@@ -1035,44 +1035,136 @@ function selected(id){ return SEC[id].items.map((it,i)=>checks.has(id+":"+i)?it:
 /* ---------- Relazione: generata da una scheda (salvata o in compilazione), in una lingua a scelta ---------- */
 const lc = s => s.charAt(0).toLowerCase()+s.slice(1);
 function roleNameIn(zid, lg){ const z = ZONES.find(z=>z.id===zid); if(!z) return ""; return z.pos == null ? UI[lg].gk : SEC.position.items[z.pos][LI[lg]]; }
+/* Frasi "legate" per ogni voce della scheda, nelle tre lingue (stesso ordine delle voci in SECTIONS) */
+const PHR = {
+  it:{
+    position:["terzino","difensore centrale","regista","mediano","mezzala","ala","trequartista","attaccante"],
+    spielart:["di impostazione difensiva","con visione di gioco","creativo","efficace in zona gol","attento alle posizioni","bravo nello smarcamento","box to box","presente in entrambe le fasi"],
+    bio:["tardivo","probabilmente tardivo","nella norma","probabilmente precoce","precoce"],
+    morph:["longilinea","equilibrata","compatta"],
+    struktur:["snella","media","robusta"],
+    technik:["la ricezione orientata","la qualità nelle azioni","il dribbling","il passaggio orizzontale","il passaggio verticale","il passaggio diagonale","il passaggio filtrante tra le linee","il lancio lungo","il dosaggio","la varietà delle giocate","il cross","il colpo di testa","i calci piazzati","i duelli","l'uso di entrambi i piedi","il passaggio corto"],
+    taktik:["il pressing","l'attacco dello spazio libero","la lettura delle linee di passaggio","il comportamento preventivo"],
+    pers:["uomo squadra","positivo","attivo","leader","combattivo","concentrato","motivato","coraggioso","comunicativo","corretto","giocatore di carattere","intraprendente",null,"flessibile","dominante","determinato"],
+    athl:["la resistenza","l'esplosività","l'accelerazione","il cambio di direzione","l'agilità","la presenza fisica","la velocità","la capacità di ripetere gli sprint"],
+    smartP:["coglie il contesto e l'idea di gioco","anticipa e sceglie il momento giusto","si adatta con creatività e rischio calcolato","si posiziona per creare opportunità o ridurre i pericoli","comunica e guida il gioco"],
+    field:"campo", also:"Inoltre:",
+    foot:["Destro","Mancino","Ambidestro"], and:"e",
+    intro:(n,m,r)=>`${n}, osservato${m?` nella partita ${m}`:""}${r?`, impiegato come ${r}`:""}.`,
+    player:"giocatore",
+    phys:(b,mo,st)=>"Giocatore "+[b&&`dallo sviluppo biologico ${b}`, mo&&`dalla corporatura ${mo}`, st&&`dalla struttura ${st}`].filter(Boolean).join(", ").replace(/, ([^,]*)$/," e $1")+".",
+    tech:x=>`Sul piano tecnico si distingue per ${x}.`,
+    smart:x=>`Nella lettura del gioco ${x}.`,
+    tak:x=>`Tatticamente si nota per ${x}.`,
+    persS:x=>`${x}.`, neg:"Deve però crescere in intensità e disponibilità.",
+    ath:x=>`Sul piano atletico spiccano ${x}.`,
+    tips:"Valutazione TIPS", pot:(a,b)=>`Valutazione: ${a} – ${b}.`
+  },
+  de:{
+    position:["Aussenverteidiger","Innenverteidiger","Spielmacher","6er","8er","Flügelspieler","10er","Stürmer"],
+    spielart:["defensiv orientiert","mit Spielübersicht","kreativ","abschlussstark","positionsbewusst","stark im Freilaufverhalten","Box-to-Box-Spieler","aktiv in beiden Spielphasen"],
+    bio:["ein Spätentwickler","wahrscheinlich ein Spätentwickler","normal entwickelt","wahrscheinlich ein Frühentwickler","ein Frühentwickler"],
+    morph:["langen","ausgewogenen","kompakten"],
+    struktur:["schlanker","durchschnittlicher","robuster"],
+    technik:["orientierte Ballannahme","Qualität in den Aktionen","Dribbling","Querpass","Vertikalpass","Diagonalpass","linienbrechende Pässe","lange Bälle","Dosierung","Variationen","Flanken","Kopfballspiel","Standardsituationen","Zweikampfverhalten","Beidfüssigkeit","kurzes Passspiel"],
+    taktik:["Pressing","das Attackieren freier Räume","Passantizipation","präventives Verhalten"],
+    pers:["Teamplayer","positiv","aktiv","Leader","kämpferisch","konzentriert","motiviert","mutig","kommunikativ","fair","Charakter- und Mentalitätsspieler","initiativ",null,"flexibel","dominant","entschlossen"],
+    athl:["Belastbarkeit","Explosivität","Beschleunigung","Richtungswechsel","Agilität","Robustheit","Schnelligkeit","Wiederholung von Sprints"],
+    smartP:["liest Kontext und Spielidee","antizipiert und wählt den richtigen Moment","passt sich kreativ und mit kalkuliertem Risiko an","positioniert sich, um Chancen zu schaffen oder Gefahren zu minimieren","kommuniziert und lenkt das Spiel"],
+    field:"Platz", also:"Ausserdem:",
+    foot:["Rechtsfuss","Linksfuss","Beidfüssig"], and:"und",
+    intro:(n,m,r)=>`${n}, beobachtet${m?` im Spiel ${m}`:""}${r?`, eingesetzt als ${r}`:""}.`,
+    player:"Spieler",
+    phys:(b,mo,st)=>"Er "+[b&&`ist ${b}`, mo&&`hat einen ${mo} Körperbau`, st&&`ist ein ${st} Typ`].filter(Boolean).join(", ").replace(/, ([^,]*)$/," und $1")+".",
+    tech:x=>`Technisch zeichnet er sich durch ${x} aus.`,
+    smart:x=>`Im Spiel ${x}.`.replace(/^Im Spiel /,"Er "),
+    tak:x=>`Taktisch fällt er durch ${x} auf.`,
+    persS:x=>`Charakterlich: ${x}.`, neg:"Bei Intensität und Bereitschaft muss er sich noch steigern.",
+    ath:x=>`Athletisch überzeugen ${x}.`,
+    tips:"TIPS-Bewertung", pot:(a,b)=>`Einschätzung: ${a} – ${b}.`
+  },
+  fr:{
+    position:["latéral","défenseur central","meneur de jeu","milieu défensif","n°8","ailier","milieu offensif","attaquant"],
+    spielart:["à vocation défensive","avec une bonne vision du jeu","créatif","efficace devant le but","discipliné dans son placement","bon dans les appels","box to box","actif dans les deux phases"],
+    bio:["tardif","plutôt tardif","normal","plutôt précoce","précoce"],
+    morph:["longiligne","normoligne","bréviligne"],
+    struktur:["fin","moyen","robuste"],
+    technik:["le contrôle orienté","la conduite de balle","le dribble","la passe horizontale","la passe verticale","la passe diagonale","la passe en profondeur","la passe longue","le dosage","la variété","le centre","le jeu de tête","les balles arrêtées","les duels","l'utilisation des deux pieds","la passe courte"],
+    taktik:["le pressing","l'attaque de l'espace","l'interception","le comportement préventif"],
+    pers:["joueur d'équipe","positif","actif","leader","combatif","concentré","motivé","courageux","communicatif","fair-play","joueur de caractère","entreprenant",null,"flexible","dominant","déterminé"],
+    athl:["la résistance","l'explosivité","l'accélération","les changements de direction","l'agilité","la puissance","la vitesse","la répétition des sprints"],
+    smartP:["saisit le contexte et l'idée de jeu","anticipe et choisit le bon moment","s'adapte avec créativité et un risque calculé","se positionne pour créer des occasions ou réduire les dangers","communique et oriente le jeu"],
+    field:"terrain", also:"En outre :",
+    foot:["Droitier","Gaucher","Ambidextre"], and:"et",
+    intro:(n,m,r)=>`${n}, observé${m?` lors du match ${m}`:""}${r?`, aligné comme ${r}`:""}.`,
+    player:"joueur",
+    phys:(b,mo,st)=>"Joueur "+[b&&`au développement biologique ${b}`, mo&&`au physique ${mo}`, st&&`de gabarit ${st}`].filter(Boolean).join(", ").replace(/, ([^,]*)$/," et $1")+".",
+    tech:x=>`Techniquement, il se distingue par ${x}.`,
+    smart:x=>`Dans la lecture du jeu, il ${x}.`,
+    tak:x=>`Tactiquement, il se signale par ${x}.`,
+    persS:x=>`${x}.`, neg:"Il peut toutefois paraître nonchalant.",
+    ath:x=>`Sur le plan athlétique, on retient ${x}.`,
+    tips:"Évaluation TIPS", pot:(a,b)=>`Évaluation : ${a} – ${b}.`
+  }
+};
+const cap = s => s ? s.charAt(0).toUpperCase()+s.slice(1) : s;
 function reportFrom(rec, lg){
-  const U = k => UI[lg][k], LL = arr => arr[LI[lg]] ?? arr[0];
-  const AND = {de:"und",fr:"et",it:"e"}[lg];
-  const J = a => a.length<2 ? (a[0]||"") : a.slice(0,-1).join(", ")+" "+AND+" "+a.at(-1);
-  const pick = id => { const v = rec[id]||[]; return SEC[id].items.filter(it=>v.includes(it[0])); };
-  const keep = id => pick(id).map(it=>LL(it));
-  const lcl = arr => lg==="de" ? arr : arr.map(lc);
+  const P = PHR[lg], U = k => UI[lg][k], LL = arr => arr[LI[lg]] ?? arr[0];
+  const J = a => a.length<2 ? (a[0]||"") : a.slice(0,-1).join(", ")+" "+P.and+" "+a.at(-1);
+  const has = (id, it) => (rec[id]||[]).includes(it[0]);
+  const ph = id => SEC[id].items.map((it,i)=> has(id,it) ? P[id][i] : null).filter(Boolean);
   const p = pl(rec.giocatoreId) || {};
   const [cog="", nom=""] = (rec.giocatore||"").split(", ");
-  const extra = [p.nascita, p.club].filter(Boolean).join(", ");
+  const year = ((p.nascita||"").match(/(19|20)\d\d/)||[])[0] || p.nascita;
+  const extra = [year, p.club].filter(Boolean).join(", ");
   const name = `${nom} ${cog}`.trim() + (extra?` (${extra})`:"");
-  const ml = rec.partita || "", role = p.ruolo ? roleNameIn(p.ruolo, lg) : "";
-  const footW = {de:["rechts","links"],fr:["droit","gauche"],it:["destro","sinistro"]}[lg];
-  const foot = SEC.fuss.items.map((it,i)=>(rec.fuss||[]).includes(it[0])?footW[i]:null).filter(Boolean);
-  const S = {
-    it:{intro:`${name} è stato osservato${ml?` nella partita ${ml}`:""}${role?`, schierato come ${lc(role)}`:""}.`,
-        foot:x=>`Piede: ${x}.`,pos:x=>`Posizione: ${x}.`,prof:x=>`Profilo: ${x}.`,bio:x=>`Sviluppo biologico: ${x}.`,morph:x=>`Morfologia: ${x}.`,
-        tech:x=>`Sul piano tecnico si distingue per: ${x}.`,smart:x=>`Intelligenza di gioco: ${x}.`,tak:x=>`Aspetti tattici: ${x}.`,pers:x=>`Personalità: ${x}.`,ath:x=>`Aspetti atletici: ${x}.`,pot:(a,b)=>`Potenziale: ${a} – ${b}.`},
-    de:{intro:`${name} wurde${ml?` im Spiel ${ml}`:""} beobachtet${role?`, eingesetzt als ${role}`:""}.`,
-        foot:x=>`Fuss: ${x}.`,pos:x=>`Position: ${x}.`,prof:x=>`Spielart: ${x}.`,bio:x=>`Biologische Entwicklung: ${x}.`,morph:x=>`Morphologie: ${x}.`,
-        tech:x=>`Technisch fällt er auf durch: ${x}.`,smart:x=>`Spielintelligenz: ${x}.`,tak:x=>`Taktisch: ${x}.`,pers:x=>`Persönlichkeit: ${x}.`,ath:x=>`Athletisch: ${x}.`,pot:(a,b)=>`Potenzial: ${a} – ${b}.`},
-    fr:{intro:`${name} a été observé${ml?` lors du match ${ml}`:""}${role?`, aligné comme ${lc(role)}`:""}.`,
-        foot:x=>`Pied : ${x}.`,pos:x=>`Poste : ${x}.`,prof:x=>`Profil : ${x}.`,bio:x=>`Développement biologique : ${x}.`,morph:x=>`Morphologie : ${x}.`,
-        tech:x=>`Sur le plan technique, il se distingue par : ${x}.`,smart:x=>`Intelligence de jeu : ${x}.`,tak:x=>`Aspects tactiques : ${x}.`,pers:x=>`Personnalité : ${x}.`,ath:x=>`Profil athlétique : ${x}.`,pot:(a,b)=>`Potentiel : ${a} – ${b}.`}
-  }[lg];
-  const out=[S.intro], add=(arr,f)=>{ if(arr.length) out.push(f(J(arr))); };
-  const b1=[]; if(foot.length) b1.push(S.foot(J(foot))); if(keep("position").length) b1.push(S.pos(J(lcl(keep("position"))))); if(keep("spielart").length) b1.push(S.prof(J(lcl(keep("spielart"))))); if(b1.length) out.push(b1.join(" "));
-  const b2=[]; if(keep("bio").length) b2.push(S.bio(J(lcl(keep("bio"))))); const mo=[...lcl(keep("morph")),...lcl(keep("struktur"))]; if(mo.length) b2.push(S.morph(J(mo))); if(b2.length) out.push(b2.join(" "));
-  add(lcl(keep("technik")), S.tech);
-  const sm = pick("smart").map(it=>lc(LL(it.slice(1)))); if (sm.length) out.push(S.smart(sm.join("; ")));
-  add([...lcl(keep("taktik")), ...(rec.taktik||[]).filter(x=>x.startsWith("✎ ")).map(x=>x.slice(2))], S.tak);
-  add(lcl(keep("pers")), S.pers); add(lcl(keep("athl")), S.ath);
+  const role = p.ruolo ? roleNameIn(p.ruolo, lg) : "";
+  const mt = rec.partitaId && D.matches.find(x=>x.id===rec.partitaId);
+  const mlab = mt ? `${team(mt.a)?.name||"?"} – ${team(mt.b)?.name||"?"} (${fmtDay(mt.giorno)}${mt.campo?`, ${P.field} ${mt.campo}`:""})` : (rec.partita||"");
+  const out = [P.intro(name, mlab, lg==="de" ? role : lc(role))];
+
+  // Profilo: piede, ruoli, caratteristiche di gioco
+  const f = rec.fuss||[];
+  const foot = f.includes("R") && f.includes("L") ? P.foot[2] : f.includes("R") ? P.foot[0] : f.includes("L") ? P.foot[1] : "";
+  const pos = ph("position"), sty = ph("spielart");
+  let prof = [foot, pos.join(" / ")].filter(Boolean).join(", ");
+  if (sty.length) prof = prof ? `${prof}${pos.length?" ":", "+P.player+" "}${J(sty)}` : `${cap(P.player)} ${J(sty)}`;
+  if (prof) out.push(cap(prof)+".");
+
+  // Fisico
+  const bio = ph("bio"), mo = ph("morph"), st = ph("struktur");
+  if (bio.length || mo.length || st.length) out.push(P.phys(J(bio), J(mo), J(st)));
+
+  // Tecnica, lettura del gioco, tattica
+  const tecn = ph("technik"); if (tecn.length) out.push(P.tech(J(tecn)));
+  const sm = SEC.smart.items.map((it,i)=> has("smart",it) ? P.smartP[i] : null).filter(Boolean);
+  if (sm.length) out.push(P.smart(J(sm)));
+  const tak = ph("taktik"), takFree = (rec.taktik||[]).filter(x=>x.startsWith("✎ ")).map(x=>x.slice(2).trim()).filter(Boolean);
+  const b2 = [];
+  if (tak.length) b2.push(P.tak(J(tak)));
+  if (takFree.length) b2.push(`${P.also} ${J(takFree)}.`);
+  if (b2.length) out.push(b2.join(" "));
+
+  // Personalità e atletica
+  const pers = ph("pers"), neg = (rec.pers||[]).includes(SEC.pers.items[12][0]);
+  const ath = ph("athl");
+  const b3 = [];
+  if (pers.length) b3.push(P.persS(cap(J(pers))));
+  if (neg) b3.push(P.neg);
+  if (ath.length) b3.push(P.ath(J(ath)));
+  if (b3.length) out.push(b3.join(" "));
+
+  // TIPS
   const tp = rec.tips || {};
-  const tl = ["T","I","P","S"].filter(k=>tp[k] && (tp[k].nota!=null || (tp[k].commento||"").trim()))
-    .map(k=>`${k} – ${U("tipsNames")[k]}: ${fmt(tp[k].nota ?? null)}${(tp[k].commento||"").trim()?` – ${tp[k].commento.trim()}`:""}`);
-  if (tl.length) out.push("TIPS\n"+tl.join("\n"));
-  if (rec.potenziale){ const it=SEC.potenzial.items.find(x=>x[0]===rec.potenziale); out.push(S.pot(rec.potenziale, LL(it.slice(1)))); }
-  if ((rec.annotazioni||"").trim()) out.push(`${U("notesT")}${lg==="fr"?" :":":"} ${rec.annotazioni.trim()}`);
+  const ks = ["T","I","P","S"].filter(k=>tp[k] && (tp[k].nota!=null || (tp[k].commento||"").trim()));
+  if (ks.length){
+    const nums = ks.filter(k=>tp[k].nota!=null).map(k=>`${U("tipsNames")[k]} ${fmt(tp[k].nota)}`);
+    const col_ = lg==="fr" ? " :" : ":";
+    const com = ks.filter(k=>(tp[k].commento||"").trim()).map(k=>`${U("tipsNames")[k]}${col_} ${tp[k].commento.trim().replace(/([^.!?])$/,"$1.")}`);
+    out.push([nums.length?`${P.tips}${col_} ${nums.join(" · ")}.`:"", ...com].filter(Boolean).join("\n"));
+  }
+  if ((rec.annotazioni||"").trim()) out.push(rec.annotazioni.trim());
+  if (rec.potenziale){ const it=SEC.potenzial.items.find(x=>x[0]===rec.potenziale); out.push(P.pot(rec.potenziale, lg==="de" ? LL(it.slice(1)) : lc(LL(it.slice(1))))); }
   out.push(`— ${rec.scout||""}`);
   return out.join("\n\n");
 }
