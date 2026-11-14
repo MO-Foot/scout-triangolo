@@ -210,6 +210,62 @@
     .board{grid-template-columns:230px 1fr}
     .grid2{grid-template-columns:1fr}
   }
+
+  /* ---------- Smartphone (schermi stretti) ---------- */
+  @media (max-width:700px){
+    body{font-size:15px}
+    header.top .bar{flex-wrap:wrap;gap:8px;padding:8px 12px}
+    header.top .brand{font-size:19px}
+    header.top .logo{width:28px;height:28px}
+    header.top .who{order:3;width:100%;font-size:13px;display:flex;align-items:center}
+    header.top .lang button{padding:5px 9px}
+    header.top .btn{padding:5px 9px}
+    nav.tabs{padding:0 6px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+    nav.tabs::-webkit-scrollbar{display:none}
+    nav.tabs button{padding:10px 11px;white-space:nowrap;flex:none}
+    main{padding:12px 10px 170px}
+    .card{padding:14px}
+    h3{font-size:20px}
+    .row-flex > div{min-width:0 !important;flex:1 1 100%}
+    .row-flex input.t[style*="width"]{width:100% !important}
+
+    /* scheda */
+    .head-box{padding:12px;gap:10px}
+    .roster{grid-template-columns:1fr}
+    .cells{grid-template-columns:repeat(2,minmax(0,1fr));padding:6px;gap:5px}
+    .cells.smart{grid-template-columns:1fr}
+    .smart .cell{min-height:0}
+    .cell{min-height:48px;font-size:14px}
+    .tips{grid-template-columns:1fr;padding:6px}
+    .pot{grid-template-columns:repeat(3,minmax(0,1fr));padding:6px}
+    .pot .sm{font-size:12px}
+    .rlabel{font-size:16px}
+
+    /* barra in basso: riassunto sopra, pulsanti 2x2 */
+    .footbar .in{flex-wrap:wrap;padding:8px 10px;gap:6px}
+    .footbar .sum{flex:1 1 100%;font-size:13px}
+    .footbar .btn{flex:1 1 calc(50% - 6px);padding:11px 6px}
+
+    /* tabelle: scorrono in orizzontale */
+    table.list{display:block;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch}
+
+    /* campetto: giocatori da assegnare sopra, campo sotto */
+    .board{grid-template-columns:1fr}
+    .pool{max-height:240px}
+    .zone{width:31%;min-height:46px;padding:3px}
+    .zone .zl{font-size:9.5px;letter-spacing:0}
+    .chip{font-size:11.5px;padding:2px 2px 2px 5px}
+    .teams-bar #teamName{width:100% !important}
+
+    /* finestre */
+    .modal{padding:8px}
+    .modal .box{max-height:94vh}
+    .modal .mb{padding:12px}
+    .modal textarea{min-height:46vh;font-size:14px}
+    .modal .mf{flex-wrap:wrap;padding:10px 12px}
+    .modal .mf .btn{flex:1 1 auto}
+    .login-card{padding:22px}
+  }
   .login-err{background:var(--ch-soft);border:1px solid var(--ch-line);color:var(--ch-dark);border-radius:8px;padding:9px 12px;font-size:14px;margin-top:14px}
   .hint a{color:var(--ink-2)}
   .pill.ok{background:var(--green-soft);color:#1d6b40}.pill.no{background:var(--red-soft);color:var(--ch-dark)}
