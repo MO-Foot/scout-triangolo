@@ -319,7 +319,7 @@ const UI = {
   change:"Ändern",existing:"Bögen",date:"Datum",save:"Bogen speichern",clear:"Neuer Bogen",marked:"Merkmale markiert",noPlayer:"Kein Spieler gewählt",
   needPlayer:"Bitte zuerst einen Spieler wählen",savedOk:"Bogen gespeichert",saveFail:"Speichern fehlgeschlagen",
   otherPh:"Weiterer Aspekt…",notePh:"Notiz…",close:"Schliessen",cleared:"Bogen geleert",potHint:"Eine Auswahl",tipsHint:"Note 1–5 · 3 = genügend",
-  tipsNames:{T:"Technik",I:"Intelligenz",P:"Persönlichkeit",S:"Schnelligkeit"},itPending:"",
+  notesT:"Bemerkungen",notesPh:"Weitere Beobachtungen, Kontext, Hinweise…",tipsNames:{T:"Technik",I:"Intelligenz",P:"Persönlichkeit",S:"Schnelligkeit"},itPending:"",
   genText:"Text generieren",genTitle:"Bericht (Entwurf – Stil wird mit dem Head Coach festgelegt)",copy:"Kopieren",copied:"Kopiert",
   noTeamYet:"ohne Team",del:"Löschen",confirmDel:"Wirklich löschen?",yes:"Ja, löschen",permErr:"Keine Berechtigung"},
  fr:{loginTitle:"Connexion",email:"E-mail",pw:"Mot de passe",loginBtn:"Se connecter",forgot:"Mot de passe oublié ?",
@@ -346,7 +346,7 @@ const UI = {
   change:"Changer",existing:"fiches",date:"Date",save:"Enregistrer la fiche",clear:"Nouvelle fiche",marked:"caractéristiques cochées",noPlayer:"Aucun joueur choisi",
   needPlayer:"Choisir d'abord un joueur",savedOk:"Fiche enregistrée",saveFail:"Échec de l'enregistrement",
   otherPh:"Autre aspect…",notePh:"Note…",close:"Fermer",cleared:"Fiche vidée",potHint:"Un seul choix",tipsHint:"Note 1–5 · 3 = suffisant",
-  tipsNames:{T:"Technique",I:"Intelligence",P:"Personnalité",S:"Vitesse"},itPending:"",
+  notesT:"Remarques",notesPh:"Autres observations, contexte, indications…",tipsNames:{T:"Technique",I:"Intelligence",P:"Personnalité",S:"Vitesse"},itPending:"",
   genText:"Générer le texte",genTitle:"Rapport (brouillon – le style sera défini avec le head coach)",copy:"Copier",copied:"Copié",
   noTeamYet:"sans équipe",del:"Supprimer",confirmDel:"Vraiment supprimer ?",yes:"Oui, supprimer",permErr:"Pas d'autorisation"},
  it:{loginTitle:"Accesso",email:"Email",pw:"Password",loginBtn:"Accedi",forgot:"Password dimenticata?",
@@ -373,7 +373,7 @@ const UI = {
   change:"Cambia",existing:"schede",date:"Data",save:"Salva scheda",clear:"Nuova scheda",marked:"caratteristiche spuntate",noPlayer:"Nessun giocatore scelto",
   needPlayer:"Scegli prima un giocatore",savedOk:"Scheda salvata",saveFail:"Salvataggio non riuscito",
   otherPh:"Altro aspetto…",notePh:"Nota…",close:"Chiudi",cleared:"Scheda svuotata",potHint:"Una sola scelta",tipsHint:"Nota 1–5 · 3 = sufficiente",
-  tipsNames:{T:"Tecnica",I:"Intelligenza",P:"Personalità",S:"Velocità"},
+  notesT:"Annotazioni",notesPh:"Altre osservazioni, contesto, indicazioni…",tipsNames:{T:"Tecnica",I:"Intelligenza",P:"Personalità",S:"Velocità"},
   itPending:"Voci della scheda in italiano provvisorie: verranno sostituite con la tabella ufficiale.",
   genText:"Genera testo",genTitle:"Relazione (bozza – lo stile verrà definito con l'head coach)",copy:"Copia",copied:"Copiato",
   noTeamYet:"senza squadra",del:"Elimina",confirmDel:"Eliminare davvero?",yes:"Sì, elimina",permErr:"Permesso negato"}
@@ -438,7 +438,7 @@ const D = {users:[], players:[], teams:[], matches:[], schede:[], logo:null};
 let unsubs = [];
 let coachSel = null, curTeam = null, importRows = null, pasteText = "";
 let matchId = null, player = null, query = "";
-let checks = new Set(), free = ["","","",""], pot = null, tips = freshTips();
+let checks = new Set(), free = ["","","",""], pot = null, tips = freshTips(), note = "";
 function freshTips(){ return {T:{v:null,n:""},I:{v:null,n:""},P:{v:null,n:""},S:{v:null,n:""}}; }
 
 /* =====================================================================
@@ -925,7 +925,8 @@ function renderSheet(){
     const cnt = (sec.type==="tips"||sec.type==="pot")?"":`<span class="cnt" data-cnt="${sec.id}">${sectionCount(sec)||""}</span>`;
     const sub = sec.sub?`<small>${esc(L(sec.sub))}</small>`:"", hint = sec.type==="tips"?`<small>${esc(u("tipsHint"))}</small>`:"";
     return `<div class="srow"><div class="rlabel">${esc(L(sec.t))}${sub}${hint}${cnt}</div>${body}</div>`;
-  }).join("");
+  }).join("") + `<div class="srow"><div class="rlabel">${esc(u("notesT"))}</div>
+    <div style="padding:10px"><textarea class="t" id="notes" rows="4" placeholder="${esc(u("notesPh"))}">${esc(note)}</textarea></div></div>`;
   const sh=$("#sheet");
   sh.querySelectorAll("[data-k]").forEach(b=> b.onclick = ()=>{ const k=b.dataset.k; checks.has(k)?checks.delete(k):checks.add(k); b.classList.toggle("on",checks.has(k)); updateCounts(); renderSummary(); });
   sh.querySelectorAll("[data-free]").forEach(inp=> inp.oninput = ()=>{ free[+inp.dataset.free]=inp.value; inp.parentElement.classList.toggle("on",!!inp.value.trim()); updateCounts(); renderSummary(); });
@@ -934,6 +935,7 @@ function renderSheet(){
     const tip=b.closest(".tip"); tip.querySelectorAll("[data-tip]").forEach(x=>x.classList.toggle("on",+x.dataset.v===tips[Lt].v));
     const bd=tip.querySelector(".badge"); bd.className="badge "+col(tips[Lt].v); bd.textContent=fmt(tips[Lt].v);
   });
+  $("#notes").oninput = e=>{ note = e.target.value; };
   sh.querySelectorAll("[data-note]").forEach(t=> t.oninput = ()=>{ tips[t.dataset.note].n=t.value; });
   sh.querySelectorAll(".pot button").forEach(b=> b.onclick = ()=>{ pot = pot===b.dataset.v?null:b.dataset.v; sh.querySelectorAll(".pot button").forEach(x=>x.classList.toggle("on",x.dataset.v===pot)); renderSummary(); });
 }
@@ -975,13 +977,14 @@ function buildReport(){
   const tl = ["T","I","P","S"].filter(k=>tips[k].v!=null||tips[k].n.trim()).map(k=>`${k} – ${u("tipsNames")[k]}: ${fmt(tips[k].v)}${tips[k].n.trim()?` – ${tips[k].n.trim()}`:""}`);
   if (tl.length) out.push("TIPS\n"+tl.join("\n"));
   if (pot){ const it=SEC.potenzial.items.find(x=>x[0]===pot); out.push(S.pot(pot, L(it.slice(1)))); }
+  if (note.trim()) out.push(`${u("notesT")}${lang==="fr"?" :":":"} ${note.trim()}`);
   out.push(`— ${me.nome}`);
   return out.join("\n\n");
 }
 function buildRecord(){
   const m = D.matches.find(x=>x.id===matchId);
   const rec = {giocatoreId:player.id, giocatore:`${player.cognome}, ${player.nome}`, partitaId:matchId, partita:matchLabel(m),
-    scoutUid:me.uid, scout:me.nome, lingua:lang, creatoIl:serverTimestamp()};
+    scoutUid:me.uid, scout:me.nome, lingua:lang, annotazioni:note.trim(), creatoIl:serverTimestamp()};
   SECTIONS.forEach(sec=>{
     if (sec.type==="tips") rec.tips = Object.fromEntries(Object.entries(tips).map(([k,t])=>[k,{nota:t.v,commento:t.n}]));
     else if (sec.type==="pot") rec.potenziale = pot;
@@ -994,7 +997,7 @@ function needBoth(){
   if (!player){ toast(u("needPlayer")); $("#q")?.focus(); return false; }
   return true;
 }
-function resetSheet(){ checks=new Set(); free=["","","",""]; pot=null; tips=freshTips(); player=null; query=""; }
+function resetSheet(){ checks=new Set(); free=["","","",""]; pot=null; tips=freshTips(); note=""; player=null; query=""; }
 $("#genBtn").onclick = ()=>{
   if (!needBoth()) return;
   openModal(u("genTitle"), `<textarea id="repText">${esc(buildReport())}</textarea>`, [
