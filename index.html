@@ -497,7 +497,8 @@ onAuthStateChanged(auth, async user=>{
     me = {uid:user.uid, ...snap.data()};
   }catch(e){
     await signOut(auth);
-    loginError(e.code==="no-profile"||e.code==="permission-denied" ? u("noAccess") : u("netErr"));
+    console.error("Profilo:", e);
+    loginError(e.code==="no-profile"||e.code==="permission-denied" ? u("noAccess") : `${u("netErr")} [profilo: ${e.code||e.message||e}]`);
     return;
   }
   if (me.lingua && UI[me.lingua]) lang = me.lingua;
@@ -512,7 +513,8 @@ $("#loginForm").addEventListener("submit", async e=>{
   try{ await signInWithEmailAndPassword(auth, $("#u").value.trim(), $("#p").value); }
   catch(err){
     const bad = ["auth/invalid-credential","auth/wrong-password","auth/user-not-found","auth/invalid-email","auth/user-disabled"];
-    loginError(bad.includes(err.code) ? u("badCreds") : u("netErr"));
+    console.error("Login:", err);
+    loginError(bad.includes(err.code) ? u("badCreds") : `${u("netErr")} [login: ${err.code||err.message||err}]`);
   }finally{ btn.disabled = false; }
 });
 $("#forgot").onclick = async e=>{
