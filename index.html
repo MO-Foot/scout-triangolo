@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scout Triangolo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+  :root{
+    --ch:#d52b1e; --ch-dark:#a81f15; --ch-soft:#fdecea; --ch-line:#f1a59d;
+    --ink:#1b1f26; --ink-2:#4b5361; --ink-3:#808896;
+    --bg:#f4f2ee; --paper:#fff; --line:#dedad2; --line-2:#eeebe5;
+    --red:#d64545; --red-soft:#fbe4e4; --yellow:#e8b500; --yellow-soft:#fdf3cc; --green:#2e9e5b; --green-soft:#ddf3e5;
+    --pitch:#2f8a4e; --pitch-2:#2a7d46;
+    --radius:10px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Barlow",system-ui,sans-serif;font-size:16px}
+  button,input,textarea,select{font:inherit;color:inherit}
+  .hidden{display:none !important}
+  h3{font-family:"Barlow Condensed";font-weight:700;font-size:22px;margin:0 0 12px}
+
+  .btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:9px 15px;font-weight:600;cursor:pointer}
+  .btn:hover{border-color:var(--ink-3)}
+  .btn.primary{background:var(--ch);border-color:var(--ch);color:#fff}
+  .btn.primary:hover{background:var(--ch-dark)}
+  .btn.dark{background:var(--ink);border-color:var(--ink);color:#fff}
+  .btn.sm{padding:5px 10px;font-size:14px}
+  .x{border:0;background:transparent;cursor:pointer;color:var(--ink-3);font-size:18px;line-height:1;padding:2px 6px}
+  .x:hover{color:var(--ch)}
+  input.t,select.t,textarea.t{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:#fff}
+  input:focus,textarea:focus,select:focus{outline:2px solid var(--ch-line);border-color:var(--ch)}
+  .muted{color:var(--ink-3);font-size:14px}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+
+  /* logo */
+  .logo{width:34px;height:34px;flex:none;display:grid;place-items:center;border-radius:6px;overflow:hidden}
+  .logo img{max-width:100%;max-height:100%;object-fit:contain;background:#fff}
+  .brand{display:flex;align-items:center;gap:10px;font-family:"Barlow Condensed";font-weight:700;font-size:24px;letter-spacing:.3px;white-space:nowrap}
+  .brand .sub{font-weight:500;opacity:.8;font-size:18px}
+
+  .lang{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff}
+  .lang button{border:0;background:transparent;padding:6px 12px;font-weight:600;font-size:14px;cursor:pointer;color:var(--ink-2)}
+  .lang button.on{background:var(--ch);color:#fff}
+
+  /* ---------- Login ---------- */
+  #login{min-height:100vh;display:grid;place-items:center;padding:24px;background:linear-gradient(180deg,var(--ch) 0 38%,var(--bg) 38%)}
+  .login-card{width:min(440px,100%);background:#fff;border-radius:16px;padding:30px;box-shadow:0 20px 50px rgba(0,0,0,.12)}
+  .login-card .brand{color:var(--ink)}
+  .login-card h2{font-family:"Barlow Condensed";font-weight:600;font-size:20px;margin:22px 0 6px;color:var(--ink-2)}
+  label.f{display:block;font-size:14px;font-weight:600;color:var(--ink-2);margin:12px 0 6px}
+  .login-btns{display:grid;gap:8px;margin-top:20px}
+  .login-btns .btn{padding:12px}
+  .hint{font-size:13px;color:var(--ink-3);margin-top:14px;text-align:center}
+
+  /* ---------- Header ---------- */
+  header.top{position:sticky;top:0;z-index:30;background:var(--ch);color:#fff}
+  header.top .bar{display:flex;align-items:center;gap:14px;padding:10px 24px}
+  header.top .sp{flex:1}
+  header.top .who{font-size:14px}
+  header.top .who .role{background:rgba(255,255,255,.18);border-radius:999px;padding:3px 9px;margin-right:6px;font-weight:600;font-size:12.5px}
+  header.top .lang{border-color:rgba(255,255,255,.4);background:transparent}
+  header.top .lang button{color:#fff}
+  header.top .lang button.on{background:#fff;color:var(--ch)}
+  header.top .btn{background:transparent;color:#fff;border-color:rgba(255,255,255,.4);padding:6px 12px;font-size:14px}
+  nav.tabs{display:flex;gap:4px;padding:0 24px;background:var(--ch-dark)}
+  nav.tabs button{border:0;background:transparent;color:rgba(255,255,255,.8);padding:11px 16px;font-weight:600;cursor:pointer;border-bottom:3px solid transparent}
+  nav.tabs button.on{color:#fff;border-bottom-color:#fff}
+  main{max-width:1260px;margin:0 auto;padding:20px 24px 120px}
+  .banner{background:var(--yellow-soft);border:1px solid #edd57a;border-radius:8px;padding:10px 14px;font-size:14px;margin-bottom:16px}
+
+  /* ---------- Tables ---------- */
+  table.list{width:100%;border-collapse:collapse;font-size:15px}
+  table.list th{text-align:left;font-size:13px;color:var(--ink-3);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--line)}
+  table.list td{padding:8px 10px;border-bottom:1px solid var(--line-2)}
+  .dot{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:-1px;margin-right:6px;border:1px solid rgba(0,0,0,.2)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .row-flex{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .drop{border:2px dashed var(--line);border-radius:10px;padding:18px;text-align:center;cursor:pointer;background:#fbfaf7}
+  .drop:hover{border-color:var(--ch)}
+
+  /* ---------- Squadre / campetto ---------- */
+  .teams-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+  .tteam{display:flex;align-items:center;gap:6px;border:2px solid var(--line);border-radius:999px;padding:6px 8px 6px 12px;background:#fff;cursor:pointer;font-weight:600}
+  .tteam.on{border-color:var(--ink);box-shadow:0 0 0 2px var(--ink) inset}
+  .tteam .n{font-weight:500;color:var(--ink-3);font-size:13px}
+  .tteam input[type=color]{width:22px;height:22px;border:0;padding:0;background:none;cursor:pointer}
+  .board{display:grid;grid-template-columns:280px 1fr;gap:16px;align-items:start}
+  .pool{max-height:780px;overflow:auto}
+  .pool .pl{display:flex;justify-content:space-between;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;margin-bottom:6px;cursor:pointer;background:#fff;font-size:14.5px}
+  .pool .pl:hover{border-color:var(--ink-3)}
+  .pool .pl.sel,.chip.sel{outline:3px solid var(--ch);outline-offset:1px}
+  .pool .pl small{color:var(--ink-3)}
+  .pitch{position:relative;aspect-ratio:68/88;max-height:780px;margin:0 auto;width:100%;border-radius:12px;overflow:hidden;
+    background:repeating-linear-gradient(180deg,var(--pitch) 0 10%,var(--pitch-2) 10% 20%)}
+  .pitch svg.lines{position:absolute;inset:0;width:100%;height:100%}
+  .zone{position:absolute;transform:translate(-50%,-50%);width:27%;min-height:58px;background:rgba(255,255,255,.14);border:1.5px dashed rgba(255,255,255,.65);border-radius:10px;padding:5px;cursor:pointer;display:flex;flex-direction:column;gap:4px}
+  .zone:hover,.zone.target{background:rgba(255,255,255,.28)}
+  .zone .zl{color:#fff;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;text-align:center}
+  .chip{display:flex;align-items:center;justify-content:space-between;gap:4px;background:#fff;border-radius:6px;padding:3px 4px 3px 7px;font-size:13px;font-weight:600;border-left:5px solid var(--c,#999)}
+  .chip .x{font-size:15px;padding:0 3px}
+  .benchbox{margin-top:12px;background:#fff;border:1px dashed var(--line);border-radius:10px;padding:10px;cursor:pointer;min-height:56px}
+  .benchbox .zl{font-size:12px;font-weight:700;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px}
+  .benchbox .chips{display:flex;flex-wrap:wrap;gap:6px}
+  .selmsg{background:var(--ink);color:#fff;border-radius:8px;padding:8px 12px;font-size:14px;margin-bottom:10px}
+
+  /* ---------- Scout: partita + giocatore ---------- */
+  .head-box{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;margin-bottom:14px;display:grid;grid-template-columns:170px 1fr auto;gap:16px;align-items:center}
+  .head-box .lbl{font-family:"Barlow Condensed";font-weight:700;font-size:19px}
+  .roster{grid-column:2 / 4;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .roster .rt{font-weight:700;font-size:14px;margin-bottom:6px}
+  .roster .chips{display:flex;flex-wrap:wrap;gap:6px}
+  .rchip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 11px;cursor:pointer;font-size:14px;border-left:5px solid var(--c,#999)}
+  .rchip:hover{border-color:var(--ink-3)}
+  .rchip small{color:var(--ink-3);margin-left:4px}
+  .search{position:relative}
+  .search input{padding-left:38px}
+  .search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--ink-3)}
+  .results{position:absolute;left:0;right:0;top:calc(100% + 4px);background:#fff;border:1px solid var(--line);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.08);z-index:10;max-height:280px;overflow:auto}
+  .results div{padding:10px 12px;cursor:pointer;display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line-2)}
+  .results div:hover{background:var(--ch-soft)}
+  .results .meta{color:var(--ink-3);font-size:14px}
+  .chosen{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .chosen .name{font-weight:700;font-size:20px}
+  .chosen .meta{color:var(--ink-2);font-size:14px}
+  .pill{font-size:12px;font-weight:600;background:var(--line-2);border-radius:999px;padding:3px 9px;color:var(--ink-2)}
+  .datebox{font-size:14px;color:var(--ink-2);white-space:nowrap}
+
+  /* ---------- Scheda ---------- */
+  .sheet{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+  .srow{display:grid;grid-template-columns:190px 1fr;border-top:1px solid var(--line)}
+  .srow:first-child{border-top:0}
+  .rlabel{background:#faf8f5;padding:14px 16px;border-right:1px solid var(--line);font-family:"Barlow Condensed";font-weight:700;font-size:18px;line-height:1.15;display:flex;flex-direction:column;justify-content:center}
+  .rlabel small{font-family:"Barlow";font-weight:500;font-style:italic;font-size:13px;color:var(--ink-3);margin-top:4px}
+  .rlabel .cnt{font-family:"Barlow";font-size:12px;font-weight:700;color:var(--ch);margin-top:6px}
+  .cells{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:6px;padding:8px}
+  .cell{position:relative;min-height:52px;border:1px solid var(--line);border-radius:8px;background:#fff;padding:8px 10px 8px 34px;display:flex;align-items:center;font-size:14.5px;line-height:1.2;cursor:pointer;user-select:none;text-align:left;overflow-wrap:anywhere;hyphens:auto;transition:background .12s,border-color .12s}
+  .cell:hover{border-color:var(--ink-3)}
+  .cell::before{content:"";position:absolute;left:10px;top:50%;width:16px;height:16px;margin-top:-8px;border:1.5px solid var(--ink-3);border-radius:4px;background:#fff}
+  .cell.on{background:var(--ch-soft);border-color:var(--ch);font-weight:600}
+  .cell.on::before{background:var(--ch);border-color:var(--ch);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.5l3 3 6-7' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-size:14px;background-position:center;background-repeat:no-repeat}
+  .cell input{width:100%;border:0;border-bottom:1px dashed var(--line);padding:4px 0;background:transparent;font-size:14.5px;outline:none}
+  .cell.free{padding-left:10px;cursor:text}
+  .cell.free::before{display:none}
+  .smart{grid-template-columns:repeat(5,minmax(0,1fr))}
+  .smart .cell{flex-direction:column;align-items:flex-start;padding:10px 12px 12px;min-height:150px}
+  .smart .cell::before{left:auto;right:10px;top:12px;margin-top:0}
+  .smart .letter{display:inline-grid;place-items:center;width:30px;height:30px;color:var(--ch);font-family:"Barlow Condensed";font-weight:700;font-size:17px;margin-bottom:8px;
+    background:var(--ch);clip-path:polygon(30% 0,70% 0,100% 30%,100% 70%,70% 100%,30% 100%,0 70%,0 30%);position:relative}
+  .smart .letter span{position:absolute;inset:2px;background:#fff;clip-path:inherit;display:grid;place-items:center}
+  .smart .cell.on .letter span{background:var(--ch);color:#fff}
+  .smart .desc{font-weight:400;font-size:13.5px;color:var(--ink-2)}
+  .tips{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:10px}
+  .tip{border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:#fff}
+  .tip-h{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .tip-h .L{font-family:"Barlow Condensed";font-weight:700;font-size:24px;width:26px}
+  .tip-h .n{font-weight:600;flex:1;font-size:14.5px}
+  .badge{min-width:46px;text-align:center;font-weight:700;border-radius:6px;padding:4px 8px;background:var(--line-2);color:var(--ink-3)}
+  .badge.r{background:var(--red);color:#fff}.badge.y{background:var(--yellow);color:var(--ink)}.badge.g{background:var(--green);color:#fff}
+  .scale{display:grid;grid-template-columns:repeat(9,1fr);gap:3px;margin-bottom:8px}
+  .scale button{border:1px solid var(--line);background:#fff;border-radius:5px;padding:7px 0;font-size:12.5px;font-weight:600;cursor:pointer;color:var(--ink-2)}
+  .scale button.half{font-size:11px;color:var(--ink-3)}
+  .scale button.r{border-bottom:3px solid var(--red-soft)}.scale button.y{border-bottom:3px solid var(--yellow-soft)}.scale button.g{border-bottom:3px solid var(--green-soft)}
+  .scale button.on.r{background:var(--red);border-color:var(--red);color:#fff}
+  .scale button.on.y{background:var(--yellow);border-color:var(--yellow);color:var(--ink)}
+  .scale button.on.g{background:var(--green);border-color:var(--green);color:#fff}
+  .tip textarea{width:100%;min-height:64px;resize:vertical;border:1px solid var(--line);border-radius:6px;padding:8px;font-size:14px}
+  .pot{display:grid;grid-template-columns:repeat(3,minmax(0,220px));gap:8px;padding:10px}
+  .pot button{border:2px solid var(--line);border-radius:8px;background:#fff;padding:10px;cursor:pointer;text-align:center}
+  .pot .big{display:block;font-family:"Barlow Condensed";font-weight:700;font-size:28px;line-height:1}
+  .pot .sm{font-size:13.5px;font-weight:600}
+  .pot button[data-v=A]{border-color:#9fd38b}.pot button[data-v=B]{border-color:#f1d75c}.pot button[data-v=C]{border-color:#ee9d9d}
+  .pot button.on[data-v=A]{background:#8bd16f}.pot button.on[data-v=B]{background:#ffeb3b}.pot button.on[data-v=C]{background:#f04a4a;color:#fff}
+  .pot-hint{font-size:13px;color:var(--ink-3);padding:0 12px 10px}
+
+  .footbar{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.97);border-top:1px solid var(--line);z-index:20}
+  .footbar .in{max-width:1260px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;gap:10px}
+  .footbar .sum{flex:1;font-size:14.5px;color:var(--ink-2)}
+  .footbar .sum b{color:var(--ink)}
+
+  .toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:8px;font-size:14px;z-index:60;opacity:0;transition:opacity .2s;pointer-events:none}
+  .toast.show{opacity:1}
+  .modal{position:fixed;inset:0;background:rgba(27,31,38,.5);display:grid;place-items:center;z-index:50;padding:24px}
+  .modal .box{background:#fff;border-radius:14px;width:min(780px,100%);max-height:86vh;display:flex;flex-direction:column;overflow:hidden}
+  .modal .mh{padding:16px 20px;border-bottom:1px solid var(--line);font-weight:700}
+  .modal .mb{padding:16px 20px;overflow:auto;flex:1}
+  .modal pre{margin:0;font-size:13px;white-space:pre-wrap}
+  .modal textarea{width:100%;min-height:360px;border:1px solid var(--line);border-radius:8px;padding:12px;font-size:15px;line-height:1.5}
+  .modal .mf{padding:12px 20px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px}
+
+  @media (max-width:1100px){
+    .srow{grid-template-columns:1fr}
+    .rlabel{border-right:0;border-bottom:1px solid var(--line-2);flex-direction:row;align-items:baseline;gap:10px;justify-content:flex-start;padding:10px 14px}
+    .rlabel small,.rlabel .cnt{margin-top:0}
+    .cells{grid-template-columns:repeat(4,minmax(0,1fr))}
+    .cells.smart{grid-template-columns:repeat(5,minmax(0,1fr))}
+    .smart .cell{min-height:170px}
+    .tips{grid-template-columns:repeat(2,1fr)}
+    .head-box{grid-template-columns:1fr}
+    .roster{grid-column:auto}
+    .board{grid-template-columns:230px 1fr}
+    .grid2{grid-template-columns:1fr}
+  }
+  .login-err{background:var(--ch-soft);border:1px solid var(--ch-line);color:var(--ch-dark);border-radius:8px;padding:9px 12px;font-size:14px;margin-top:14px}
+  .hint a{color:var(--ink-2)}
+  .pill.ok{background:var(--green-soft);color:#1d6b40}.pill.no{background:var(--red-soft);color:var(--ch-dark)}
+  tr.off td{color:var(--ink-3)}
+  .btn:disabled{opacity:.6;cursor:default}
+</style>
+</head>
+<body>
+
+<!-- ============ CARICAMENTO ============ -->
+<section id="boot" style="min-height:100vh;display:grid;place-items:center"><div class="muted" id="bootMsg">…</div></section>
+
+<!-- ============ LOGIN ============ -->
+<section id="login" class="hidden">
+  <form class="login-card" id="loginForm">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+      <div class="brand"><span class="logo" data-logo></span>Scout Triangolo</div>
+      <div class="lang" data-lang-switch></div>
+    </div>
+    <h2 data-ui="loginTitle"></h2>
+    <label class="f" for="u" data-ui="email"></label>
+    <input class="t" id="u" type="email" autocomplete="username" required>
+    <label class="f" for="p" data-ui="pw"></label>
+    <input class="t" id="p" type="password" autocomplete="current-password" required>
+    <div class="login-err hidden" id="loginErr"></div>
+    <div class="login-btns"><button class="btn primary" type="submit" id="loginBtn" data-ui="loginBtn"></button></div>
+    <div class="hint"><a href="#" id="forgot" data-ui="forgot"></a></div>
+  </form>
+</section>
+
+<!-- ============ APP ============ -->
+<section id="app" class="hidden">
+  <header class="top">
+    <div class="bar">
+      <div class="brand"><span class="logo" data-logo></span>Scout Triangolo</div>
+      <div class="sp"></div>
+      <div class="who"><span class="role" id="roleTag"></span><b id="userName"></b></div>
+      <div class="lang" data-lang-switch></div>
+      <button class="btn" id="logout" data-ui="logout"></button>
+    </div>
+    <nav class="tabs" id="tabs"></nav>
+  </header>
+  <main id="view"></main>
+  <div class="footbar hidden" id="footbar">
+    <div class="in">
+      <div class="sum" id="summary"></div>
+      <button class="btn" id="clearBtn" data-ui="clear"></button>
+      <button class="btn dark" id="genBtn" data-ui="genText"></button>
+      <button class="btn primary" id="saveBtn" data-ui="save"></button>
+    </div>
+  </div>
+</section>
+
+<div class="toast" id="toast"></div>
+<div class="modal hidden" id="modal">
+  <div class="box">
+    <div class="mh" id="mTitle"></div>
+    <div class="mb" id="mBody"></div>
+    <div class="mf" id="mFoot"></div>
+  </div>
+</div>
+<input type="file" id="fileXlsx" accept=".xlsx,.xls,.csv" class="hidden">
+<input type="file" id="fileLogo" accept="image/png,image/svg+xml,image/jpeg" class="hidden">
+
+<script type="module">
+import { firebaseConfig } from "./firebase-config.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-app.js";
+import { getAuth, connectAuthEmulator, onAuthStateChanged, signInWithEmailAndPassword, signOut,
+         createUserWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-auth.js";
+import { getFirestore, connectFirestoreEmulator, collection, doc, getDoc, setDoc, addDoc, updateDoc, deleteDoc,
+         onSnapshot, writeBatch, serverTimestamp } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-firestore.js";
+
+/* =====================================================================
+   FIREBASE
+   ===================================================================== */
+const fbApp = initializeApp(firebaseConfig);
+const auth = getAuth(fbApp);
+const db = getFirestore(fbApp);
+// App secondaria: serve all'head coach per creare account scout senza uscire dal proprio account
+const fbApp2 = initializeApp(firebaseConfig, "creazioneUtenti");
+const auth2 = getAuth(fbApp2);
+const LOCAL = ["localhost","127.0.0.1"].includes(location.hostname) && new URLSearchParams(location.search).has("emulator");
+if (LOCAL){
+  connectAuthEmulator(auth, "http://127.0.0.1:9099", {disableWarnings:true});
+  connectAuthEmulator(auth2, "http://127.0.0.1:9099", {disableWarnings:true});
+  connectFirestoreEmulator(db, "127.0.0.1", 8080);
+}
+
+/* =====================================================================
+   TESTI INTERFACCIA (DE / FR / IT)
+   ===================================================================== */
+const UI = {
+ de:{loginTitle:"Anmeldung",email:"E-Mail",pw:"Passwort",loginBtn:"Anmelden",forgot:"Passwort vergessen?",
+  badCreds:"E-Mail oder Passwort falsch",noAccess:"Kein Zugang: Ihr Konto wurde nicht vom Head Coach freigeschaltet oder ist deaktiviert.",
+  needEmail:"Zuerst die E-Mail eingeben",resetSent:"Falls die Adresse existiert, wurde eine E-Mail zum Zurücksetzen gesendet.",loading:"Laden…",netErr:"Verbindungsfehler – bitte erneut versuchen",
+  roleCoach:"Head Coach",roleScout:"Scout",logout:"Abmelden",
+  tabPlayers:"Spieler",tabTeams:"Teams & Spielfeld",tabMatches:"Spiele",tabSheet:"Scout-Bogen",tabUsers:"Scouts",tabLogo:"Logo",
+  importTitle:"Spieler importieren",importExcel:"Excel-Datei (Aufgebot) laden",importExcelHint:"Spalten werden automatisch erkannt: Name, Vorname, Geburtsdatum, Verein",
+  importPaste:"Oder Liste einfügen (aus Excel kopiert): Name, Vorname, Geburtsdatum, Verein – eine Zeile pro Spieler",
+  parse:"Liste lesen",previewN:"Spieler gelesen",addAll:"Zur Liste hinzufügen",cancel:"Abbrechen",
+  colCognome:"Name",colNome:"Vorname",colNascita:"Geburtsdatum",colClub:"Verein",colTeam:"Team",colRole:"Rolle",
+  listTitle:"Spielerliste",xlsxFail:"Datei konnte nicht gelesen werden",nothingFound:"Keine Spieler gefunden",added:"Spieler hinzugefügt",
+  teamsTitle:"Teams",addTeam:"+ Team",newTeam:"Neues Team",pool:"Zuzuteilen",poolHint:"Spieler antippen, dann die Rolle auf dem Spielfeld antippen.",
+  bench:"Ersatz",gk:"Torhüter",selMsg:"Ausgewählt: {x} – jetzt eine Rolle antippen",allAssigned:"Alle Spieler sind zugeteilt",delTeam:"Team löschen",
+  mkTeams:"3 Teams erstellen (Rot, Blau, Grün)",defTeams:["Rot","Blau","Grün"],noTeams:"Noch keine Teams",
+  matchesTitle:"Spiele des Turniers",addMatch:"Spiel hinzufügen",teamA:"Team A",teamB:"Team B",day:"Tag",time:"Zeit",field:"Platz",
+  roundRobin:"Jeder gegen jeden erstellen",noMatches:"Noch keine Spiele",sameTeam:"Zwei verschiedene Teams wählen",
+  logoTitle:"Logo",logoHint:"Logo hochladen (PNG, SVG oder JPG, max. 700 KB): es erscheint oben anstelle des Schweizerkreuzes.",logoUpload:"Logo hochladen",logoRemove:"Logo entfernen",logoTooBig:"Logo zu gross (max. 700 KB)",
+  usersTitle:"Zugänge",newUser:"Neuer Zugang",uName:"Name",uEmail:"E-Mail",uPw:"Startpasswort (mind. 6 Zeichen)",uRole:"Rolle",uLang:"Sprache",create:"Zugang erstellen",
+  status:"Status",active:"aktiv",inactive:"deaktiviert",deactivate:"Deaktivieren",reactivate:"Reaktivieren",sendReset:"Passwort-Mail senden",resetTo:"E-Mail gesendet an",
+  created:"Zugang erstellt",pwShort:"Passwort zu kurz (mind. 6 Zeichen)",emailInUse:"Diese E-Mail hat bereits ein Konto",emailBad:"E-Mail ungültig",you:"Sie",
+  usersHint:"Nur Personen mit einem aktiven Zugang können sich anmelden. Deaktivierte Zugänge sehen keine Daten mehr.",
+  match:"Spiel",pickMatch:"Spiel wählen…",needMatch:"Bitte zuerst ein Spiel wählen",player:"Spieler",search:"Spieler suchen (Name, Vorname)…",noRes:"Kein Spieler gefunden",
+  change:"Ändern",existing:"Bögen",date:"Datum",save:"Bogen speichern",clear:"Neuer Bogen",marked:"Merkmale markiert",noPlayer:"Kein Spieler gewählt",
+  needPlayer:"Bitte zuerst einen Spieler wählen",savedOk:"Bogen gespeichert",saveFail:"Speichern fehlgeschlagen",
+  otherPh:"Weiterer Aspekt…",notePh:"Notiz…",close:"Schliessen",cleared:"Bogen geleert",potHint:"Eine Auswahl",tipsHint:"Note 1–5 · 3 = genügend",
+  tipsNames:{T:"Technik",I:"Intelligenz",P:"Persönlichkeit",S:"Schnelligkeit"},itPending:"",
+  genText:"Text generieren",genTitle:"Bericht (Entwurf – Stil wird mit dem Head Coach festgelegt)",copy:"Kopieren",copied:"Kopiert",
+  noTeamYet:"ohne Team",del:"Löschen",confirmDel:"Wirklich löschen?",yes:"Ja, löschen",permErr:"Keine Berechtigung"},
+ fr:{loginTitle:"Connexion",email:"E-mail",pw:"Mot de passe",loginBtn:"Se connecter",forgot:"Mot de passe oublié ?",
+  badCreds:"E-mail ou mot de passe incorrect",noAccess:"Accès refusé : votre compte n'a pas été activé par le head coach ou il est désactivé.",
+  needEmail:"Saisir d'abord l'e-mail",resetSent:"Si l'adresse existe, un e-mail de réinitialisation a été envoyé.",loading:"Chargement…",netErr:"Erreur de connexion – réessayer",
+  roleCoach:"Head coach",roleScout:"Scout",logout:"Déconnexion",
+  tabPlayers:"Joueurs",tabTeams:"Équipes & terrain",tabMatches:"Matchs",tabSheet:"Fiche scout",tabUsers:"Scouts",tabLogo:"Logo",
+  importTitle:"Importer des joueurs",importExcel:"Charger le fichier Excel (convocation)",importExcelHint:"Colonnes reconnues automatiquement : nom, prénom, date de naissance, club",
+  importPaste:"Ou coller une liste (copiée d'Excel) : nom, prénom, date de naissance, club – une ligne par joueur",
+  parse:"Lire la liste",previewN:"joueurs lus",addAll:"Ajouter à la liste",cancel:"Annuler",
+  colCognome:"Nom",colNome:"Prénom",colNascita:"Date de naissance",colClub:"Club",colTeam:"Équipe",colRole:"Rôle",
+  listTitle:"Liste des joueurs",xlsxFail:"Impossible de lire le fichier",nothingFound:"Aucun joueur trouvé",added:"joueurs ajoutés",
+  teamsTitle:"Équipes",addTeam:"+ Équipe",newTeam:"Nouvelle équipe",pool:"À attribuer",poolHint:"Touchez un joueur, puis touchez le rôle sur le terrain.",
+  bench:"Remplaçants",gk:"Gardien",selMsg:"Sélectionné : {x} – touchez maintenant un rôle",allAssigned:"Tous les joueurs sont attribués",delTeam:"Supprimer l'équipe",
+  mkTeams:"Créer 3 équipes (Rouge, Bleu, Vert)",defTeams:["Rouge","Bleu","Vert"],noTeams:"Pas encore d'équipes",
+  matchesTitle:"Matchs du tournoi",addMatch:"Ajouter un match",teamA:"Équipe A",teamB:"Équipe B",day:"Jour",time:"Heure",field:"Terrain",
+  roundRobin:"Créer tous contre tous",noMatches:"Pas encore de matchs",sameTeam:"Choisir deux équipes différentes",
+  logoTitle:"Logo",logoHint:"Charger le logo (PNG, SVG ou JPG, max. 700 Ko) : il apparaît en haut à la place de la croix suisse.",logoUpload:"Charger le logo",logoRemove:"Retirer le logo",logoTooBig:"Logo trop grand (max. 700 Ko)",
+  usersTitle:"Accès",newUser:"Nouvel accès",uName:"Nom",uEmail:"E-mail",uPw:"Mot de passe initial (min. 6 caractères)",uRole:"Rôle",uLang:"Langue",create:"Créer l'accès",
+  status:"Statut",active:"actif",inactive:"désactivé",deactivate:"Désactiver",reactivate:"Réactiver",sendReset:"Envoyer e-mail mot de passe",resetTo:"E-mail envoyé à",
+  created:"Accès créé",pwShort:"Mot de passe trop court (min. 6 caractères)",emailInUse:"Cet e-mail a déjà un compte",emailBad:"E-mail non valide",you:"vous",
+  usersHint:"Seules les personnes avec un accès actif peuvent se connecter. Les accès désactivés ne voient plus aucune donnée.",
+  match:"Match",pickMatch:"Choisir le match…",needMatch:"Choisir d'abord un match",player:"Joueur",search:"Chercher un joueur (nom, prénom)…",noRes:"Aucun joueur trouvé",
+  change:"Changer",existing:"fiches",date:"Date",save:"Enregistrer la fiche",clear:"Nouvelle fiche",marked:"caractéristiques cochées",noPlayer:"Aucun joueur choisi",
+  needPlayer:"Choisir d'abord un joueur",savedOk:"Fiche enregistrée",saveFail:"Échec de l'enregistrement",
+  otherPh:"Autre aspect…",notePh:"Note…",close:"Fermer",cleared:"Fiche vidée",potHint:"Un seul choix",tipsHint:"Note 1–5 · 3 = suffisant",
+  tipsNames:{T:"Technique",I:"Intelligence",P:"Personnalité",S:"Vitesse"},itPending:"",
+  genText:"Générer le texte",genTitle:"Rapport (brouillon – le style sera défini avec le head coach)",copy:"Copier",copied:"Copié",
+  noTeamYet:"sans équipe",del:"Supprimer",confirmDel:"Vraiment supprimer ?",yes:"Oui, supprimer",permErr:"Pas d'autorisation"},
+ it:{loginTitle:"Accesso",email:"Email",pw:"Password",loginBtn:"Accedi",forgot:"Password dimenticata?",
+  badCreds:"Email o password errati",noAccess:"Accesso negato: il tuo account non è stato abilitato dall'head coach oppure è disattivato.",
+  needEmail:"Scrivi prima l'email",resetSent:"Se l'indirizzo esiste, è stata inviata un'email per reimpostare la password.",loading:"Caricamento…",netErr:"Errore di connessione – riprova",
+  roleCoach:"Head coach",roleScout:"Scout",logout:"Esci",
+  tabPlayers:"Giocatori",tabTeams:"Squadre e campetto",tabMatches:"Partite",tabSheet:"Scheda scout",tabUsers:"Scout",tabLogo:"Logo",
+  importTitle:"Importa giocatori",importExcel:"Carica file Excel (call up)",importExcelHint:"Le colonne vengono riconosciute da sole: cognome, nome, data di nascita, club",
+  importPaste:"Oppure incolla una lista (copiata da Excel): cognome, nome, data di nascita, club – una riga per giocatore",
+  parse:"Leggi lista",previewN:"giocatori letti",addAll:"Aggiungi all'elenco",cancel:"Annulla",
+  colCognome:"Cognome",colNome:"Nome",colNascita:"Data di nascita",colClub:"Club",colTeam:"Squadra",colRole:"Ruolo",
+  listTitle:"Elenco giocatori",xlsxFail:"Non riesco a leggere il file",nothingFound:"Nessun giocatore trovato",added:"giocatori aggiunti",
+  teamsTitle:"Squadre",addTeam:"+ Squadra",newTeam:"Nuova squadra",pool:"Da assegnare",poolHint:"Tocca un giocatore, poi tocca il ruolo sul campo.",
+  bench:"Panchina",gk:"Portiere",selMsg:"Selezionato: {x} – ora tocca un ruolo",allAssigned:"Tutti i giocatori sono assegnati",delTeam:"Elimina squadra",
+  mkTeams:"Crea 3 squadre (Rossi, Blu, Verdi)",defTeams:["Rossi","Blu","Verdi"],noTeams:"Ancora nessuna squadra",
+  matchesTitle:"Partite del torneo",addMatch:"Aggiungi partita",teamA:"Squadra A",teamB:"Squadra B",day:"Giorno",time:"Ora",field:"Campo",
+  roundRobin:"Crea tutti contro tutti",noMatches:"Ancora nessuna partita",sameTeam:"Scegli due squadre diverse",
+  logoTitle:"Logo",logoHint:"Carica il logo (PNG, SVG o JPG, max 700 KB): comparirà in alto al posto della croce svizzera.",logoUpload:"Carica logo",logoRemove:"Rimuovi logo",logoTooBig:"Logo troppo grande (max 700 KB)",
+  usersTitle:"Accessi",newUser:"Nuovo accesso",uName:"Nome",uEmail:"Email",uPw:"Password iniziale (min. 6 caratteri)",uRole:"Ruolo",uLang:"Lingua",create:"Crea accesso",
+  status:"Stato",active:"attivo",inactive:"disattivato",deactivate:"Disattiva",reactivate:"Riattiva",sendReset:"Invia email password",resetTo:"Email inviata a",
+  created:"Accesso creato",pwShort:"Password troppo corta (min. 6 caratteri)",emailInUse:"Questa email ha già un account",emailBad:"Email non valida",you:"tu",
+  usersHint:"Solo chi ha un accesso attivo può entrare. Gli accessi disattivati non vedono più nessun dato.",
+  match:"Partita",pickMatch:"Scegli la partita…",needMatch:"Scegli prima la partita",player:"Giocatore",search:"Cerca giocatore (cognome, nome)…",noRes:"Nessun giocatore trovato",
+  change:"Cambia",existing:"schede",date:"Data",save:"Salva scheda",clear:"Nuova scheda",marked:"caratteristiche spuntate",noPlayer:"Nessun giocatore scelto",
+  needPlayer:"Scegli prima un giocatore",savedOk:"Scheda salvata",saveFail:"Salvataggio non riuscito",
+  otherPh:"Altro aspetto…",notePh:"Nota…",close:"Chiudi",cleared:"Scheda svuotata",potHint:"Una sola scelta",tipsHint:"Nota 1–5 · 3 = sufficiente",
+  tipsNames:{T:"Tecnica",I:"Intelligenza",P:"Personalità",S:"Velocità"},
+  itPending:"Voci della scheda in italiano provvisorie: verranno sostituite con la tabella ufficiale.",
+  genText:"Genera testo",genTitle:"Relazione (bozza – lo stile verrà definito con l'head coach)",copy:"Copia",copied:"Copiato",
+  noTeamYet:"senza squadra",del:"Elimina",confirmDel:"Eliminare davvero?",yes:"Sì, elimina",permErr:"Permesso negato"}
+};
+
+/* =====================================================================
+   SCHEDA – riferimento DE. Ogni voce: [DE, FR, IT (provvisorio)]
+   ===================================================================== */
+const SECTIONS = [
+  {id:"fuss", t:["Fuss","Pied","Piede"], items:[["R","D","D"],["L","G","S"]]},
+  {id:"position", t:["Spielposition","Rôle / position","Posizione"], items:[
+    ["Aussenverteidiger","Déf. latéral","Terzino"],["Innenverteidiger","Déf. central","Difensore centrale"],["Play / Spielmacher","Playmaker","Regista"],["6er","Milieu","Mediano (6)"],
+    ["8er","N°8 / profil demi-espace","Mezzala (8)"],["Flügel","Ailier","Ala"],["10er","Milieu offensif","Trequartista (10)"],["Stürmer","Attaquant","Attaccante"]]},
+  {id:"spielart", t:["Einstellung / Spielart","Profil","Atteggiamento / stile di gioco"], items:[
+    ["Defensiv","Défensif","Difensivo"],["Spielmacher / Übersicht","Joueur de construction","Regista / visione di gioco"],["Kreativ","Liaison offensive / dernière passe","Creativo"],["Torabschluss / Effizienz","Joueur de box / profil buteur","Finalizzazione / efficacia"],
+    ["Position","Position","Posizione"],["Bewegung / Freilaufverhalten","Mouvement","Movimento / smarcamento"],["Box to box","Box to box","Box to box"],["Aktiv in beiden Spielphasen","Complet dans les deux phases","Attivo in entrambe le fasi"]]},
+  {id:"bio", t:["Biol. Entwicklung","Développement biologique","Sviluppo biologico"], items:[
+    ["Spätentwickler","Tardif","Sviluppo tardivo"],["Wahrscheinlicher Spätentwickler","Plutôt tardif","Probabile sviluppo tardivo"],["Normal","Normal","Normale"],["Wahrscheinlicher Frühentwickler","Plutôt avancé","Probabile sviluppo precoce"],["Frühentwickler","Avancé","Sviluppo precoce"]]},
+  {id:"morph", t:["Morphologie","Morphologie","Morfologia"], items:[
+    ["Langer Körperbau","Longiligne","Corporatura longilinea"],["Ausgewogener / balancierter Körperbau","Normoligne","Corporatura equilibrata"],["Kompakter Körperbau","Bréviligne","Corporatura compatta"]]},
+  {id:"struktur", t:["Struktur","Gabarit","Struttura"], items:[
+    ["Schlanker / drahtiger Typ","Fin","Snello / asciutto"],["Mittlerer / durchschn. Körperbau","Moyen","Corporatura media"],["Robust","Robuste","Robusto"]]},
+  {id:"technik", t:["Technik","Technique","Tecnica"], items:[
+    ["Orientierte Ballannahme","Contrôle orienté","Ricezione orientata"],["Qualität in den Aktionen","Conduite","Qualità nelle azioni"],["Dribbling","Dribbling","Dribbling"],["Querpass","Passe horizontale","Passaggio orizzontale"],
+    ["Vertikalpass (Keypass)","Passe vert. (Keypass)","Passaggio verticale (keypass)"],["Diagonalpass","Passe diagonale","Passaggio diagonale"],["Steil- / Linienbrechender Pass (Keypass)","Passe en profondeur (Keypass)","Passaggio filtrante / tra le linee (keypass)"],["Langer – hoher oder flacher Pass","Passe longue","Passaggio lungo – alto o rasoterra"],
+    ["Dosierung","Dosage","Dosaggio"],["Variationen","Variation","Variazioni"],["Flanke","Centre","Cross"],["Kopfball","Jeu de tête","Colpo di testa"],
+    ["Standardsituationen","Balles arrêtées","Calci piazzati"],["Zweikampfverhalten","Duels","Duelli"],["Beidfüssig","Utilise les deux pieds","Ambidestro"],["Kurze Pässe","Passe courte","Passaggio corto"]]},
+  {id:"smart", type:"smart", t:["(Spiel-) Intelligenz","Intelligence de jeu","Intelligenza di gioco"], sub:["Wahrnehmung, Entscheidung, Positionierung","Perception, décision, positionnement","Percezione, decisione, posizionamento"], items:[
+    ["S","Bezieht Kontext, Stärken/Schwächen und die Spielidee in Aktionen mit ein","Intègre le contexte, les forces/les faiblesses et l'idée de jeu dans ses actions","Integra contesto, punti di forza/debolezza e idea di gioco nelle sue azioni"],
+    ["M","Antizipiert, bleibt ruhig und agiert im richtigen Moment","Anticipe les situations de jeu, garde son calme et agit au bon moment","Anticipa, resta calmo e agisce al momento giusto"],
+    ["A","Reagiert flexibel, kreativ und mit abgewogenem Risiko auf sich verändernde Spielsituationen","Réagit de manière flexible, créative et prend des risques calculés face à des situations de jeu changeantes","Reagisce in modo flessibile, creativo e con rischio calcolato alle situazioni di gioco che cambiano"],
+    ["R","Orientiert und positioniert sich aktiv, um Möglichkeiten zu schaffen oder Gefahren zu minimieren","S'oriente et se positionne activement afin de créer des opportunités ou de minimiser les dangers","Si orienta e si posiziona attivamente per creare opportunità o ridurre i pericoli"],
+    ["T","Kommuniziert hilfreich, lenkt das Spiel und ermöglicht erfolgversprechende Spielfortsetzungen","Communique de manière utile, influence le jeu et favorise la poursuite prometteuse de l'action de jeu","Comunica in modo utile, guida il gioco e favorisce prosecuzioni promettenti dell'azione"]]},
+  {id:"taktik", type:"taktik", t:["Weitere taktische Aspekte","Autres aspects","Altri aspetti tattici"], items:[
+    ["Pressing","Pressing","Pressing"],["Attackieren eines freien Raums","Attaque de l'espace","Attacco dello spazio libero"],["Abfangen / Antizipation eines Passes","Interception","Intercetto / anticipo del passaggio"],["Präventives Verhalten – OFF/DEF","Préventif OFF / DEF","Comportamento preventivo – OFF/DEF"]]},
+  {id:"pers", t:["Persönlichkeit","Personnalité","Personalità"], items:[
+    ["Teamplayer","Teamplayer","Uomo squadra"],["Positiv","Positif","Positivo"],["Aktiv","Actif","Attivo"],["Leader","Leader","Leader"],
+    ["Kämpferisch / aggressiv / mental stark","Combatif","Combattivo / aggressivo / mentalmente forte"],["Konzentriert","Concentré","Concentrato"],["Motiviert","Motivé","Motivato"],["Mutig","Courageux","Coraggioso"],
+    ["Kommunikativ","Communicatif","Comunicativo"],["Fairplay","Fairplay","Fair play"],["Charakter- / Mentalitätsspieler","Sacrifice","Giocatore di carattere / mentalità"],["Initiativ / Aktiv / Mutig","Entreprenant","Intraprendente / attivo / coraggioso"],
+    ["Fehlende Intensität / Bereitschaft","Nonchalant","Mancanza di intensità / disponibilità"],["Flexibel","Flexible","Flessibile"],["Dominant","Dominant","Dominante"],["Entschlossen","Déterminé","Determinato"]]},
+  {id:"athl", t:["Athl. Aspekte","Profil athlétique","Aspetti atletici"], items:[
+    ["Widerstandsfähig / Belastbar / Ausdauernd","Résistant","Resistente"],["Explosiv","Explosif","Esplosivo"],["Beschleunigung","Accélération","Accelerazione"],["Richtungswechsel","Changement de direction","Cambio di direzione"],
+    ["Agil / Reaktiv","Agile / Réactif","Agile / reattivo"],["Robust / Kraftvoll / Präsent","Fort / puissant","Robusto / potente / presente"],["Schnell","Rapide","Veloce"],["Wiederholende Sprints","Répétition de sprints","Sprint ripetuti"]]},
+  {id:"tips", type:"tips", t:["TIPS","TIPS","TIPS"]},
+  {id:"potenzial", type:"pot", t:["Potenzial","Potentiel","Potenziale"], items:[
+    ["A","Nationalspieler","Joueur équipe nationale","Giocatore da nazionale"],["B","Nationalmannschaftspotenzial","Joueur cadre élargi","Potenziale da nazionale"],["C","Kein Nationalspieler","Pas le profil international","Non da nazionale"]]}
+];
+const SEC = Object.fromEntries(SECTIONS.map(s=>[s.id,s]));
+const LI = {de:0,fr:1,it:2};
+const ZONES = [
+  {id:"st",pos:7,x:50,y:11},{id:"flL",pos:5,x:16,y:21},{id:"flR",pos:5,x:84,y:21},{id:"z10",pos:6,x:50,y:28},
+  {id:"z8",pos:4,x:28,y:43},{id:"play",pos:2,x:72,y:43},{id:"z6",pos:3,x:50,y:57},
+  {id:"avL",pos:0,x:16,y:70},{id:"avR",pos:0,x:84,y:70},{id:"iv",pos:1,x:50,y:75},{id:"tw",pos:null,x:50,y:91}];
+
+/* =====================================================================
+   STATO
+   ===================================================================== */
+let lang = (()=>{ try{ return localStorage.getItem("st_lang") || "it"; }catch(e){ return "it"; } })();
+let me = null;                       // profilo utente collegato
+let tab = null;
+const D = {users:[], players:[], teams:[], matches:[], schede:[], logo:null};
+let unsubs = [];
+let coachSel = null, curTeam = null, importRows = null, pasteText = "";
+let matchId = null, player = null, query = "";
+let checks = new Set(), free = ["","","",""], pot = null, tips = freshTips();
+function freshTips(){ return {T:{v:null,n:""},I:{v:null,n:""},P:{v:null,n:""},S:{v:null,n:""}}; }
+
+/* =====================================================================
+   UTILITÀ
+   ===================================================================== */
+const $ = s => document.querySelector(s);
+const u = k => UI[lang][k];
+const L = arr => arr[LI[lang]] ?? arr[0];
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const col = v => v == null ? "" : v >= 4 ? "g" : v >= 2.5 ? "y" : "r";
+const fmt = v => v == null ? "–" : (v % 1 ? v.toFixed(1) : String(v));
+const team = id => D.teams.find(t=>t.id===id);
+const pl = id => D.players.find(p=>p.id===id);
+const isCoach = () => me && me.ruolo === "coach";
+function roleName(zid){ const z = ZONES.find(z=>z.id===zid); if(!z) return ""; return z.pos == null ? u("gk") : L(SEC.position.items[z.pos]); }
+function fmtDay(iso){ if(!iso) return ""; const [y,m,d]=iso.split("-"); return `${d}.${m}.`; }
+function matchLabel(m){ if(!m) return ""; const a=team(m.a), b=team(m.b); return `${fmtDay(m.giorno)} ${m.ora} · ${a?a.name:"?"} – ${b?b.name:"?"} · ${u("field")} ${m.campo}`; }
+function toast(msg){ const t=$("#toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove("show"),2600); }
+function openModal(title, bodyHTML, buttons){
+  $("#mTitle").textContent = title; $("#mBody").innerHTML = bodyHTML; $("#mFoot").innerHTML = "";
+  buttons.forEach(b=>{ const el=document.createElement("button"); el.className="btn "+(b.cls||""); el.textContent=b.label; el.onclick=b.on; $("#mFoot").appendChild(el); });
+  $("#modal").classList.remove("hidden");
+}
+const closeModal = ()=> $("#modal").classList.add("hidden");
+function confirmDel(onYes){ openModal(u("confirmDel"), "", [{label:u("cancel"),on:closeModal},{label:u("yes"),cls:"primary",on:()=>{closeModal();onYes();}}]); }
+function fail(e){ console.error(e); toast(e && e.code==="permission-denied" ? u("permErr") : u("netErr")); }
+const run = p => p.catch(fail);
+function logoHTML(size=34){
+  if (D.logo) return `<img src="${D.logo}" alt="Logo">`;
+  return `<svg viewBox="0 0 32 32" width="${size}" height="${size}"><rect width="32" height="32" rx="5" fill="#d52b1e" stroke="#fff" stroke-width="2"/><rect x="13" y="6" width="6" height="20" fill="#fff"/><rect x="6" y="13" width="20" height="6" fill="#fff"/></svg>`;
+}
+function show(id){ ["boot","login","app"].forEach(x=> $("#"+x).classList.toggle("hidden", x!==id)); }
+
+/* Render "gentile": se l'utente sta scrivendo in un campo, aspetta che finisca */
+let pendingRender = false;
+function scheduleRender(){
+  const a = document.activeElement;
+  if (a && $("#view").contains(a) && (a.tagName==="INPUT"||a.tagName==="TEXTAREA"||a.tagName==="SELECT")) { pendingRender = true; return; }
+  render();
+}
+document.addEventListener("focusout", ()=> setTimeout(()=>{ if (pendingRender){ pendingRender=false; scheduleRender(); } }, 50));
+
+/* =====================================================================
+   AUTENTICAZIONE
+   ===================================================================== */
+function loginError(msg){ const e=$("#loginErr"); e.textContent=msg; e.classList.toggle("hidden", !msg); }
+
+onAuthStateChanged(auth, async user=>{
+  stopListeners();
+  me = null;
+  if (!user){ renderChrome(); show("login"); return; }
+  show("boot"); $("#bootMsg").textContent = u("loading");
+  try{
+    const snap = await getDoc(doc(db,"users",user.uid));
+    if (!snap.exists() || snap.data().attivo !== true) throw {code:"no-profile"};
+    me = {uid:user.uid, ...snap.data()};
+  }catch(e){
+    await signOut(auth);
+    loginError(e.code==="no-profile"||e.code==="permission-denied" ? u("noAccess") : u("netErr"));
+    return;
+  }
+  if (me.lingua && UI[me.lingua]) lang = me.lingua;
+  tab = isCoach() ? "players" : "sheet";
+  startListeners();
+  show("app"); render();
+});
+
+$("#loginForm").addEventListener("submit", async e=>{
+  e.preventDefault(); loginError("");
+  const btn = $("#loginBtn"); btn.disabled = true;
+  try{ await signInWithEmailAndPassword(auth, $("#u").value.trim(), $("#p").value); }
+  catch(err){
+    const bad = ["auth/invalid-credential","auth/wrong-password","auth/user-not-found","auth/invalid-email","auth/user-disabled"];
+    loginError(bad.includes(err.code) ? u("badCreds") : u("netErr"));
+  }finally{ btn.disabled = false; }
+});
+$("#forgot").onclick = async e=>{
+  e.preventDefault();
+  const em = $("#u").value.trim(); if (!em){ loginError(u("needEmail")); return; }
+  try{ await sendPasswordResetEmail(auth, em); }catch(err){}
+  loginError(""); toast(u("resetSent"));
+};
+$("#logout").onclick = ()=> signOut(auth);
+
+/* =====================================================================
+   DATI IN TEMPO REALE
+   ===================================================================== */
+function listen(name, sortFn){
+  return onSnapshot(collection(db,name), snap=>{
+    D[name] = snap.docs.map(d=>({id:d.id, ...d.data()}));
+    if (sortFn) D[name].sort(sortFn);
+    if (name==="players" && player) player = pl(player.id) || null;
+    scheduleRender();
+  }, fail);
+}
+function startListeners(){
+  unsubs.push(listen("players", (a,b)=>(a.cognome||"").localeCompare(b.cognome||"")));
+  unsubs.push(listen("teams", (a,b)=>(a.ordine??0)-(b.ordine??0)));
+  unsubs.push(listen("matches", (a,b)=>((a.giorno||"")+(a.ora||"")).localeCompare((b.giorno||"")+(b.ora||""))));
+  unsubs.push(listen("schede"));
+  unsubs.push(onSnapshot(doc(db,"settings","app"), s=>{ D.logo = s.exists() ? (s.data().logo||null) : null; renderChrome(); if(tab==="logo") scheduleRender(); }, fail));
+  // il proprio profilo: se l'head coach lo disattiva, si esce subito
+  unsubs.push(onSnapshot(doc(db,"users",me.uid), s=>{
+    if (!s.exists() || s.data().attivo !== true){ signOut(auth); loginError(u("noAccess")); return; }
+    me = {uid:me.uid, ...s.data()};
+  }, ()=>{ signOut(auth); }));
+  if (isCoach()) unsubs.push(listen("users", (a,b)=>(a.nome||"").localeCompare(b.nome||"")));
+}
+function stopListeners(){ unsubs.forEach(f=>{ try{f();}catch(e){} }); unsubs = []; }
+
+/* =====================================================================
+   RENDER GENERALE
+   ===================================================================== */
+function renderChrome(){
+  document.querySelectorAll("[data-lang-switch]").forEach(el=>{
+    el.innerHTML = ["de","fr","it"].map(l=>`<button type="button" class="${l===lang?"on":""}" data-l="${l}">${l.toUpperCase()}</button>`).join("");
+  });
+  document.querySelectorAll("[data-ui]").forEach(el=>{ el.textContent = u(el.dataset.ui); });
+  document.querySelectorAll("[data-logo]").forEach(el=> el.innerHTML = logoHTML());
+  document.documentElement.lang = lang;
+  if (!me) return;
+  $("#roleTag").textContent = isCoach() ? u("roleCoach") : u("roleScout");
+  $("#userName").textContent = me.nome || "";
+  const tabs = isCoach() ? ["players","teams","matches","sheet","users","logo"] : [];
+  const names = {players:"tabPlayers",teams:"tabTeams",matches:"tabMatches",sheet:"tabSheet",users:"tabUsers",logo:"tabLogo"};
+  $("#tabs").innerHTML = tabs.map(t=>`<button class="${t===tab?"on":""}" data-tab="${t}">${u(names[t])}</button>`).join("");
+  $("#tabs").classList.toggle("hidden", !tabs.length);
+}
+function render(){
+  renderChrome();
+  if (!me) return;
+  $("#footbar").classList.toggle("hidden", tab!=="sheet");
+  ({players:viewPlayers,teams:viewTeams,matches:viewMatches,sheet:viewSheet,users:viewUsers,logo:viewLogo})[tab]();
+}
+
+/* =====================================================================
+   HEAD COACH – GIOCATORI
+   ===================================================================== */
+function viewPlayers(){
+  const rows = D.players;
+  $("#view").innerHTML = `
+  <div class="grid2" style="margin-bottom:16px">
+    <div class="card"><h3>${u("importTitle")}</h3>
+      <div class="drop" id="dropX"><b>📄 ${u("importExcel")}</b><div class="muted" style="margin-top:6px">${u("importExcelHint")}</div></div></div>
+    <div class="card"><h3>&nbsp;</h3>
+      <div class="muted" style="margin-bottom:8px">${u("importPaste")}</div>
+      <textarea class="t" id="pasteBox" rows="4" placeholder="Rossi	Mario	12.03.2011	FC Lugano">${esc(pasteText)}</textarea>
+      <div style="margin-top:8px"><button class="btn" id="parseBtn">${u("parse")}</button></div></div>
+  </div>
+  <div id="preview"></div>
+  <div class="card">
+    <h3>${u("listTitle")} <span class="muted">(${rows.length})</span></h3>
+    <table class="list"><thead><tr><th>${u("colCognome")}</th><th>${u("colNome")}</th><th>${u("colNascita")}</th><th>${u("colClub")}</th><th>${u("colTeam")}</th><th>${u("colRole")}</th><th></th></tr></thead>
+    <tbody>${rows.map(p=>{ const t=team(p.team); return `<tr>
+      <td><b>${esc(p.cognome)}</b></td><td>${esc(p.nome)}</td><td>${esc(p.nascita)}</td><td>${esc(p.club)}</td>
+      <td>${t?`<span class="dot" style="background:${esc(t.color)}"></span>${esc(t.name)}`:`<span class="muted">${u("noTeamYet")}</span>`}</td>
+      <td>${p.ruolo?esc(roleName(p.ruolo)):(t?`<span class="muted">${u("bench")}</span>`:"")}</td>
+      <td style="text-align:right"><button class="x" title="${u("del")}" data-delp="${p.id}">×</button></td></tr>`; }).join("")}</tbody></table>
+  </div>`;
+  renderPreview();
+  $("#dropX").onclick = ()=> $("#fileXlsx").click();
+  $("#pasteBox").oninput = e=>{ pasteText = e.target.value; };
+  $("#parseBtn").onclick = ()=>{
+    const rows = pasteText.split(/\r?\n/).map(l=>l.split(/\t|;/).map(c=>c.trim())).filter(r=>r.some(Boolean));
+    importRows = mapRows(rows);
+    if (!importRows.length){ toast(u("nothingFound")); importRows=null; }
+    renderPreview();
+  };
+  document.querySelectorAll("[data-delp]").forEach(b=> b.onclick = ()=> confirmDel(()=> run(deleteDoc(doc(db,"players",b.dataset.delp)))));
+}
+function classify(h){
+  h = String(h||"").toLowerCase().trim();
+  if (/vorname|prénom|prenom|first/.test(h) || h==="nome") return "nome";
+  if (/nachname|cognome|nom de famille|last|surname/.test(h) || h==="name" || h==="nom") return "cognome";
+  if (/geburt|nascita|naissance|birth|jahrgang|anno|année|date/.test(h)) return "nascita";
+  if (/verein|club|klub|società|societa|squadra|team|équipe|equipe/.test(h)) return "club";
+  return null;
+}
+function mapRows(rows){
+  if (!rows.length) return [];
+  let map = {cognome:0,nome:1,nascita:2,club:3}, start = 0;
+  const hdr = rows[0].map(classify);
+  if (hdr.filter(Boolean).length >= 2){ map = {}; hdr.forEach((k,i)=>{ if(k && map[k]==null) map[k]=i; }); start = 1; }
+  return rows.slice(start).map(r=>({cognome:r[map.cognome]||"",nome:r[map.nome]||"",nascita:r[map.nascita]||"",club:r[map.club]||""}))
+             .filter(p=>p.cognome && p.nome);
+}
+function renderPreview(){
+  const box = $("#preview"); if (!box) return;
+  if (!importRows){ box.innerHTML=""; return; }
+  box.innerHTML = `<div class="card" style="margin-bottom:16px;border-color:var(--ch)">
+    <div class="row-flex" style="justify-content:space-between;margin-bottom:8px"><b>${importRows.length} ${u("previewN")}</b>
+      <div class="row-flex"><button class="btn" id="impCancel">${u("cancel")}</button><button class="btn primary" id="impOk">${u("addAll")}</button></div></div>
+    <table class="list"><thead><tr><th>${u("colCognome")}</th><th>${u("colNome")}</th><th>${u("colNascita")}</th><th>${u("colClub")}</th></tr></thead>
+    <tbody>${importRows.map(p=>`<tr><td>${esc(p.cognome)}</td><td>${esc(p.nome)}</td><td>${esc(p.nascita)}</td><td>${esc(p.club)}</td></tr>`).join("")}</tbody></table></div>`;
+  $("#impCancel").onclick = ()=>{ importRows=null; renderPreview(); };
+  $("#impOk").onclick = async ()=>{
+    const rows = importRows, n = rows.length;
+    try{
+      for (let i=0;i<rows.length;i+=400){
+        const b = writeBatch(db);
+        rows.slice(i,i+400).forEach(p=> b.set(doc(collection(db,"players")), {...p, team:null, ruolo:null}));
+        await b.commit();
+      }
+      importRows = null; pasteText = ""; toast(`${n} ${u("added")}`); render();
+    }catch(e){ fail(e); }
+  };
+}
+$("#fileXlsx").onchange = async e=>{
+  const f = e.target.files[0]; e.target.value=""; if(!f) return;
+  try{
+    const wb = XLSX.read(await f.arrayBuffer(), {type:"array"});
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    let rows = XLSX.utils.sheet_to_json(ws,{header:1,raw:false,defval:""}).map(r=>r.map(c=>String(c).trim())).filter(r=>r.some(Boolean));
+    const hi = rows.findIndex(r=> r.map(classify).filter(Boolean).length>=2);
+    if (hi>0) rows = rows.slice(hi);
+    importRows = mapRows(rows);
+    if (!importRows.length){ importRows=null; toast(u("nothingFound")); }
+    renderPreview();
+  }catch(err){ toast(u("xlsxFail")); }
+};
+
+/* =====================================================================
+   HEAD COACH – SQUADRE E CAMPETTO
+   ===================================================================== */
+function viewTeams(){
+  if (!team(curTeam)) curTeam = D.teams[0]?.id || null;
+  const t = team(curTeam);
+  if (!t){
+    $("#view").innerHTML = `<div class="card"><h3>${u("teamsTitle")}</h3><p class="muted">${u("noTeams")}</p>
+      <div class="row-flex"><button class="btn primary" id="mkTeams">${u("mkTeams")}</button><button class="btn" id="addTeam">${u("addTeam")}</button></div></div>`;
+    $("#mkTeams").onclick = ()=>{
+      const b = writeBatch(db); const cols = ["#d52b1e","#2b5fd9","#2e9e5b"];
+      u("defTeams").forEach((n,i)=> b.set(doc(collection(db,"teams")), {name:n,color:cols[i],ordine:i}));
+      run(b.commit());
+    };
+    $("#addTeam").onclick = addTeam;
+    return;
+  }
+  const pool = D.players.filter(p=>!p.team || !team(p.team));
+  const inTeam = D.players.filter(p=>p.team===curTeam);
+  const chip = p => `<div class="chip ${coachSel===p.id?"sel":""}" style="--c:${esc(t.color)}" data-chip="${p.id}"><span>${esc(p.cognome)} ${esc((p.nome||"")[0]||"")}.</span><button class="x" data-unassign="${p.id}">×</button></div>`;
+  const selP = coachSel ? pl(coachSel) : null;
+  $("#view").innerHTML = `
+    <div class="teams-bar">
+      ${D.teams.map(x=>`<div class="tteam ${x.id===curTeam?"on":""}" data-team="${x.id}">
+          <input type="color" value="${esc(x.color)}" data-tcolor="${x.id}">
+          <span>${esc(x.name)}</span><span class="n">${D.players.filter(p=>p.team===x.id).length}</span></div>`).join("")}
+      <button class="btn sm" id="addTeam">${u("addTeam")}</button>
+      <span style="flex:1"></span><input class="t" style="width:200px" id="teamName" value="${esc(t.name)}"><button class="btn sm" id="delTeam">${u("delTeam")}</button>
+    </div>
+    ${selP?`<div class="selmsg">${esc(u("selMsg").replace("{x}", selP.cognome+" "+selP.nome))}</div>`:""}
+    <div class="board">
+      <div class="card pool">
+        <h3>${u("pool")} <span class="muted">(${pool.length})</span></h3>
+        <div class="muted" style="margin-bottom:10px">${u("poolHint")}</div>
+        ${pool.length? pool.map(p=>`<div class="pl ${coachSel===p.id?"sel":""}" data-pick="${p.id}"><span><b>${esc(p.cognome)}</b> ${esc(p.nome)}</span><small>${esc(p.club)}</small></div>`).join("") : `<div class="muted">${u("allAssigned")}</div>`}
+      </div>
+      <div>
+        <div class="pitch">
+          <svg class="lines" viewBox="0 0 68 88" preserveAspectRatio="none" fill="none" stroke="rgba(255,255,255,.75)" stroke-width=".4">
+            <rect x="2" y="2" width="64" height="84"/><line x1="2" y1="44" x2="66" y2="44"/><circle cx="34" cy="44" r="7"/>
+            <rect x="16" y="2" width="36" height="14"/><rect x="25" y="2" width="18" height="5"/>
+            <rect x="16" y="72" width="36" height="14"/><rect x="25" y="81" width="18" height="5"/></svg>
+          ${ZONES.map(z=>`<div class="zone" data-zone="${z.id}" style="left:${z.x}%;top:${z.y}%"><div class="zl">${esc(roleName(z.id))}</div>
+              ${inTeam.filter(p=>p.ruolo===z.id).map(chip).join("")}</div>`).join("")}
+        </div>
+        <div class="benchbox" data-zone="bench"><div class="zl">${u("bench")}</div><div class="chips">${inTeam.filter(p=>!p.ruolo).map(chip).join("")}</div></div>
+      </div>
+    </div>`;
+  document.querySelectorAll("[data-team]").forEach(el=> el.onclick = e=>{ if (e.target.matches("input")) return; curTeam = el.dataset.team; coachSel=null; viewTeams(); });
+  document.querySelectorAll("[data-tcolor]").forEach(el=> el.onchange = ()=> run(updateDoc(doc(db,"teams",el.dataset.tcolor),{color:el.value})));
+  $("#addTeam").onclick = addTeam;
+  $("#teamName").onchange = e=>{ const n=e.target.value.trim(); if(n) run(updateDoc(doc(db,"teams",t.id),{name:n})); };
+  $("#delTeam").onclick = ()=> confirmDel(async ()=>{
+    try{
+      const b = writeBatch(db);
+      D.players.filter(p=>p.team===t.id).forEach(p=> b.update(doc(db,"players",p.id),{team:null,ruolo:null}));
+      D.matches.filter(m=>m.a===t.id||m.b===t.id).forEach(m=> b.delete(doc(db,"matches",m.id)));
+      b.delete(doc(db,"teams",t.id)); await b.commit();
+    }catch(e){ fail(e); }
+  });
+  document.querySelectorAll("[data-pick]").forEach(el=> el.onclick = ()=>{ coachSel = coachSel===el.dataset.pick ? null : el.dataset.pick; viewTeams(); });
+  document.querySelectorAll("[data-chip]").forEach(el=> el.onclick = e=>{
+    e.stopPropagation(); if (e.target.closest("[data-unassign]")) return;
+    coachSel = coachSel===el.dataset.chip ? null : el.dataset.chip; viewTeams();
+  });
+  document.querySelectorAll("[data-unassign]").forEach(el=> el.onclick = e=>{
+    e.stopPropagation(); const id = el.dataset.unassign; if (coachSel===id) coachSel=null;
+    run(updateDoc(doc(db,"players",id),{team:null,ruolo:null}));
+  });
+  document.querySelectorAll("[data-zone]").forEach(el=> el.onclick = ()=>{
+    if (!coachSel) return;
+    const id = coachSel; coachSel = null;
+    run(updateDoc(doc(db,"players",id),{team:curTeam, ruolo: el.dataset.zone==="bench" ? null : el.dataset.zone}));
+  });
+}
+function addTeam(){
+  const palette = ["#d52b1e","#2b5fd9","#2e9e5b","#f0a400","#7a3fd1","#1b1f26"];
+  const ord = D.teams.reduce((m,t)=>Math.max(m,(t.ordine??0)+1),0);
+  run(addDoc(collection(db,"teams"),{name:u("newTeam"),color:palette[D.teams.length % palette.length],ordine:ord}).then(r=>{ curTeam=r.id; }));
+}
+
+/* =====================================================================
+   HEAD COACH – PARTITE
+   ===================================================================== */
+function viewMatches(){
+  const ms = D.matches;
+  const opts = sel => D.teams.map(t=>`<option value="${t.id}" ${t.id===sel?"selected":""}>${esc(t.name)}</option>`).join("");
+  $("#view").innerHTML = `
+  <div class="card" style="margin-bottom:16px"><h3>${u("addMatch")}</h3>
+    <div class="row-flex" style="align-items:flex-end">
+      <div><label class="f">${u("teamA")}</label><select class="t" id="mA">${opts(D.teams[0]?.id)}</select></div>
+      <div><label class="f">${u("teamB")}</label><select class="t" id="mB">${opts(D.teams[1]?.id)}</select></div>
+      <div><label class="f">${u("day")}</label><input class="t" type="date" id="mD" value="${ms.at(-1)?.giorno||new Date().toISOString().slice(0,10)}"></div>
+      <div><label class="f">${u("time")}</label><input class="t" type="time" id="mT" value="09:00"></div>
+      <div style="width:90px"><label class="f">${u("field")}</label><input class="t" id="mF" value="1"></div>
+      <button class="btn primary" id="mAdd">${u("addMatch")}</button>
+      <button class="btn" id="mRR">${u("roundRobin")}</button>
+    </div></div>
+  <div class="card"><h3>${u("matchesTitle")} <span class="muted">(${ms.length})</span></h3>
+    ${ms.length?`<table class="list"><thead><tr><th>${u("day")}</th><th>${u("time")}</th><th>${u("teamA")}</th><th></th><th>${u("teamB")}</th><th>${u("field")}</th><th></th></tr></thead><tbody>
+      ${ms.map(m=>{const a=team(m.a),b=team(m.b);return `<tr><td>${fmtDay(m.giorno)}</td><td>${esc(m.ora)}</td>
+        <td><span class="dot" style="background:${esc(a?.color)}"></span><b>${esc(a?.name)}</b></td><td class="muted">–</td>
+        <td><span class="dot" style="background:${esc(b?.color)}"></span><b>${esc(b?.name)}</b></td><td>${esc(m.campo)}</td>
+        <td style="text-align:right"><button class="x" data-delm="${m.id}">×</button></td></tr>`;}).join("")}</tbody></table>`
+      :`<div class="muted">${u("noMatches")}</div>`}</div>`;
+  $("#mAdd").onclick = ()=>{
+    const a=$("#mA").value, b=$("#mB").value;
+    if (!a || a===b){ toast(u("sameTeam")); return; }
+    run(addDoc(collection(db,"matches"),{a,b,giorno:$("#mD").value,ora:$("#mT").value,campo:$("#mF").value.trim()||"1"}));
+  };
+  $("#mRR").onclick = ()=>{
+    if (D.teams.length<2){ toast(u("sameTeam")); return; }
+    const d=$("#mD").value; let [h,mi]=($("#mT").value||"09:00").split(":").map(Number);
+    const bt = writeBatch(db);
+    for (let i=0;i<D.teams.length;i++) for (let j=i+1;j<D.teams.length;j++){
+      bt.set(doc(collection(db,"matches")),{a:D.teams[i].id,b:D.teams[j].id,giorno:d,ora:`${String(h).padStart(2,"0")}:${String(mi).padStart(2,"0")}`,campo:$("#mF").value.trim()||"1"});
+      h += 1; mi += 30; if (mi>=60){ h++; mi-=60; }
+    }
+    run(bt.commit());
+  };
+  document.querySelectorAll("[data-delm]").forEach(b=> b.onclick = ()=> confirmDel(()=> run(deleteDoc(doc(db,"matches",b.dataset.delm)))));
+}
+
+/* =====================================================================
+   HEAD COACH – ACCESSI (scout e head coach)
+   ===================================================================== */
+function viewUsers(){
+  const langOpts = ["de","fr","it"].map(l=>`<option value="${l}" ${l===lang?"selected":""}>${l.toUpperCase()}</option>`).join("");
+  $("#view").innerHTML = `
+  <div class="card" style="margin-bottom:16px"><h3>${u("newUser")}</h3>
+    <form class="row-flex" id="uForm" style="align-items:flex-end" autocomplete="off">
+      <div style="flex:1;min-width:160px"><label class="f">${u("uName")}</label><input class="t" id="nuName" required></div>
+      <div style="flex:1;min-width:200px"><label class="f">${u("uEmail")}</label><input class="t" id="nuEmail" type="email" required></div>
+      <div style="flex:1;min-width:200px"><label class="f">${u("uPw")}</label><input class="t" id="nuPw" type="text" minlength="6" required></div>
+      <div><label class="f">${u("uRole")}</label><select class="t" id="nuRole"><option value="scout">${u("roleScout")}</option><option value="coach">${u("roleCoach")}</option></select></div>
+      <div><label class="f">${u("uLang")}</label><select class="t" id="nuLang">${langOpts}</select></div>
+      <button class="btn primary" type="submit" id="nuBtn">${u("create")}</button>
+    </form></div>
+  <div class="card"><h3>${u("usersTitle")} <span class="muted">(${D.users.length})</span></h3>
+    <p class="muted" style="margin-top:-4px">${u("usersHint")}</p>
+    <table class="list"><thead><tr><th>${u("uName")}</th><th>${u("uEmail")}</th><th>${u("uRole")}</th><th>${u("uLang")}</th><th>${u("status")}</th><th></th></tr></thead>
+    <tbody>${D.users.map(x=>{ const self = x.id===me.uid; return `<tr class="${x.attivo?"":"off"}">
+      <td><b>${esc(x.nome)}</b>${self?` <span class="muted">(${u("you")})</span>`:""}</td><td>${esc(x.email)}</td>
+      <td>${x.ruolo==="coach"?u("roleCoach"):u("roleScout")}</td><td>${esc((x.lingua||"").toUpperCase())}</td>
+      <td><span class="pill ${x.attivo?"ok":"no"}">${x.attivo?u("active"):u("inactive")}</span></td>
+      <td style="text-align:right;white-space:nowrap">
+        <button class="btn sm" data-reset="${esc(x.email)}">${u("sendReset")}</button>
+        ${self?"":`<button class="btn sm" data-toggle="${x.id}">${x.attivo?u("deactivate"):u("reactivate")}</button>`}</td></tr>`; }).join("")}</tbody></table></div>`;
+  $("#uForm").onsubmit = async e=>{
+    e.preventDefault();
+    const nome=$("#nuName").value.trim(), email=$("#nuEmail").value.trim(), pw=$("#nuPw").value, ruolo=$("#nuRole").value, lingua=$("#nuLang").value;
+    if (pw.length<6){ toast(u("pwShort")); return; }
+    const btn=$("#nuBtn"); btn.disabled=true;
+    try{
+      const cred = await createUserWithEmailAndPassword(auth2, email, pw);
+      const uid = cred.user.uid;
+      await signOut(auth2);
+      await setDoc(doc(db,"users",uid), {nome,email,ruolo,lingua,attivo:true,creatoDa:me.uid,creatoIl:serverTimestamp()});
+      toast(`${u("created")}: ${email}`);
+      render();
+    }catch(err){
+      const m = {"auth/email-already-in-use":"emailInUse","auth/invalid-email":"emailBad","auth/weak-password":"pwShort"}[err.code];
+      if (m) toast(u(m)); else fail(err);
+    }finally{ btn.disabled=false; }
+  };
+  document.querySelectorAll("[data-toggle]").forEach(b=> b.onclick = ()=>{
+    const x = D.users.find(y=>y.id===b.dataset.toggle);
+    run(updateDoc(doc(db,"users",x.id),{attivo:!x.attivo}));
+  });
+  document.querySelectorAll("[data-reset]").forEach(b=> b.onclick = ()=>
+    run(sendPasswordResetEmail(auth, b.dataset.reset).then(()=> toast(`${u("resetTo")} ${b.dataset.reset}`))));
+}
+
+/* =====================================================================
+   HEAD COACH – LOGO
+   ===================================================================== */
+function viewLogo(){
+  $("#view").innerHTML = `<div class="card" style="max-width:620px"><h3>${u("logoTitle")}</h3><p class="muted">${u("logoHint")}</p>
+    <div class="row-flex"><div class="logo" style="width:80px;height:80px">${logoHTML(80)}</div>
+      <button class="btn primary" id="lUp">${u("logoUpload")}</button>${D.logo?`<button class="btn" id="lRm">${u("logoRemove")}</button>`:""}</div></div>`;
+  $("#lUp").onclick = ()=> $("#fileLogo").click();
+  if (D.logo) $("#lRm").onclick = ()=> run(setDoc(doc(db,"settings","app"),{logo:null},{merge:true}));
+}
+$("#fileLogo").onchange = e=>{
+  const f = e.target.files[0]; e.target.value=""; if(!f) return;
+  if (f.size > 700*1024){ toast(u("logoTooBig")); return; }
+  const r = new FileReader(); r.onload = ()=> run(setDoc(doc(db,"settings","app"),{logo:r.result},{merge:true})); r.readAsDataURL(f);
+};
+
+/* =====================================================================
+   SCHEDA SCOUT
+   ===================================================================== */
+function viewSheet(){
+  if (matchId && !D.matches.find(x=>x.id===matchId)) matchId = null;
+  const ms = D.matches, m = D.matches.find(x=>x.id===matchId);
+  const nSchede = player ? D.schede.filter(s=>s.giocatoreId===player.id).length : 0;
+  const rosterOf = tid => {
+    const t = team(tid); if(!t) return "";
+    const zi = id => { const i = ZONES.findIndex(z=>z.id===id); return i<0 ? 99 : i; };
+    const ps = D.players.filter(p=>p.team===tid).sort((a,b)=>zi(b.ruolo)-zi(a.ruolo));
+    return `<div><div class="rt"><span class="dot" style="background:${esc(t.color)}"></span>${esc(t.name)}</div><div class="chips">
+      ${ps.map(p=>`<button class="rchip" style="--c:${esc(t.color)}" data-pp="${p.id}">${esc(p.cognome)} ${esc(p.nome)}<small>${p.ruolo?esc(roleName(p.ruolo)):u("bench")}</small></button>`).join("")}</div></div>`;
+  };
+  const pt = player ? team(player.team) : null;
+  $("#view").innerHTML = `
+    ${lang==="it"?`<div class="banner">${u("itPending")}</div>`:""}
+    <div class="head-box"><div class="lbl">1 · ${u("match")}</div>
+      <select class="t" id="matchSel"><option value="">${esc(u("pickMatch"))}</option>
+        ${ms.map(x=>`<option value="${x.id}" ${x.id===matchId?"selected":""}>${esc(matchLabel(x))}</option>`).join("")}</select>
+      <div class="datebox">${u("date")}: <b>${new Date().toLocaleDateString("de-CH")}</b></div></div>
+    <div class="head-box"><div class="lbl">2 · ${u("player")}</div>
+      <div>${player?`<div class="chosen"><span class="name">${esc(player.cognome)}, ${esc(player.nome)}</span>
+          <span class="meta">${esc(player.nascita)} · ${esc(player.club)}${pt?` · <span class="dot" style="background:${esc(pt.color)}"></span>${esc(pt.name)}${player.ruolo?" · "+esc(roleName(player.ruolo)):""}`:""}</span>
+          <span class="pill">${nSchede} ${u("existing")}</span><button class="btn sm" id="changePlayer">${u("change")}</button></div>`
+        :`<div class="search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          <input class="t" id="q" placeholder="${esc(u("search"))}" value="${esc(query)}" autocomplete="off"><div class="results hidden" id="res"></div></div>`}</div>
+      <div></div>
+      ${!player && m?`<div class="roster">${rosterOf(m.a)}${rosterOf(m.b)}</div>`:""}</div>
+    <div class="sheet" id="sheet"></div>`;
+  $("#matchSel").onchange = e=>{ matchId = e.target.value || null; e.target.blur(); viewSheet(); };
+  if (player) $("#changePlayer").onclick = ()=>{ player=null; query=""; viewSheet(); $("#q")?.focus(); };
+  else {
+    const q=$("#q");
+    q.oninput = ()=>{ query=q.value; showResults(); };
+    q.onfocus = showResults;
+    q.onblur = ()=> setTimeout(()=> $("#res")?.classList.add("hidden"),150);
+  }
+  document.querySelectorAll("[data-pp]").forEach(b=> b.onclick = ()=>{ player = pl(b.dataset.pp); viewSheet(); });
+  renderSheet(); renderSummary();
+}
+function showResults(){
+  const res=$("#res"); if(!res) return;
+  const s = query.trim().toLowerCase().replace(/,/g," ").split(/\s+/).filter(Boolean);
+  if (!s.length){ res.classList.add("hidden"); return; }
+  const list = D.players.filter(p=> s.every(w=>((p.cognome||"")+" "+(p.nome||"")).toLowerCase().includes(w)));
+  res.innerHTML = list.length ? list.map(p=>{const t=team(p.team);return `<div data-id="${p.id}"><span><b>${esc(p.cognome)}</b>, ${esc(p.nome)}</span><span class="meta">${esc(p.club)}${t?` · ${esc(t.name)}`:""}</span></div>`;}).join("")
+    : `<div class="meta">${u("noRes")}</div>`;
+  res.classList.remove("hidden");
+  res.querySelectorAll("[data-id]").forEach(d=> d.onmousedown = e=>{ e.preventDefault(); player = pl(d.dataset.id); query=""; document.activeElement.blur(); viewSheet(); });
+}
+function sectionCount(sec){ let n=[...checks].filter(k=>k.startsWith(sec.id+":")).length; if(sec.type==="taktik") n+=free.filter(f=>f.trim()).length; return n; }
+function renderSheet(){
+  $("#sheet").innerHTML = SECTIONS.map(sec=>{
+    let body="";
+    if (sec.type==="smart"){
+      body = `<div class="cells smart">`+sec.items.map((it,i)=>{const k=sec.id+":"+i;
+        return `<button type="button" class="cell ${checks.has(k)?"on":""}" data-k="${k}"><span class="letter"><span>${it[0]}</span></span><span class="desc">${esc(L(it.slice(1)))}</span></button>`;}).join("")+`</div>`;
+    } else if (sec.type==="tips"){
+      const vals=[1,1.5,2,2.5,3,3.5,4,4.5,5];
+      body = `<div class="tips">`+["T","I","P","S"].map(Lt=>{const t=tips[Lt];return `<div class="tip">
+        <div class="tip-h"><span class="L">${Lt}</span><span class="n">${esc(u("tipsNames")[Lt])}</span><span class="badge ${col(t.v)}">${fmt(t.v)}</span></div>
+        <div class="scale">${vals.map(v=>`<button type="button" data-tip="${Lt}" data-v="${v}" class="${col(v)} ${v%1?"half":""} ${t.v===v?"on":""}">${fmt(v)}</button>`).join("")}</div>
+        <textarea data-note="${Lt}" placeholder="${esc(u("notePh"))}">${esc(t.n)}</textarea></div>`;}).join("")+`</div>`;
+    } else if (sec.type==="pot"){
+      body = `<div><div class="pot">`+sec.items.map(it=>`<button type="button" data-v="${it[0]}" class="${pot===it[0]?"on":""}"><span class="big">${it[0]}</span><span class="sm">${esc(L(it.slice(1)))}</span></button>`).join("")+`</div><div class="pot-hint">${u("potHint")}</div></div>`;
+    } else {
+      body = `<div class="cells">`+sec.items.map((it,i)=>{const k=sec.id+":"+i;return `<button type="button" class="cell ${checks.has(k)?"on":""}" data-k="${k}">${esc(L(it))}</button>`;}).join("");
+      if (sec.type==="taktik") body += free.map((f,i)=>`<label class="cell free ${f.trim()?"on":""}"><input data-free="${i}" value="${esc(f)}" placeholder="${esc(u("otherPh"))}"></label>`).join("");
+      body += `</div>`;
+    }
+    const cnt = (sec.type==="tips"||sec.type==="pot")?"":`<span class="cnt" data-cnt="${sec.id}">${sectionCount(sec)||""}</span>`;
+    const sub = sec.sub?`<small>${esc(L(sec.sub))}</small>`:"", hint = sec.type==="tips"?`<small>${esc(u("tipsHint"))}</small>`:"";
+    return `<div class="srow"><div class="rlabel">${esc(L(sec.t))}${sub}${hint}${cnt}</div>${body}</div>`;
+  }).join("");
+  const sh=$("#sheet");
+  sh.querySelectorAll("[data-k]").forEach(b=> b.onclick = ()=>{ const k=b.dataset.k; checks.has(k)?checks.delete(k):checks.add(k); b.classList.toggle("on",checks.has(k)); updateCounts(); renderSummary(); });
+  sh.querySelectorAll("[data-free]").forEach(inp=> inp.oninput = ()=>{ free[+inp.dataset.free]=inp.value; inp.parentElement.classList.toggle("on",!!inp.value.trim()); updateCounts(); renderSummary(); });
+  sh.querySelectorAll("[data-tip]").forEach(b=> b.onclick = ()=>{
+    const Lt=b.dataset.tip, v=+b.dataset.v; tips[Lt].v = tips[Lt].v===v?null:v;
+    const tip=b.closest(".tip"); tip.querySelectorAll("[data-tip]").forEach(x=>x.classList.toggle("on",+x.dataset.v===tips[Lt].v));
+    const bd=tip.querySelector(".badge"); bd.className="badge "+col(tips[Lt].v); bd.textContent=fmt(tips[Lt].v);
+  });
+  sh.querySelectorAll("[data-note]").forEach(t=> t.oninput = ()=>{ tips[t.dataset.note].n=t.value; });
+  sh.querySelectorAll(".pot button").forEach(b=> b.onclick = ()=>{ pot = pot===b.dataset.v?null:b.dataset.v; sh.querySelectorAll(".pot button").forEach(x=>x.classList.toggle("on",x.dataset.v===pot)); renderSummary(); });
+}
+function updateCounts(){ SECTIONS.forEach(sec=>{ const el=document.querySelector(`[data-cnt="${sec.id}"]`); if(el) el.textContent=sectionCount(sec)||""; }); }
+function renderSummary(){
+  const n = checks.size + free.filter(f=>f.trim()).length;
+  const who = player?`<b>${esc(player.cognome)}, ${esc(player.nome)}</b>`:u("noPlayer");
+  $("#summary").innerHTML = `${who} · <b>${n}</b> ${u("marked")}${pot?` · ${esc(L(SEC.potenzial.t))}: <b>${pot}</b>`:""}`;
+}
+function selected(id){ return SEC[id].items.map((it,i)=>checks.has(id+":"+i)?it:null).filter(Boolean); }
+
+/* ---------- Genera testo (bozza, nella lingua dello scout) ---------- */
+function joinList(arr){ const AND={de:"und",fr:"et",it:"e"}[lang]; if(arr.length<2) return arr[0]||""; return arr.slice(0,-1).join(", ")+" "+AND+" "+arr.at(-1); }
+const lc = s => s.charAt(0).toLowerCase()+s.slice(1);
+function buildReport(){
+  const m = D.matches.find(x=>x.id===matchId), p = player, role = p.ruolo ? roleName(p.ruolo) : "";
+  const keep = id => selected(id).map(x=>L(x));
+  const lcl = arr => lang==="de" ? arr : arr.map(lc);
+  const footW = {de:["rechts","links"],fr:["droit","gauche"],it:["destro","sinistro"]}[lang];
+  const foot = SEC.fuss.items.map((it,i)=>checks.has("fuss:"+i)?footW[i]:null).filter(Boolean);
+  const S = {
+    it:{intro:`${p.nome} ${p.cognome} (${p.nascita}, ${p.club}) è stato osservato nella partita ${matchLabel(m)}${role?`, schierato come ${lc(role)}`:""}.`,
+        foot:x=>`Piede: ${x}.`,pos:x=>`Posizione: ${x}.`,prof:x=>`Profilo: ${x}.`,bio:x=>`Sviluppo biologico: ${x}.`,morph:x=>`Morfologia: ${x}.`,
+        tech:x=>`Sul piano tecnico si distingue per: ${x}.`,smart:x=>`Intelligenza di gioco: ${x}.`,tak:x=>`Aspetti tattici: ${x}.`,pers:x=>`Personalità: ${x}.`,ath:x=>`Aspetti atletici: ${x}.`,pot:(a,b)=>`Potenziale: ${a} – ${b}.`},
+    de:{intro:`${p.nome} ${p.cognome} (${p.nascita}, ${p.club}) wurde im Spiel ${matchLabel(m)} beobachtet${role?`, eingesetzt als ${role}`:""}.`,
+        foot:x=>`Fuss: ${x}.`,pos:x=>`Position: ${x}.`,prof:x=>`Spielart: ${x}.`,bio:x=>`Biologische Entwicklung: ${x}.`,morph:x=>`Morphologie: ${x}.`,
+        tech:x=>`Technisch fällt er auf durch: ${x}.`,smart:x=>`Spielintelligenz: ${x}.`,tak:x=>`Taktisch: ${x}.`,pers:x=>`Persönlichkeit: ${x}.`,ath:x=>`Athletisch: ${x}.`,pot:(a,b)=>`Potenzial: ${a} – ${b}.`},
+    fr:{intro:`${p.nome} ${p.cognome} (${p.nascita}, ${p.club}) a été observé lors du match ${matchLabel(m)}${role?`, aligné comme ${lc(role)}`:""}.`,
+        foot:x=>`Pied : ${x}.`,pos:x=>`Poste : ${x}.`,prof:x=>`Profil : ${x}.`,bio:x=>`Développement biologique : ${x}.`,morph:x=>`Morphologie : ${x}.`,
+        tech:x=>`Sur le plan technique, il se distingue par : ${x}.`,smart:x=>`Intelligence de jeu : ${x}.`,tak:x=>`Aspects tactiques : ${x}.`,pers:x=>`Personnalité : ${x}.`,ath:x=>`Profil athlétique : ${x}.`,pot:(a,b)=>`Potentiel : ${a} – ${b}.`}
+  }[lang];
+  const out=[S.intro], add=(arr,f)=>{ if(arr.length) out.push(f(joinList(arr))); };
+  const b1=[]; if(foot.length) b1.push(S.foot(joinList(foot))); if(keep("position").length) b1.push(S.pos(joinList(lcl(keep("position"))))); if(keep("spielart").length) b1.push(S.prof(joinList(lcl(keep("spielart"))))); if(b1.length) out.push(b1.join(" "));
+  const b2=[]; if(keep("bio").length) b2.push(S.bio(joinList(lcl(keep("bio"))))); const mo=[...lcl(keep("morph")),...lcl(keep("struktur"))]; if(mo.length) b2.push(S.morph(joinList(mo))); if(b2.length) out.push(b2.join(" "));
+  add(lcl(keep("technik")), S.tech);
+  const sm = selected("smart").map(it=>lc(L(it.slice(1)))); if (sm.length) out.push(S.smart(sm.join("; ")));
+  add([...lcl(keep("taktik")), ...free.map(f=>f.trim()).filter(Boolean)], S.tak);
+  add(lcl(keep("pers")), S.pers); add(lcl(keep("athl")), S.ath);
+  const tl = ["T","I","P","S"].filter(k=>tips[k].v!=null||tips[k].n.trim()).map(k=>`${k} – ${u("tipsNames")[k]}: ${fmt(tips[k].v)}${tips[k].n.trim()?` – ${tips[k].n.trim()}`:""}`);
+  if (tl.length) out.push("TIPS\n"+tl.join("\n"));
+  if (pot){ const it=SEC.potenzial.items.find(x=>x[0]===pot); out.push(S.pot(pot, L(it.slice(1)))); }
+  out.push(`— ${me.nome}`);
+  return out.join("\n\n");
+}
+function buildRecord(){
+  const m = D.matches.find(x=>x.id===matchId);
+  const rec = {giocatoreId:player.id, giocatore:`${player.cognome}, ${player.nome}`, partitaId:matchId, partita:matchLabel(m),
+    scoutUid:me.uid, scout:me.nome, lingua:lang, creatoIl:serverTimestamp()};
+  SECTIONS.forEach(sec=>{
+    if (sec.type==="tips") rec.tips = Object.fromEntries(Object.entries(tips).map(([k,t])=>[k,{nota:t.v,commento:t.n}]));
+    else if (sec.type==="pot") rec.potenziale = pot;
+    else { const sel=selected(sec.id).map(it=>it[0]); if(sec.type==="taktik") sel.push(...free.map(f=>f.trim()).filter(Boolean).map(f=>"✎ "+f)); rec[sec.id]=sel; }
+  });
+  return rec;
+}
+function needBoth(){
+  if (!matchId){ toast(u("needMatch")); $("#matchSel")?.focus(); return false; }
+  if (!player){ toast(u("needPlayer")); $("#q")?.focus(); return false; }
+  return true;
+}
+function resetSheet(){ checks=new Set(); free=["","","",""]; pot=null; tips=freshTips(); player=null; query=""; }
+$("#genBtn").onclick = ()=>{
+  if (!needBoth()) return;
+  openModal(u("genTitle"), `<textarea id="repText">${esc(buildReport())}</textarea>`, [
+    {label:u("copy"), cls:"primary", on:async ()=>{ const ta=$("#repText"); try{ await navigator.clipboard.writeText(ta.value); toast(u("copied")); }catch(e){ ta.select(); } }},
+    {label:u("close"), on:closeModal}]);
+};
+$("#saveBtn").onclick = async ()=>{
+  if (!needBoth()) return;
+  const btn=$("#saveBtn"); btn.disabled=true;
+  try{ await addDoc(collection(db,"schede"), buildRecord()); resetSheet(); viewSheet(); toast(u("savedOk")); }
+  catch(e){ console.error(e); toast(u("saveFail")); }
+  finally{ btn.disabled=false; }
+};
+$("#clearBtn").onclick = ()=>{ resetSheet(); viewSheet(); toast(u("cleared")); };
+
+/* =====================================================================
+   NAVIGAZIONE
+   ===================================================================== */
+document.addEventListener("click", e=>{
+  const l = e.target.closest("[data-l]");
+  if (l){
+    lang = l.dataset.l; try{ localStorage.setItem("st_lang", lang); }catch(err){}
+    if (me){ updateDoc(doc(db,"users",me.uid),{lingua:lang}).catch(()=>{}); render(); } else renderChrome();
+    return;
+  }
+  const t = e.target.closest("[data-tab]"); if (t){ tab=t.dataset.tab; coachSel=null; render(); }
+});
+$("#modal").onclick = e=>{ if (e.target.id==="modal") closeModal(); };
+renderChrome();
+</script>
+</body>
+</html>

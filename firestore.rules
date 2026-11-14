@@ -1,0 +1,47 @@
+rules_version = '2';
+
+// Scout Triangolo – regole di sicurezza Firestore
+// Principio: si entra SOLO con un profilo in /users creato dall'head coach e con attivo == true.
+// Un account Firebase senza profilo (o disattivato) non legge e non scrive nulla.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn()  { return request.auth != null; }
+    function userDoc()   { return /databases/$(database)/documents/users/$(request.auth.uid); }
+    function active()    { return signedIn() && exists(userDoc()) && get(userDoc()).data.attivo == true; }
+    function isCoach()   { return active() && get(userDoc()).data.ruolo == 'coach'; }
+
+    // Profili utente
+    match /users/{uid} {
+      allow read:   if active() && (request.auth.uid == uid || isCoach());
+      allow create: if isCoach()
+                    && request.resource.data.ruolo in ['scout', 'coach']
+                    && request.resource.data.attivo is bool;
+      // l'head coach può modificare tutto, ma non disattivare o declassare sé stesso
+      allow update: if (isCoach() && !(request.auth.uid == uid
+                         && (request.resource.data.attivo != true || request.resource.data.ruolo != 'coach')))
+                    // ogni utente può cambiare solo la propria lingua
+                    || (active() && request.auth.uid == uid
+                         && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['lingua']));
+      allow delete: if isCoach() && request.auth.uid != uid;
+    }
+
+    // Dati del torneo: li leggono tutti gli utenti attivi, li scrive solo l'head coach
+    match /players/{id}  { allow read: if active(); allow write: if isCoach(); }
+    match /teams/{id}    { allow read: if active(); allow write: if isCoach(); }
+    match /matches/{id}  { allow read: if active(); allow write: if isCoach(); }
+    match /settings/{id} { allow read: if active(); allow write: if isCoach(); }
+
+    // Schede di osservazione: tutti gli utenti attivi le leggono;
+    // uno scout crea solo schede a proprio nome e modifica/cancella solo le proprie.
+    match /schede/{id} {
+      allow read:   if active();
+      allow create: if active() && request.resource.data.scoutUid == request.auth.uid;
+      allow update: if isCoach()
+                    || (active() && resource.data.scoutUid == request.auth.uid
+                        && request.resource.data.scoutUid == request.auth.uid);
+      allow delete: if isCoach() || (active() && resource.data.scoutUid == request.auth.uid);
+    }
+  }
+}
