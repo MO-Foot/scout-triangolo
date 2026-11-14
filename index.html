@@ -304,7 +304,7 @@ const UI = {
   importPaste:"Oder Liste einfügen (aus Excel kopiert): Name, Vorname, Geburtsdatum, Verein – eine Zeile pro Spieler",
   parse:"Liste lesen",previewN:"Spieler gelesen",addAll:"Zur Liste hinzufügen",cancel:"Abbrechen",
   colCognome:"Name",colNome:"Vorname",colNascita:"Geburtsdatum",colClub:"Verein",colTeam:"Team",colRole:"Rolle",
-  listTitle:"Spielerliste",xlsxFail:"Datei konnte nicht gelesen werden",nothingFound:"Keine Spieler gefunden",added:"Spieler hinzugefügt",
+  listTitle:"Spielerliste",addPlayer:"+ Spieler hinzufügen",addBtn:"Hinzufügen",playerAdded:"Spieler hinzugefügt",needName:"Name und Vorname angeben",xlsxFail:"Datei konnte nicht gelesen werden",nothingFound:"Keine Spieler gefunden",added:"Spieler hinzugefügt",
   teamsTitle:"Teams",addTeam:"+ Team",newTeam:"Neues Team",pool:"Zuzuteilen",poolHint:"Spieler antippen, dann die Rolle auf dem Spielfeld antippen.",
   bench:"Ersatz",gk:"Torhüter",selMsg:"Ausgewählt: {x} – jetzt eine Rolle antippen",allAssigned:"Alle Spieler sind zugeteilt",delTeam:"Team löschen",
   mkTeams:"3 Teams erstellen (Rot, Blau, Grün)",defTeams:["Rot","Blau","Grün"],noTeams:"Noch keine Teams",
@@ -331,7 +331,7 @@ const UI = {
   importPaste:"Ou coller une liste (copiée d'Excel) : nom, prénom, date de naissance, club – une ligne par joueur",
   parse:"Lire la liste",previewN:"joueurs lus",addAll:"Ajouter à la liste",cancel:"Annuler",
   colCognome:"Nom",colNome:"Prénom",colNascita:"Date de naissance",colClub:"Club",colTeam:"Équipe",colRole:"Rôle",
-  listTitle:"Liste des joueurs",xlsxFail:"Impossible de lire le fichier",nothingFound:"Aucun joueur trouvé",added:"joueurs ajoutés",
+  listTitle:"Liste des joueurs",addPlayer:"+ Ajouter un joueur",addBtn:"Ajouter",playerAdded:"Joueur ajouté",needName:"Indiquer nom et prénom",xlsxFail:"Impossible de lire le fichier",nothingFound:"Aucun joueur trouvé",added:"joueurs ajoutés",
   teamsTitle:"Équipes",addTeam:"+ Équipe",newTeam:"Nouvelle équipe",pool:"À attribuer",poolHint:"Touchez un joueur, puis touchez le rôle sur le terrain.",
   bench:"Remplaçants",gk:"Gardien",selMsg:"Sélectionné : {x} – touchez maintenant un rôle",allAssigned:"Tous les joueurs sont attribués",delTeam:"Supprimer l'équipe",
   mkTeams:"Créer 3 équipes (Rouge, Bleu, Vert)",defTeams:["Rouge","Bleu","Vert"],noTeams:"Pas encore d'équipes",
@@ -358,7 +358,7 @@ const UI = {
   importPaste:"Oppure incolla una lista (copiata da Excel): cognome, nome, data di nascita, club – una riga per giocatore",
   parse:"Leggi lista",previewN:"giocatori letti",addAll:"Aggiungi all'elenco",cancel:"Annulla",
   colCognome:"Cognome",colNome:"Nome",colNascita:"Data di nascita",colClub:"Club",colTeam:"Squadra",colRole:"Ruolo",
-  listTitle:"Elenco giocatori",xlsxFail:"Non riesco a leggere il file",nothingFound:"Nessun giocatore trovato",added:"giocatori aggiunti",
+  listTitle:"Elenco giocatori",addPlayer:"+ Aggiungi giocatore",addBtn:"Aggiungi",playerAdded:"Giocatore aggiunto",needName:"Inserisci cognome e nome",xlsxFail:"Non riesco a leggere il file",nothingFound:"Nessun giocatore trovato",added:"giocatori aggiunti",
   teamsTitle:"Squadre",addTeam:"+ Squadra",newTeam:"Nuova squadra",pool:"Da assegnare",poolHint:"Tocca un giocatore, poi tocca il ruolo sul campo.",
   bench:"Panchina",gk:"Portiere",selMsg:"Selezionato: {x} – ora tocca un ruolo",allAssigned:"Tutti i giocatori sono assegnati",delTeam:"Elimina squadra",
   mkTeams:"Crea 3 squadre (Rossi, Blu, Verdi)",defTeams:["Rossi","Blu","Verdi"],noTeams:"Ancora nessuna squadra",
@@ -592,7 +592,9 @@ function viewPlayers(){
   </div>
   <div id="preview"></div>
   <div class="card">
-    <h3>${u("listTitle")} <span class="muted">(${rows.length})</span></h3>
+    <div class="row-flex" style="justify-content:space-between;margin-bottom:12px">
+      <h3 style="margin:0">${u("listTitle")} <span class="muted">(${rows.length})</span></h3>
+      <button class="btn primary" id="addPlayerBtn">${u("addPlayer")}</button></div>
     <table class="list"><thead><tr><th>${u("colCognome")}</th><th>${u("colNome")}</th><th>${u("colNascita")}</th><th>${u("colClub")}</th><th>${u("colTeam")}</th><th>${u("colRole")}</th><th></th></tr></thead>
     <tbody>${rows.map(p=>{ const t=team(p.team); return `<tr>
       <td><b>${esc(p.cognome)}</b></td><td>${esc(p.nome)}</td><td>${esc(p.nascita)}</td><td>${esc(p.club)}</td>
@@ -602,6 +604,7 @@ function viewPlayers(){
   </div>`;
   renderPreview();
   $("#dropX").onclick = ()=> $("#fileXlsx").click();
+  $("#addPlayerBtn").onclick = openAddPlayer;
   $("#pasteBox").oninput = e=>{ pasteText = e.target.value; };
   $("#parseBtn").onclick = ()=>{
     const rows = pasteText.split(/\r?\n/).map(l=>l.split(/\t|;/).map(c=>c.trim())).filter(r=>r.some(Boolean));
@@ -610,6 +613,23 @@ function viewPlayers(){
     renderPreview();
   };
   document.querySelectorAll("[data-delp]").forEach(b=> b.onclick = ()=> confirmDel(()=> run(deleteDoc(doc(db,"players",b.dataset.delp)))));
+}
+function openAddPlayer(){
+  const f = (id,label,ph="") => `<div><label class="f" for="${id}">${label}</label><input class="t" id="${id}" placeholder="${esc(ph)}"></div>`;
+  openModal(u("addPlayer").replace(/^\+\s*/,""), `<form id="apForm" class="grid2" style="gap:12px">
+      ${f("apC",u("colCognome"))}${f("apN",u("colNome"))}${f("apD",u("colNascita"),"12.03.2011")}${f("apK",u("colClub"),"FC Lugano")}
+      <button type="submit" class="hidden"></button></form>`, [
+    {label:u("cancel"), on:closeModal},
+    {label:u("addBtn"), cls:"primary", on:()=> $("#apForm").requestSubmit()}]);
+  $("#apC").focus();
+  $("#apForm").onsubmit = async e=>{
+    e.preventDefault();
+    const v = id => $("#"+id).value.trim();
+    const p = {cognome:v("apC"), nome:v("apN"), nascita:v("apD"), club:v("apK"), team:null, ruolo:null};
+    if (!p.cognome || !p.nome){ toast(u("needName")); return; }
+    try{ await addDoc(collection(db,"players"), p); closeModal(); toast(`${u("playerAdded")}: ${p.cognome} ${p.nome}`); }
+    catch(err){ fail(err); }
+  };
 }
 function classify(h){
   h = String(h||"").toLowerCase().trim();
