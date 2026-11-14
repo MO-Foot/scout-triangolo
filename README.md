@@ -64,7 +64,9 @@ Da qui in poi gli altri accessi (scout o altri head coach) si creano **dall'app*
 - Un account senza profilo, o disattivato, viene buttato fuori subito e non legge niente: lo bloccano le regole del database, non solo l'app.
 - Se l'head coach disattiva uno scout mentre questo è collegato, lo scout esce subito.
 - **L'head coach può:** creare accessi, disattivarli e riattivarli, e mandare l'email per reimpostare la password.
-- **Lo scout può:** compilare e salvare schede a proprio nome e cambiare la propria lingua.
+- **Lo scout può:** compilare schede a proprio nome, vedere solo le proprie, modificarle finché sono "bozza" e inviarle (dopo l'invio non può più cambiarle), e cambiare la propria lingua.
+- **L'head coach vede tutte le schede** e può modificarle, inviarle, riaprirle o eliminarle in qualsiasi momento.
+- **Dopo ogni modifica a `firestore.rules`** va ripubblicato il testo in Firebase → Firestore → Regole → Pubblica.
 
 ## Limiti di questa prima versione (piano gratuito)
 - **Cancellare un account:** dall'app un account si può solo disattivare. Per cancellarlo del tutto: Firebase → Authentication → Utenti → elimina.
@@ -72,7 +74,6 @@ Da qui in poi gli altri accessi (scout o altri head coach) si creano **dall'app*
 - **Creazione non completata:** se la creazione di un accesso si interrompe a metà (rete), l'email resta "già usata". In quel caso elimina l'utente in Authentication e riprova.
 - **Voci in italiano:** sono provvisorie, in attesa della tabella ufficiale.
 - **"Genera testo":** è una bozza. Lo stile si definisce con gli esempi dell'head coach.
-- **Consultare le schede:** le schede salvate non si possono ancora consultare dall'app (prossimo passo).
 
 ## Test locale (facoltativo, per sviluppatori)
 ```

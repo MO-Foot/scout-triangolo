@@ -33,15 +33,23 @@ service cloud.firestore {
     match /matches/{id}  { allow read: if active(); allow write: if isCoach(); }
     match /settings/{id} { allow read: if active(); allow write: if isCoach(); }
 
-    // Schede di osservazione: tutti gli utenti attivi le leggono;
-    // uno scout crea solo schede a proprio nome e modifica/cancella solo le proprie.
+    // Schede di osservazione
+    // - head coach: legge, crea, modifica, invia, riapre ed elimina tutto
+    // - scout: legge solo le proprie; crea schede a proprio nome;
+    //   modifica/elimina solo le proprie finché sono "bozza"; dopo "inviata" non può più cambiarle
     match /schede/{id} {
-      allow read:   if active();
-      allow create: if active() && request.resource.data.scoutUid == request.auth.uid;
+      function stato(d) { return d.get('stato', 'bozza'); }
+      allow read:   if isCoach() || (active() && resource.data.scoutUid == request.auth.uid);
+      allow create: if isCoach()
+                    || (active() && request.resource.data.scoutUid == request.auth.uid
+                        && stato(request.resource.data) in ['bozza', 'inviata']);
       allow update: if isCoach()
                     || (active() && resource.data.scoutUid == request.auth.uid
-                        && request.resource.data.scoutUid == request.auth.uid);
-      allow delete: if isCoach() || (active() && resource.data.scoutUid == request.auth.uid);
+                        && stato(resource.data) == 'bozza'
+                        && request.resource.data.scoutUid == request.auth.uid
+                        && stato(request.resource.data) in ['bozza', 'inviata']);
+      allow delete: if isCoach()
+                    || (active() && resource.data.scoutUid == request.auth.uid && stato(resource.data) == 'bozza');
     }
   }
 }
