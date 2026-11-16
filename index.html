@@ -176,6 +176,11 @@
   .pot-hint{font-size:13px;color:var(--ink-3);padding:0 12px 10px}
 
   .span2{grid-column:2 / 4}
+  .num{display:inline-block;min-width:22px;text-align:center;font-weight:700;background:var(--ink);color:#fff;border-radius:5px;padding:0 5px;margin-right:6px;font-size:.9em}
+  .cell:focus-visible,.btn:focus-visible,.rchip:focus-visible,.scale button:focus-visible,.pot button:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+  .results div.hl{background:var(--ch-soft)}
+  .kbtable td{padding:6px 10px;border-bottom:1px solid var(--line-2)} .kbtable td:first-child{font-weight:700;white-space:nowrap}
+  .datebox input{width:auto;padding:6px 8px}
   table.clickable tbody tr{cursor:pointer} table.clickable tbody tr:hover td{background:var(--ch-soft)}
   .pill.draft{background:var(--yellow-soft);color:#7a5d00}
   .potpill{display:inline-block;min-width:26px;text-align:center;font-weight:700;border-radius:6px;padding:2px 6px}
@@ -245,6 +250,7 @@
     .footbar .in{flex-wrap:wrap;padding:8px 10px;gap:6px}
     .footbar .sum{flex:1 1 100%;font-size:13px}
     .footbar .btn{flex:1 1 calc(50% - 6px);padding:11px 6px}
+    .kb-only{display:none}
 
     /* tabelle: scorrono in orizzontale */
     table.list{display:block;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch}
@@ -312,6 +318,7 @@
   <div class="footbar hidden" id="footbar">
     <div class="in">
       <div class="sum" id="summary"></div>
+      <button class="btn kb-only" id="kbBtn" title="?">⌨ ?</button>
       <button class="btn" id="clearBtn" data-ui="clear"></button>
       <button class="btn dark" id="genBtn" data-ui="genText"></button>
       <button class="btn" id="saveBtn" data-ui="save"></button>
@@ -359,7 +366,7 @@ if (LOCAL){
    TESTI INTERFACCIA (DE / FR / IT)
    ===================================================================== */
 const UI = {
- de:{loginTitle:"Anmeldung",systemPh:"Spielsystem (optional), z. B. 1-4-3-3",uSurname:"Name",uFirst:"Vorname",editUser:"Zugang bearbeiten",saveBtn:"Speichern",userSaved:"Zugang aktualisiert",emailFixed:"Die E-Mail ist die Anmeldung und kann hier nicht geändert werden.",needNames:"Name und Vorname angeben",tabSchede:"Bögen",schedeAll:"Alle Bögen",schedeMine:"Meine Bögen",filterPh:"Filtern nach Spieler, Spiel, Scout…",allStates:"Alle",stDraft:"Entwurf",stSent:"Gesendet",colDate:"Datum",colPot:"Pot.",noSchede:"Noch keine Bögen",edit:"Bearbeiten",send:"Senden",sendConfirmT:"Bogen senden?",sendConfirmB:"Nach dem Senden können Sie den Bogen nicht mehr ändern.",sendConfirmCoach:"Der Bogen wird als gesendet markiert. Als Head Coach können Sie ihn weiterhin ändern.",sentOk:"Bogen gesendet",reopen:"Wieder öffnen (Entwurf)",reopened:"Bogen wieder als Entwurf geöffnet",deleted:"Bogen gelöscht",lockedMsg:"gesendet, nicht mehr änderbar",replaceT:"Aktuellen Bogen ersetzen?",replaceB:"Der Bogen, den Sie gerade ausfüllen, wird durch den gespeicherten ersetzt.",editingLbl:"Bearbeitung eines gespeicherten Bogens",viewIn:"Anzeigen in:",origLang:"Sprache des Scouts",freeTextNote:"Freie Texte (Notizen, Bemerkungen) bleiben in der Originalsprache.",email:"E-Mail",pw:"Passwort",loginBtn:"Anmelden",forgot:"Passwort vergessen?",
+ de:{loginTitle:"Anmeldung",colNum:"Nr.",editPlayer:"Spieler bearbeiten",playerSaved:"Spieler gespeichert",impNew:"neu",impUpd:"aktualisiert",impApply:"Übernehmen",stNew:"neu",stUpd:"aktualisieren",impHint:"Bereits erfasste Spieler (gleicher Name, Vorname und Geburtsdatum) werden aktualisiert, nicht verdoppelt. Team und Rolle bleiben.",matchDate:"Spieldatum",compiled:"ausgefüllt am",editUntil:"Korrektur möglich bis",correctSaved:"Korrektur gespeichert",kbTitle:"Tastenkürzel",tipsKey:"TIPS {L}: Taste 1–5 (Umschalt = +0,5)",kbRows:[["Ctrl+K oder /", "Spieler suchen (Name oder Nummer)"], ["Ctrl+S", "Entwurf speichern"], ["Ctrl+Umschalt+Enter", "Senden"], ["T, I, P, S dann 1–5", "TIPS-Note (mit Umschalt +0,5: Umschalt+3 = 3,5)"], ["A, B, C", "Potenzial"], ["Tab / Pfeiltasten + Leertaste", "Zwischen Feldern bewegen und ankreuzen"], ["↑ ↓ + Enter in der Suche", "Spieler auswählen"], ["Esc", "Fenster schliessen"], ["?", "Diese Liste"]],systemPh:"Spielsystem (optional), z. B. 1-4-3-3",uSurname:"Name",uFirst:"Vorname",editUser:"Zugang bearbeiten",saveBtn:"Speichern",userSaved:"Zugang aktualisiert",emailFixed:"Die E-Mail ist die Anmeldung und kann hier nicht geändert werden.",needNames:"Name und Vorname angeben",tabSchede:"Bögen",schedeAll:"Alle Bögen",schedeMine:"Meine Bögen",filterPh:"Filtern nach Spieler, Spiel, Scout…",allStates:"Alle",stDraft:"Entwurf",stSent:"Gesendet",colDate:"Datum",colPot:"Pot.",noSchede:"Noch keine Bögen",edit:"Bearbeiten",send:"Senden",sendConfirmT:"Bogen senden?",sendConfirmB:"Nach dem Senden können Sie den Bogen nicht mehr ändern.",sendConfirmCoach:"Der Bogen wird als gesendet markiert. Als Head Coach können Sie ihn weiterhin ändern.",sentOk:"Bogen gesendet",reopen:"Wieder öffnen (Entwurf)",reopened:"Bogen wieder als Entwurf geöffnet",deleted:"Bogen gelöscht",lockedMsg:"gesendet, nicht mehr änderbar",replaceT:"Aktuellen Bogen ersetzen?",replaceB:"Der Bogen, den Sie gerade ausfüllen, wird durch den gespeicherten ersetzt.",editingLbl:"Bearbeitung eines gespeicherten Bogens",viewIn:"Anzeigen in:",origLang:"Sprache des Scouts",freeTextNote:"Freie Texte (Notizen, Bemerkungen) bleiben in der Originalsprache.",email:"E-Mail",pw:"Passwort",loginBtn:"Anmelden",forgot:"Passwort vergessen?",
   badCreds:"E-Mail oder Passwort falsch",noAccess:"Kein Zugang: Ihr Konto wurde nicht vom Head Coach freigeschaltet oder ist deaktiviert.",
   needEmail:"Zuerst die E-Mail eingeben",resetSent:"Falls die Adresse existiert, wurde eine E-Mail zum Zurücksetzen gesendet.",loading:"Laden…",netErr:"Verbindungsfehler – bitte erneut versuchen",
   roleCoach:"Head Coach",roleScout:"Scout",logout:"Abmelden",
@@ -379,14 +386,14 @@ const UI = {
   status:"Status",active:"aktiv",inactive:"deaktiviert",deactivate:"Deaktivieren",reactivate:"Reaktivieren",sendReset:"Passwort-Mail senden",resetTo:"E-Mail gesendet an",
   created:"Zugang erstellt",pwShort:"Passwort zu kurz (mind. 6 Zeichen)",emailInUse:"Diese E-Mail hat bereits ein Konto",emailBad:"E-Mail ungültig",you:"Sie",
   usersHint:"Nur Personen mit einem aktiven Zugang können sich anmelden. Deaktivierte Zugänge sehen keine Daten mehr.",
-  match:"Spiel",pickMatch:"Spiel wählen…",manualMatch:"✎ Anderes Spiel (von Hand eingeben)…",manualPh:"z. B. Rot – Blau, 14.11., Platz 2",draftRestored:"Nicht gespeicherter Entwurf wiederhergestellt",needMatch:"Bitte zuerst ein Spiel wählen",player:"Spieler",search:"Spieler suchen (Name, Vorname)…",noRes:"Kein Spieler gefunden",
+  match:"Spiel",pickMatch:"Spiel wählen…",manualMatch:"✎ Anderes Spiel (von Hand eingeben)…",manualPh:"z. B. Rot – Blau, 14.11., Platz 2",draftRestored:"Nicht gespeicherter Entwurf wiederhergestellt",needMatch:"Bitte zuerst ein Spiel wählen",player:"Spieler",search:"Spieler suchen: Name oder Nummer, z. B. «7 blau»…",noRes:"Kein Spieler gefunden",
   change:"Ändern",existing:"Bögen",date:"Datum",save:"Entwurf speichern",clear:"Neuer Bogen",marked:"Merkmale markiert",noPlayer:"Kein Spieler gewählt",
   needPlayer:"Bitte zuerst einen Spieler wählen",savedOk:"Entwurf gespeichert",saveFail:"Speichern fehlgeschlagen",
   otherPh:"Weiterer Aspekt…",notePh:"Notiz…",close:"Schliessen",cleared:"Bogen geleert",potHint:"Eine Auswahl",tipsHint:"Note 1–5 · 3 = genügend",
   notesT:"Bemerkungen",notesPh:"Weitere Beobachtungen, Kontext, Hinweise…",tipsNames:{T:"Technik",I:"Intelligenz",P:"Persönlichkeit",S:"Schnelligkeit"},itPending:"",
   genText:"Text generieren",genTitle:"Bericht (Entwurf – Stil wird mit dem Head Coach festgelegt)",copy:"Kopieren",copied:"Kopiert",
   noTeamYet:"ohne Team",del:"Löschen",confirmDel:"Wirklich löschen?",yes:"Ja, löschen",permErr:"Keine Berechtigung"},
- fr:{loginTitle:"Connexion",systemPh:"Système de jeu (facultatif), p. ex. 1-4-3-3",uSurname:"Nom",uFirst:"Prénom",editUser:"Modifier l'accès",saveBtn:"Enregistrer",userSaved:"Accès mis à jour",emailFixed:"L'e-mail sert à la connexion et ne peut pas être modifiée ici.",needNames:"Indiquer nom et prénom",tabSchede:"Fiches",schedeAll:"Toutes les fiches",schedeMine:"Mes fiches",filterPh:"Filtrer par joueur, match, scout…",allStates:"Toutes",stDraft:"Brouillon",stSent:"Envoyée",colDate:"Date",colPot:"Pot.",noSchede:"Pas encore de fiches",edit:"Modifier",send:"Envoyer",sendConfirmT:"Envoyer la fiche ?",sendConfirmB:"Après l'envoi, vous ne pourrez plus modifier la fiche.",sendConfirmCoach:"La fiche sera marquée comme envoyée. En tant que head coach, vous pourrez encore la modifier.",sentOk:"Fiche envoyée",reopen:"Rouvrir (brouillon)",reopened:"Fiche rouverte comme brouillon",deleted:"Fiche supprimée",lockedMsg:"envoyée, plus modifiable",replaceT:"Remplacer la fiche en cours ?",replaceB:"La fiche en cours sera remplacée par celle enregistrée.",editingLbl:"Modification d'une fiche enregistrée",viewIn:"Afficher en :",origLang:"langue du scout",freeTextNote:"Les textes libres (notes, remarques) restent dans la langue d'origine.",email:"E-mail",pw:"Mot de passe",loginBtn:"Se connecter",forgot:"Mot de passe oublié ?",
+ fr:{loginTitle:"Connexion",colNum:"N°",editPlayer:"Modifier le joueur",playerSaved:"Joueur enregistré",impNew:"nouveaux",impUpd:"mis à jour",impApply:"Appliquer",stNew:"nouveau",stUpd:"mise à jour",impHint:"Les joueurs déjà présents (même nom, prénom et date de naissance) sont mis à jour, pas dupliqués. Équipe et rôle restent.",matchDate:"Date du match",compiled:"remplie le",editUntil:"modifiable jusqu'au",correctSaved:"Correction enregistrée",kbTitle:"Raccourcis clavier",tipsKey:"TIPS {L} : touche 1–5 (Maj = +0,5)",kbRows:[["Ctrl+K ou /", "Chercher un joueur (nom ou numéro)"], ["Ctrl+S", "Enregistrer le brouillon"], ["Ctrl+Maj+Entrée", "Envoyer"], ["T, I, P, S puis 1–5", "Note TIPS (avec Maj +0,5 : Maj+3 = 3,5)"], ["A, B, C", "Potentiel"], ["Tab / flèches + Espace", "Se déplacer entre les cases et cocher"], ["↑ ↓ + Entrée dans la recherche", "Choisir le joueur"], ["Échap", "Fermer la fenêtre"], ["?", "Cette liste"]],systemPh:"Système de jeu (facultatif), p. ex. 1-4-3-3",uSurname:"Nom",uFirst:"Prénom",editUser:"Modifier l'accès",saveBtn:"Enregistrer",userSaved:"Accès mis à jour",emailFixed:"L'e-mail sert à la connexion et ne peut pas être modifiée ici.",needNames:"Indiquer nom et prénom",tabSchede:"Fiches",schedeAll:"Toutes les fiches",schedeMine:"Mes fiches",filterPh:"Filtrer par joueur, match, scout…",allStates:"Toutes",stDraft:"Brouillon",stSent:"Envoyée",colDate:"Date",colPot:"Pot.",noSchede:"Pas encore de fiches",edit:"Modifier",send:"Envoyer",sendConfirmT:"Envoyer la fiche ?",sendConfirmB:"Après l'envoi, vous ne pourrez plus modifier la fiche.",sendConfirmCoach:"La fiche sera marquée comme envoyée. En tant que head coach, vous pourrez encore la modifier.",sentOk:"Fiche envoyée",reopen:"Rouvrir (brouillon)",reopened:"Fiche rouverte comme brouillon",deleted:"Fiche supprimée",lockedMsg:"envoyée, plus modifiable",replaceT:"Remplacer la fiche en cours ?",replaceB:"La fiche en cours sera remplacée par celle enregistrée.",editingLbl:"Modification d'une fiche enregistrée",viewIn:"Afficher en :",origLang:"langue du scout",freeTextNote:"Les textes libres (notes, remarques) restent dans la langue d'origine.",email:"E-mail",pw:"Mot de passe",loginBtn:"Se connecter",forgot:"Mot de passe oublié ?",
   badCreds:"E-mail ou mot de passe incorrect",noAccess:"Accès refusé : votre compte n'a pas été activé par le head coach ou il est désactivé.",
   needEmail:"Saisir d'abord l'e-mail",resetSent:"Si l'adresse existe, un e-mail de réinitialisation a été envoyé.",loading:"Chargement…",netErr:"Erreur de connexion – réessayer",
   roleCoach:"Head coach",roleScout:"Scout",logout:"Déconnexion",
@@ -406,14 +413,14 @@ const UI = {
   status:"Statut",active:"actif",inactive:"désactivé",deactivate:"Désactiver",reactivate:"Réactiver",sendReset:"Envoyer e-mail mot de passe",resetTo:"E-mail envoyé à",
   created:"Accès créé",pwShort:"Mot de passe trop court (min. 6 caractères)",emailInUse:"Cet e-mail a déjà un compte",emailBad:"E-mail non valide",you:"vous",
   usersHint:"Seules les personnes avec un accès actif peuvent se connecter. Les accès désactivés ne voient plus aucune donnée.",
-  match:"Match",pickMatch:"Choisir le match…",manualMatch:"✎ Autre match (saisir à la main)…",manualPh:"p. ex. Rouge – Bleu, 14.11, terrain 2",draftRestored:"Brouillon non enregistré restauré",needMatch:"Choisir d'abord un match",player:"Joueur",search:"Chercher un joueur (nom, prénom)…",noRes:"Aucun joueur trouvé",
+  match:"Match",pickMatch:"Choisir le match…",manualMatch:"✎ Autre match (saisir à la main)…",manualPh:"p. ex. Rouge – Bleu, 14.11, terrain 2",draftRestored:"Brouillon non enregistré restauré",needMatch:"Choisir d'abord un match",player:"Joueur",search:"Chercher un joueur : nom ou numéro, p. ex. «7 bleu»…",noRes:"Aucun joueur trouvé",
   change:"Changer",existing:"fiches",date:"Date",save:"Enregistrer brouillon",clear:"Nouvelle fiche",marked:"caractéristiques cochées",noPlayer:"Aucun joueur choisi",
   needPlayer:"Choisir d'abord un joueur",savedOk:"Brouillon enregistré",saveFail:"Échec de l'enregistrement",
   otherPh:"Autre aspect…",notePh:"Note…",close:"Fermer",cleared:"Fiche vidée",potHint:"Un seul choix",tipsHint:"Note 1–5 · 3 = suffisant",
   notesT:"Remarques",notesPh:"Autres observations, contexte, indications…",tipsNames:{T:"Technique",I:"Intelligence",P:"Personnalité",S:"Vitesse"},itPending:"",
   genText:"Générer le texte",genTitle:"Rapport (brouillon – le style sera défini avec le head coach)",copy:"Copier",copied:"Copié",
   noTeamYet:"sans équipe",del:"Supprimer",confirmDel:"Vraiment supprimer ?",yes:"Oui, supprimer",permErr:"Pas d'autorisation"},
- it:{loginTitle:"Accesso",systemPh:"Sistema di gioco (facoltativo), es. 1-4-3-3",uSurname:"Cognome",uFirst:"Nome",editUser:"Modifica accesso",saveBtn:"Salva",userSaved:"Accesso aggiornato",emailFixed:"L'email serve per l'accesso e qui non si può modificare.",needNames:"Inserisci cognome e nome",tabSchede:"Schede",schedeAll:"Tutte le schede",schedeMine:"Le mie schede",filterPh:"Filtra per giocatore, partita, scout…",allStates:"Tutte",stDraft:"Bozza",stSent:"Inviata",colDate:"Data",colPot:"Pot.",noSchede:"Ancora nessuna scheda",edit:"Modifica",send:"Invia",sendConfirmT:"Inviare la scheda?",sendConfirmB:"Dopo l'invio non potrai più modificare la scheda.",sendConfirmCoach:"La scheda sarà segnata come inviata. Come head coach potrai comunque modificarla.",sentOk:"Scheda inviata",reopen:"Riapri (torna bozza)",reopened:"Scheda riaperta come bozza",deleted:"Scheda eliminata",lockedMsg:"inviata, non più modificabile",replaceT:"Sostituire la scheda in corso?",replaceB:"La scheda che stai compilando verrà sostituita da quella salvata.",editingLbl:"Stai modificando una scheda salvata",viewIn:"Mostra in:",origLang:"lingua dello scout",freeTextNote:"I testi liberi (note TIPS, annotazioni) restano nella lingua in cui sono stati scritti.",email:"Email",pw:"Password",loginBtn:"Accedi",forgot:"Password dimenticata?",
+ it:{loginTitle:"Accesso",colNum:"N°",editPlayer:"Modifica giocatore",playerSaved:"Giocatore salvato",impNew:"nuovi",impUpd:"aggiornati",impApply:"Applica",stNew:"nuovo",stUpd:"aggiorna",impHint:"I giocatori già presenti (stesso cognome, nome e data di nascita) vengono aggiornati, non duplicati. Squadra e ruolo restano.",matchDate:"Data della partita",compiled:"compilata il",editUntil:"correggibile fino al",correctSaved:"Correzione salvata",kbTitle:"Scorciatoie da tastiera",tipsKey:"TIPS {L}: premi 1–5 (Maiusc = +0,5)",kbRows:[["Ctrl+K oppure /", "Cerca giocatore (nome o numero)"], ["Ctrl+S", "Salva bozza"], ["Ctrl+Maiusc+Invio", "Invia"], ["T, I, P, S poi 1–5", "Voto TIPS (con Maiusc +0,5: Maiusc+3 = 3,5)"], ["A, B, C", "Potenziale"], ["Tab / frecce + Spazio", "Muoversi tra le caselle e spuntarle"], ["↑ ↓ + Invio nella ricerca", "Scegliere il giocatore"], ["Esc", "Chiudere la finestra"], ["?", "Questo elenco"]],systemPh:"Sistema di gioco (facoltativo), es. 1-4-3-3",uSurname:"Cognome",uFirst:"Nome",editUser:"Modifica accesso",saveBtn:"Salva",userSaved:"Accesso aggiornato",emailFixed:"L'email serve per l'accesso e qui non si può modificare.",needNames:"Inserisci cognome e nome",tabSchede:"Schede",schedeAll:"Tutte le schede",schedeMine:"Le mie schede",filterPh:"Filtra per giocatore, partita, scout…",allStates:"Tutte",stDraft:"Bozza",stSent:"Inviata",colDate:"Data",colPot:"Pot.",noSchede:"Ancora nessuna scheda",edit:"Modifica",send:"Invia",sendConfirmT:"Inviare la scheda?",sendConfirmB:"Dopo l'invio non potrai più modificare la scheda.",sendConfirmCoach:"La scheda sarà segnata come inviata. Come head coach potrai comunque modificarla.",sentOk:"Scheda inviata",reopen:"Riapri (torna bozza)",reopened:"Scheda riaperta come bozza",deleted:"Scheda eliminata",lockedMsg:"inviata, non più modificabile",replaceT:"Sostituire la scheda in corso?",replaceB:"La scheda che stai compilando verrà sostituita da quella salvata.",editingLbl:"Stai modificando una scheda salvata",viewIn:"Mostra in:",origLang:"lingua dello scout",freeTextNote:"I testi liberi (note TIPS, annotazioni) restano nella lingua in cui sono stati scritti.",email:"Email",pw:"Password",loginBtn:"Accedi",forgot:"Password dimenticata?",
   badCreds:"Email o password errati",noAccess:"Accesso negato: il tuo account non è stato abilitato dall'head coach oppure è disattivato.",
   needEmail:"Scrivi prima l'email",resetSent:"Se l'indirizzo esiste, è stata inviata un'email per reimpostare la password.",loading:"Caricamento…",netErr:"Errore di connessione – riprova",
   roleCoach:"Head coach",roleScout:"Scout",logout:"Esci",
@@ -433,7 +440,7 @@ const UI = {
   status:"Stato",active:"attivo",inactive:"disattivato",deactivate:"Disattiva",reactivate:"Riattiva",sendReset:"Invia email password",resetTo:"Email inviata a",
   created:"Accesso creato",pwShort:"Password troppo corta (min. 6 caratteri)",emailInUse:"Questa email ha già un account",emailBad:"Email non valida",you:"tu",
   usersHint:"Solo chi ha un accesso attivo può entrare. Gli accessi disattivati non vedono più nessun dato.",
-  match:"Partita",pickMatch:"Scegli la partita…",manualMatch:"✎ Altra partita (inserisci a mano)…",manualPh:"es. Rossi – Blu, 14.11., campo 2",draftRestored:"Bozza non salvata ripristinata",needMatch:"Scegli prima la partita",player:"Giocatore",search:"Cerca giocatore (cognome, nome)…",noRes:"Nessun giocatore trovato",
+  match:"Partita",pickMatch:"Scegli la partita…",manualMatch:"✎ Altra partita (inserisci a mano)…",manualPh:"es. Rossi – Blu, 14.11., campo 2",draftRestored:"Bozza non salvata ripristinata",needMatch:"Scegli prima la partita",player:"Giocatore",search:"Cerca giocatore: nome o numero, es. «7 blu»…",noRes:"Nessun giocatore trovato",
   change:"Cambia",existing:"schede",date:"Data",save:"Salva bozza",clear:"Nuova scheda",marked:"caratteristiche spuntate",noPlayer:"Nessun giocatore scelto",
   needPlayer:"Scegli prima un giocatore",savedOk:"Bozza salvata",saveFail:"Salvataggio non riuscito",
   otherPh:"Altro aspetto…",notePh:"Nota…",close:"Chiudi",cleared:"Scheda svuotata",potHint:"Una sola scelta",tipsHint:"Nota 1–5 · 3 = sufficiente",
@@ -501,7 +508,7 @@ let tab = null;
 const D = {users:[], players:[], teams:[], matches:[], schede:[], logo:null};
 let unsubs = [];
 let coachSel = null, curTeam = null, importRows = null, pasteText = "";
-let editing = null, sistema = "";
+let editing = null, sistema = "", matchDate = "";
 let matchId = null, player = null, query = "", matchManual = null, matchTouched = false, draftPlayerId = null;
 const MANUAL = "__manual";
 let checks = new Set(), free = ["","","",""], pot = null, tips = freshTips(), note = "";
@@ -519,6 +526,7 @@ const fmt = v => v == null ? "–" : (v % 1 ? v.toFixed(1) : String(v));
 const team = id => D.teams.find(t=>t.id===id);
 const pl = id => D.players.find(p=>p.id===id);
 const isCoach = () => me && me.ruolo === "coach";
+const numTag = p => p && p.numero ? `<span class="num">${esc(p.numero)}</span>` : "";
 const fullName = x => x ? [x.nome, x.cognome].filter(Boolean).join(" ") : "";
 function roleName(zid){ const z = ZONES.find(z=>z.id===zid); if(!z) return ""; return z.pos == null ? u("gk") : L(SEC.position.items[z.pos]); }
 function fmtDay(iso){ if(!iso) return ""; const [y,m,d]=iso.split("-"); return `${d}.${m}.`; }
@@ -558,7 +566,7 @@ onAuthStateChanged(auth, async user=>{
   saveDraft();
   me = null;
   checks=new Set(); free=["","","",""]; pot=null; tips=freshTips(); note=""; player=null; draftPlayerId=null; query="";
-  matchId=null; matchManual=null; matchTouched=false; editing=null; sistema="";
+  matchId=null; matchManual=null; matchTouched=false; editing=null; sistema=""; matchDate="";
   if (!user){ renderChrome(); show("login"); return; }
   show("boot"); $("#bootMsg").textContent = u("loading");
   try{
@@ -669,16 +677,17 @@ function viewPlayers(){
     <div class="row-flex" style="justify-content:space-between;margin-bottom:12px">
       <h3 style="margin:0">${u("listTitle")} <span class="muted">(${rows.length})</span></h3>
       <button class="btn primary" id="addPlayerBtn">${u("addPlayer")}</button></div>
-    <table class="list"><thead><tr><th>${u("colCognome")}</th><th>${u("colNome")}</th><th>${u("colNascita")}</th><th>${u("colClub")}</th><th>${u("colTeam")}</th><th>${u("colRole")}</th><th></th></tr></thead>
+    <table class="list"><thead><tr><th>${u("colNum")}</th><th>${u("colCognome")}</th><th>${u("colNome")}</th><th>${u("colNascita")}</th><th>${u("colClub")}</th><th>${u("colTeam")}</th><th>${u("colRole")}</th><th></th></tr></thead>
     <tbody>${rows.map(p=>{ const t=team(p.team); return `<tr>
-      <td><b>${esc(p.cognome)}</b></td><td>${esc(p.nome)}</td><td>${esc(p.nascita)}</td><td>${esc(p.club)}</td>
+      <td>${numTag(p)}</td><td><b>${esc(p.cognome)}</b></td><td>${esc(p.nome)}</td><td>${esc(p.nascita)}</td><td>${esc(p.club)}</td>
       <td>${t?`<span class="dot" style="background:${esc(t.color)}"></span>${esc(t.name)}`:`<span class="muted">${u("noTeamYet")}</span>`}</td>
       <td>${p.ruolo?esc(roleName(p.ruolo)):(t?`<span class="muted">${u("bench")}</span>`:"")}</td>
-      <td style="text-align:right"><button class="x" title="${u("del")}" data-delp="${p.id}">×</button></td></tr>`; }).join("")}</tbody></table>
+      <td style="text-align:right;white-space:nowrap"><button class="btn sm" data-editp="${p.id}">${u("edit")}</button> <button class="x" title="${u("del")}" data-delp="${p.id}">×</button></td></tr>`; }).join("")}</tbody></table>
   </div>`;
   renderPreview();
   $("#dropX").onclick = ()=> $("#fileXlsx").click();
-  $("#addPlayerBtn").onclick = openAddPlayer;
+  $("#addPlayerBtn").onclick = ()=> openPlayerForm(null);
+  document.querySelectorAll("[data-editp]").forEach(b=> b.onclick = ()=> openPlayerForm(pl(b.dataset.editp)));
   $("#pasteBox").oninput = e=>{ pasteText = e.target.value; };
   $("#parseBtn").onclick = ()=>{
     const rows = pasteText.split(/\r?\n/).map(l=>l.split(/\t|;/).map(c=>c.trim())).filter(r=>r.some(Boolean));
@@ -688,25 +697,30 @@ function viewPlayers(){
   };
   document.querySelectorAll("[data-delp]").forEach(b=> b.onclick = ()=> confirmDel(()=> run(deleteDoc(doc(db,"players",b.dataset.delp)))));
 }
-function openAddPlayer(){
-  const f = (id,label,ph="") => `<div><label class="f" for="${id}">${label}</label><input class="t" id="${id}" placeholder="${esc(ph)}"></div>`;
-  openModal(u("addPlayer").replace(/^\+\s*/,""), `<form id="apForm" class="grid2" style="gap:12px">
-      ${f("apC",u("colCognome"))}${f("apN",u("colNome"))}${f("apD",u("colNascita"),"12.03.2011")}${f("apK",u("colClub"),"FC Lugano")}
+function openPlayerForm(x){
+  const f = (id,label,val,ph="") => `<div><label class="f" for="${id}">${label}</label><input class="t" id="${id}" value="${esc(val||"")}" placeholder="${esc(ph)}"></div>`;
+  openModal(x ? u("editPlayer") : u("addPlayer").replace(/^\+\s*/,""), `<form id="apForm" class="grid2" style="gap:12px">
+      ${f("apC",u("colCognome"),x?.cognome)}${f("apN",u("colNome"),x?.nome)}${f("apD",u("colNascita"),x?.nascita,"12.03.2011")}${f("apK",u("colClub"),x?.club,"FC Lugano")}
+      ${f("apNr",u("colNum"),x?.numero,"7")}
       <button type="submit" class="hidden"></button></form>`, [
     {label:u("cancel"), on:closeModal},
-    {label:u("addBtn"), cls:"primary", on:()=> $("#apForm").requestSubmit()}]);
+    {label:x ? u("saveBtn") : u("addBtn"), cls:"primary", on:()=> $("#apForm").requestSubmit()}]);
   $("#apC").focus();
   $("#apForm").onsubmit = async e=>{
     e.preventDefault();
     const v = id => $("#"+id).value.trim();
-    const p = {cognome:v("apC"), nome:v("apN"), nascita:v("apD"), club:v("apK"), team:null, ruolo:null};
-    if (!p.cognome || !p.nome){ toast(u("needName")); return; }
-    try{ await addDoc(collection(db,"players"), p); closeModal(); toast(`${u("playerAdded")}: ${p.cognome} ${p.nome}`); }
-    catch(err){ fail(err); }
+    const d = {cognome:v("apC"), nome:v("apN"), nascita:v("apD"), club:v("apK"), numero:v("apNr")};
+    if (!d.cognome || !d.nome){ toast(u("needName")); return; }
+    try{
+      if (x) await updateDoc(doc(db,"players",x.id), d);
+      else await addDoc(collection(db,"players"), {...d, team:null, ruolo:null});
+      closeModal(); toast(`${x?u("playerSaved"):u("playerAdded")}: ${d.cognome} ${d.nome}`);
+    }catch(err){ fail(err); }
   };
 }
 function classify(h){
   h = String(h||"").toLowerCase().trim();
+  if (/^(nr\.?|n°|n\.|no\.?|#|num\.?)$/.test(h) || /nummer|numero|maglia|trikot|maillot|dossard/.test(h)) return "numero";
   if (/vorname|prénom|prenom|first/.test(h) || h==="nome") return "nome";
   if (/nachname|cognome|nom de famille|last|surname/.test(h) || h==="name" || h==="nom") return "cognome";
   if (/geburt|nascita|naissance|birth|jahrgang|anno|année|date/.test(h)) return "nascita";
@@ -718,27 +732,38 @@ function mapRows(rows){
   let map = {cognome:0,nome:1,nascita:2,club:3}, start = 0;
   const hdr = rows[0].map(classify);
   if (hdr.filter(Boolean).length >= 2){ map = {}; hdr.forEach((k,i)=>{ if(k && map[k]==null) map[k]=i; }); start = 1; }
-  return rows.slice(start).map(r=>({cognome:r[map.cognome]||"",nome:r[map.nome]||"",nascita:r[map.nascita]||"",club:r[map.club]||""}))
-             .filter(p=>p.cognome && p.nome);
+  const seen = new Set();
+  return rows.slice(start).map(r=>({cognome:r[map.cognome]||"",nome:r[map.nome]||"",nascita:r[map.nascita]||"",club:r[map.club]||"",
+                                   numero: map.numero!=null ? String(r[map.numero]||"").replace(/\.0$/,"") : ""}))
+             .filter(p=>{ if (!p.cognome || !p.nome) return false; const k=pKey(p); if (seen.has(k)) return false; seen.add(k); return true; })
+             .map(p=>({...p, existing: D.players.find(x=>pKey(x)===pKey(p))?.id || null}));
+}
+const norm = v => String(v||"").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\s+/g," ");
+function pKey(p){ return [norm(p.cognome), norm(p.nome), norm(p.nascita)].join("|");
 }
 function renderPreview(){
   const box = $("#preview"); if (!box) return;
   if (!importRows){ box.innerHTML=""; return; }
   box.innerHTML = `<div class="card" style="margin-bottom:16px;border-color:var(--ch)">
-    <div class="row-flex" style="justify-content:space-between;margin-bottom:8px"><b>${importRows.length} ${u("previewN")}</b>
-      <div class="row-flex"><button class="btn" id="impCancel">${u("cancel")}</button><button class="btn primary" id="impOk">${u("addAll")}</button></div></div>
-    <table class="list"><thead><tr><th>${u("colCognome")}</th><th>${u("colNome")}</th><th>${u("colNascita")}</th><th>${u("colClub")}</th></tr></thead>
-    <tbody>${importRows.map(p=>`<tr><td>${esc(p.cognome)}</td><td>${esc(p.nome)}</td><td>${esc(p.nascita)}</td><td>${esc(p.club)}</td></tr>`).join("")}</tbody></table></div>`;
+    <div class="row-flex" style="justify-content:space-between;margin-bottom:8px"><b>${importRows.length} ${u("previewN")} · ${importRows.filter(p=>!p.existing).length} ${u("impNew")} · ${importRows.filter(p=>p.existing).length} ${u("impUpd")}</b>
+      <div class="row-flex"><button class="btn" id="impCancel">${u("cancel")}</button><button class="btn primary" id="impOk">${u("impApply")}</button></div></div>
+    <p class="muted" style="margin:0 0 8px">${u("impHint")}</p>
+    <table class="list"><thead><tr><th>${u("colNum")}</th><th>${u("colCognome")}</th><th>${u("colNome")}</th><th>${u("colNascita")}</th><th>${u("colClub")}</th><th></th></tr></thead>
+    <tbody>${importRows.map(p=>`<tr><td>${esc(p.numero)}</td><td>${esc(p.cognome)}</td><td>${esc(p.nome)}</td><td>${esc(p.nascita)}</td><td>${esc(p.club)}</td>
+      <td><span class="pill ${p.existing?"draft":"ok"}">${p.existing?u("stUpd"):u("stNew")}</span></td></tr>`).join("")}</tbody></table></div>`;
   $("#impCancel").onclick = ()=>{ importRows=null; renderPreview(); };
   $("#impOk").onclick = async ()=>{
     const rows = importRows, n = rows.length;
     try{
       for (let i=0;i<rows.length;i+=400){
         const b = writeBatch(db);
-        rows.slice(i,i+400).forEach(p=> b.set(doc(collection(db,"players")), {...p, team:null, ruolo:null}));
+        rows.slice(i,i+400).forEach(({existing, ...p})=>{
+          if (existing){ const upd = {club:p.club, nascita:p.nascita}; if (p.numero) upd.numero = p.numero; b.update(doc(db,"players",existing), upd); }
+          else b.set(doc(collection(db,"players")), {...p, team:null, ruolo:null});
+        });
         await b.commit();
       }
-      importRows = null; pasteText = ""; toast(`${n} ${u("added")}`); render();
+      importRows = null; pasteText = ""; toast(`${rows.filter(p=>!p.existing).length} ${u("impNew")} · ${rows.filter(p=>p.existing).length} ${u("impUpd")}`); render();
     }catch(e){ fail(e); }
   };
 }
@@ -775,7 +800,7 @@ function viewTeams(){
   }
   const pool = D.players.filter(p=>!p.team || !team(p.team));
   const inTeam = D.players.filter(p=>p.team===curTeam);
-  const chip = p => `<div class="chip ${coachSel===p.id?"sel":""}" style="--c:${esc(t.color)}" data-chip="${p.id}"><span>${esc(p.cognome)} ${esc((p.nome||"")[0]||"")}.</span><button class="x" data-unassign="${p.id}">×</button></div>`;
+  const chip = p => `<div class="chip ${coachSel===p.id?"sel":""}" style="--c:${esc(t.color)}" data-chip="${p.id}"><span>${p.numero?`<b>${esc(p.numero)}</b> · `:""}${esc(p.cognome)} ${esc((p.nome||"")[0]||"")}.</span><button class="x" data-unassign="${p.id}">×</button></div>`;
   const selP = coachSel ? pl(coachSel) : null;
   $("#view").innerHTML = `
     <div class="teams-bar">
@@ -790,7 +815,7 @@ function viewTeams(){
       <div class="card pool">
         <h3>${u("pool")} <span class="muted">(${pool.length})</span></h3>
         <div class="muted" style="margin-bottom:10px">${u("poolHint")}</div>
-        ${pool.length? pool.map(p=>`<div class="pl ${coachSel===p.id?"sel":""}" data-pick="${p.id}"><span><b>${esc(p.cognome)}</b> ${esc(p.nome)}</span><small>${esc(p.club)}</small></div>`).join("") : `<div class="muted">${u("allAssigned")}</div>`}
+        ${pool.length? pool.map(p=>`<div class="pl ${coachSel===p.id?"sel":""}" data-pick="${p.id}"><span>${numTag(p)}<b>${esc(p.cognome)}</b> ${esc(p.nome)}</span><small>${esc(p.club)}</small></div>`).join("") : `<div class="muted">${u("allAssigned")}</div>`}
       </div>
       <div>
         <div class="pitch">
@@ -982,6 +1007,11 @@ function proposeMatch(){
     .sort((x,y)=>x.d-y.d);
   if (c.length) matchId = c[0].m.id;
 }
+function curMatchDate(){
+  if (matchManual!==null) return matchDate || new Date().toISOString().slice(0,10);
+  return D.matches.find(x=>x.id===matchId)?.giorno || "";
+}
+const fmtISO = iso => { if (!iso) return ""; const [y,m,d] = iso.split("-"); return `${d}.${m}.${y}`; };
 function curMatchLabel(){
   if (matchManual!==null) return matchManual.trim();
   return matchLabel(D.matches.find(x=>x.id===matchId));
@@ -994,9 +1024,10 @@ function viewSheet(){
   const rosterOf = tid => {
     const t = team(tid); if(!t) return "";
     const zi = id => { const i = ZONES.findIndex(z=>z.id===id); return i<0 ? 99 : i; };
-    const ps = D.players.filter(p=>p.team===tid).sort((a,b)=>zi(b.ruolo)-zi(a.ruolo));
+    const nr = p => parseInt(p.numero,10);
+    const ps = D.players.filter(p=>p.team===tid).sort((a,b)=> (isNaN(nr(a))?999:nr(a)) - (isNaN(nr(b))?999:nr(b)) || zi(b.ruolo)-zi(a.ruolo));
     return `<div><div class="rt"><span class="dot" style="background:${esc(t.color)}"></span>${esc(t.name)}</div><div class="chips">
-      ${ps.map(p=>`<button class="rchip" style="--c:${esc(t.color)}" data-pp="${p.id}">${esc(p.cognome)} ${esc(p.nome)}<small>${p.ruolo?esc(roleName(p.ruolo)):u("bench")}</small></button>`).join("")}</div></div>`;
+      ${ps.map(p=>`<button class="rchip" style="--c:${esc(t.color)}" data-pp="${p.id}">${numTag(p)}${esc(p.cognome)} ${esc(p.nome)}<small>${p.ruolo?esc(roleName(p.ruolo)):u("bench")}</small></button>`).join("")}</div></div>`;
   };
   const pt = player ? team(player.team) : null;
   $("#view").innerHTML = `
@@ -1005,11 +1036,13 @@ function viewSheet(){
       <select class="t" id="matchSel"><option value="">${esc(u("pickMatch"))}</option>
         ${ms.map(x=>`<option value="${x.id}" ${x.id===matchId&&matchManual===null?"selected":""}>${esc(matchLabel(x))}</option>`).join("")}
         <option value="${MANUAL}" ${matchManual!==null?"selected":""}>${esc(u("manualMatch"))}</option></select>
-      <div class="datebox">${u("date")}: <b>${new Date().toLocaleDateString("de-CH")}</b></div>
+      <div class="datebox">${u("matchDate")}: ${matchManual!==null
+          ? `<input class="t" type="date" id="matchDate" value="${esc(curMatchDate())}">`
+          : `<b>${esc(fmtISO(curMatchDate())) || "–"}</b>`}</div>
       ${matchManual!==null?`<div class="span2"><input class="t" id="matchManual" placeholder="${esc(u("manualPh"))}" value="${esc(matchManual)}"></div>`:""}
       <div class="span2"><input class="t" id="sistema" placeholder="${esc(u("systemPh"))}" value="${esc(sistema)}"></div></div>
     <div class="head-box"><div class="lbl">2 · ${u("player")}</div>
-      <div>${player?`<div class="chosen"><span class="name">${esc(player.cognome)}, ${esc(player.nome)}</span>
+      <div>${player?`<div class="chosen"><span class="name">${numTag(player)}${esc(player.cognome)}, ${esc(player.nome)}</span>
           <span class="meta">${esc(player.nascita)} · ${esc(player.club)}${pt?` · <span class="dot" style="background:${esc(pt.color)}"></span>${esc(pt.name)}${player.ruolo?" · "+esc(roleName(player.ruolo)):""}`:""}</span>
           <span class="pill">${nSchede} ${u("existing")}</span><button class="btn sm" id="changePlayer">${u("change")}</button></div>`
         :`<div class="search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
@@ -1024,25 +1057,55 @@ function viewSheet(){
   };
   if ($("#matchManual")) $("#matchManual").oninput = e=>{ matchManual = e.target.value; };
   $("#sistema").oninput = e=>{ sistema = e.target.value; };
+  if ($("#matchDate")) $("#matchDate").onchange = e=>{ matchDate = e.target.value; };
   if (player) $("#changePlayer").onclick = ()=>{ player=null; query=""; viewSheet(); $("#q")?.focus(); };
   else {
     const q=$("#q");
     q.oninput = ()=>{ query=q.value; showResults(); };
+    q.onkeydown = searchKey;
     q.onfocus = showResults;
     q.onblur = ()=> setTimeout(()=> $("#res")?.classList.add("hidden"),150);
   }
   document.querySelectorAll("[data-pp]").forEach(b=> b.onclick = ()=>{ player = pl(b.dataset.pp); viewSheet(); });
   renderSheet(); renderSummary();
 }
+let resList = [], resHl = 0;
+function searchPlayers(qs){
+  const toks = norm(qs).replace(/,/g," ").split(" ").filter(Boolean);
+  if (!toks.length) return [];
+  const m = D.matches.find(x=>x.id===matchId);
+  const inMatch = p => m && (p.team===m.a || p.team===m.b);
+  const ok = p => {
+    const tname = norm(team(p.team)?.name);
+    const hay = norm(`${p.cognome} ${p.nome} ${team(p.team)?.name||""}`);
+    return toks.every(w=>{
+      if (/^\d+$/.test(w)) return String(p.numero||"").trim()===w;
+      const mm = w.match(/^([a-z]+)(\d+)$/);
+      if (mm) return String(p.numero||"").trim()===mm[2] && tname.startsWith(mm[1]);
+      return hay.includes(w);
+    });
+  };
+  return D.players.filter(ok).sort((a,b)=> (inMatch(b)?1:0)-(inMatch(a)?1:0) || (a.cognome||"").localeCompare(b.cognome||""));
+}
+function pickPlayer(id){ player = pl(id); query=""; resList=[]; document.activeElement?.blur(); viewSheet(); }
 function showResults(){
   const res=$("#res"); if(!res) return;
-  const s = query.trim().toLowerCase().replace(/,/g," ").split(/\s+/).filter(Boolean);
-  if (!s.length){ res.classList.add("hidden"); return; }
-  const list = D.players.filter(p=> s.every(w=>((p.cognome||"")+" "+(p.nome||"")).toLowerCase().includes(w)));
-  res.innerHTML = list.length ? list.map(p=>{const t=team(p.team);return `<div data-id="${p.id}"><span><b>${esc(p.cognome)}</b>, ${esc(p.nome)}</span><span class="meta">${esc(p.club)}${t?` · ${esc(t.name)}`:""}</span></div>`;}).join("")
+  resList = searchPlayers(query); resHl = 0;
+  if (!query.trim()){ res.classList.add("hidden"); return; }
+  res.innerHTML = resList.length ? resList.map((p,i)=>{const t=team(p.team);return `<div data-id="${p.id}" class="${i===resHl?"hl":""}"><span>${numTag(p)}<b>${esc(p.cognome)}</b>, ${esc(p.nome)}</span><span class="meta">${esc(p.club)}${t?` · ${esc(t.name)}`:""}</span></div>`;}).join("")
     : `<div class="meta">${u("noRes")}</div>`;
   res.classList.remove("hidden");
-  res.querySelectorAll("[data-id]").forEach(d=> d.onmousedown = e=>{ e.preventDefault(); player = pl(d.dataset.id); query=""; document.activeElement.blur(); viewSheet(); });
+  res.querySelectorAll("[data-id]").forEach(d=> d.onmousedown = e=>{ e.preventDefault(); pickPlayer(d.dataset.id); });
+}
+function searchKey(e){
+  if (!resList.length) return;
+  const rows = $("#res").querySelectorAll("[data-id]");
+  if (e.key==="ArrowDown" || e.key==="ArrowUp"){
+    e.preventDefault();
+    resHl = (resHl + (e.key==="ArrowDown"?1:-1) + resList.length) % resList.length;
+    rows.forEach((r,i)=> r.classList.toggle("hl", i===resHl));
+    rows[resHl]?.scrollIntoView({block:"nearest"});
+  } else if (e.key==="Enter"){ e.preventDefault(); pickPlayer(resList[resHl].id); }
 }
 function sectionCount(sec){ let n=[...checks].filter(k=>k.startsWith(sec.id+":")).length; if(sec.type==="taktik") n+=free.filter(f=>f.trim()).length; return n; }
 function renderSheet(){
@@ -1185,7 +1248,8 @@ function reportFrom(rec, lg){
   // Intestazione: Cognome Nome (data di nascita, club) + partita
   const extra = [p.nascita, p.club].filter(Boolean).join(", ");
   const mt = rec.partitaId && D.matches.find(x=>x.id===rec.partitaId);
-  const mlab = mt ? `${team(mt.a)?.name||"?"} – ${team(mt.b)?.name||"?"} (${fmtDay(mt.giorno)}${mt.campo?`, ${P.field} ${mt.campo}`:""})` : (rec.partita||"");
+  const mlab = mt ? `${team(mt.a)?.name||"?"} – ${team(mt.b)?.name||"?"} (${fmtDay(mt.giorno)}${mt.campo?`, ${P.field} ${mt.campo}`:""})`
+                  : (rec.partita||"") + (rec.partita && rec.dataPartita ? ` (${fmtDay(rec.dataPartita)})` : "");
   out.push(`${cog} ${nom}`.trim() + (extra?` (${extra})`:"") + (mlab?`\n${P.matchL}${colon} ${mlab}`:""));
 
   // Ruolo, sistema, piede
@@ -1263,7 +1327,7 @@ const copyBtn = ()=>({label:u("copy"), cls:"primary", on:async ()=>{ const ta=$(
 
 function buildRecord(stato){
   const base = editing || {};
-  const rec = {giocatoreId:player.id, giocatore:`${player.cognome}, ${player.nome}`, partitaId:matchManual!==null?null:matchId, partita:curMatchLabel(), partitaManuale:matchManual!==null, sistema:sistema.trim(),
+  const rec = {giocatoreId:player.id, giocatore:`${player.cognome}, ${player.nome}`, partitaId:matchManual!==null?null:matchId, partita:curMatchLabel(), partitaManuale:matchManual!==null, dataPartita:curMatchDate(), sistema:sistema.trim(),
     scoutUid: base.scoutUid || me.uid, scout: base.scout || fullName(me), lingua: base.lingua || lang, annotazioni:note.trim(), stato};
   SECTIONS.forEach(sec=>{
     if (sec.type==="tips") rec.tips = Object.fromEntries(Object.entries(tips).map(([k,t])=>[k,{nota:t.v,commento:t.n}]));
@@ -1292,7 +1356,7 @@ function saveDraft(){
   try{
     if (sheetEmpty()) { localStorage.removeItem(k); return; }
     localStorage.setItem(k, JSON.stringify({matchId, matchManual, matchTouched, playerId: player?.id || draftPlayerId,
-      checks:[...checks], free, pot, tips, note, editing, sistema, t:Date.now()}));
+      checks:[...checks], free, pot, tips, note, editing, sistema, matchDate, t:Date.now()}));
   }catch(e){}
 }
 function restoreDraft(){
@@ -1301,7 +1365,7 @@ function restoreDraft(){
     matchId = d.matchId || null; matchManual = d.matchManual ?? null; matchTouched = !!d.matchTouched;
     draftPlayerId = d.playerId || null; player = null; editing = d.editing || null;
     checks = new Set(d.checks||[]); free = d.free || ["","","",""]; pot = d.pot || null;
-    tips = d.tips || freshTips(); note = d.note || ""; sistema = d.sistema || "";
+    tips = d.tips || freshTips(); note = d.note || ""; sistema = d.sistema || ""; matchDate = d.matchDate || "";
     setTimeout(()=> toast(u("draftRestored")), 800);
     return true;
   }catch(e){ return false; }
@@ -1327,6 +1391,7 @@ function loadRecord(rec){
   note = rec.annotazioni || ""; sistema = rec.sistema || "";
   if (rec.partitaId && D.matches.find(m=>m.id===rec.partitaId)){ matchId = rec.partitaId; matchManual = null; }
   else { matchId = null; matchManual = rec.partita || ""; }
+  matchDate = rec.dataPartita || "";
   matchTouched = true;
   const [cog="", nom=""] = (rec.giocatore||"").split(", ");
   player = pl(rec.giocatoreId) || {id:rec.giocatoreId, cognome:cog, nome:nom, nascita:"", club:""};
@@ -1335,13 +1400,15 @@ function loadRecord(rec){
 
 async function saveScheda(stato){
   if (!needBoth()) return;
+  const correcting = editing && editing.stato==="inviata" && !isCoach();
+  if (correcting) stato = "inviata";
   const rec = buildRecord(stato);
-  if (stato==="inviata") rec.inviataIl = serverTimestamp();
+  if (stato==="inviata" && !correcting) rec.inviataIl = serverTimestamp();
   const btns = ["#saveBtn","#sendBtn"].map(s=>$(s)); btns.forEach(b=>b.disabled=true);
   try{
     if (editing){ rec.modificatoIl = serverTimestamp(); await updateDoc(doc(db,"schede",editing.id), rec); }
     else { rec.creatoIl = serverTimestamp(); await addDoc(collection(db,"schede"), rec); }
-    resetSheet(); viewSheet(); toast(stato==="inviata" ? u("sentOk") : u("savedOk"));
+    resetSheet(); viewSheet(); toast(correcting ? u("correctSaved") : stato==="inviata" ? u("sentOk") : u("savedOk"));
   }catch(e){ console.error(e); toast(e && e.code==="permission-denied" ? u("permErr") : u("saveFail")); }
   finally{ btns.forEach(b=>b.disabled=false); }
 }
@@ -1354,6 +1421,7 @@ $("#genBtn").onclick = ()=>{
 $("#saveBtn").onclick = ()=> saveScheda("bozza");
 $("#sendBtn").onclick = ()=>{
   if (!needBoth()) return;
+  if (editing && editing.stato==="inviata" && !isCoach()) { saveScheda("inviata"); return; }
   openModal(u("sendConfirmT"), `<p>${esc(isCoach()?u("sendConfirmCoach"):u("sendConfirmB"))}</p>`, [
     {label:u("cancel"), on:closeModal},
     {label:u("send"), cls:"primary", on:()=>{ closeModal(); saveScheda("inviata"); }}]);
@@ -1372,7 +1440,11 @@ function tsDate(v){
 const tsMs = v => tsDate(v)?.getTime() ?? Date.now();
 function fmtTs(v){ const d = tsDate(v); if (!d) return "…"; return d.toLocaleDateString("de-CH")+" "+d.toLocaleTimeString("de-CH",{hour:"2-digit",minute:"2-digit"}); }
 const statoOf = r => r.stato || "bozza";
-const canEdit = r => isCoach() || (r.scoutUid===me.uid && statoOf(r)==="bozza");
+const DAY = 24*3600*1000;
+const sentAt = r => tsDate(r.inviataIl)?.getTime() ?? null;
+const inWindow = r => statoOf(r)==="inviata" && sentAt(r)!=null && Date.now() < sentAt(r) + DAY;
+const canEdit = r => isCoach() || (r.scoutUid===me.uid && (statoOf(r)==="bozza" || inWindow(r)));
+const canDel  = r => isCoach() || (r.scoutUid===me.uid && statoOf(r)==="bozza");
 let schedeQ = "", schedeStato = "";
 function viewSchede(){
   $("#view").innerHTML = `<div class="card">
@@ -1396,9 +1468,9 @@ function renderSchedeRows(){
     && (!q || [r.giocatore, r.partita, r.scout].join(" ").toLowerCase().includes(q)));
   $("#schedeN").textContent = `(${rows.length})`;
   $("#schedeRows").innerHTML = rows.length ? `<table class="list clickable"><thead><tr>
-      <th>${u("colDate")}</th><th>${u("player")}</th><th>${u("match")}</th>${isCoach()?`<th>${u("roleScout")}</th>`:""}<th>${u("colPot")}</th><th>${u("status")}</th></tr></thead><tbody>
+      <th>${u("matchDate")}</th><th>${u("player")}</th><th>${u("match")}</th>${isCoach()?`<th>${u("roleScout")}</th>`:""}<th>${u("colPot")}</th><th>${u("status")}</th></tr></thead><tbody>
     ${rows.map(r=>`<tr data-open="${r.id}">
-      <td>${esc(fmtTs(r.creatoIl))}</td><td><b>${esc(r.giocatore)}</b></td><td>${esc(r.partita)}</td>
+      <td>${esc(r.dataPartita ? fmtISO(r.dataPartita) : fmtTs(r.creatoIl))}</td><td><b>${esc(r.giocatore)}</b></td><td>${esc(r.partita)}</td>
       ${isCoach()?`<td>${esc(r.scout)}</td>`:""}
       <td>${r.potenziale?`<span class="potpill p${r.potenziale}">${r.potenziale}</span>`:""}</td>
       <td><span class="pill ${statoOf(r)==="inviata"?"ok":"draft"}">${statoOf(r)==="inviata"?u("stSent"):u("stDraft")}</span></td></tr>`).join("")}</tbody></table>`
@@ -1408,9 +1480,10 @@ function renderSchedeRows(){
 function openScheda(id){
   const r = D.schede.find(x=>x.id===id); if (!r) return;
   const st = statoOf(r);
-  const meta = `<p class="muted" style="margin:0 0 12px">${esc(r.scout)} · ${esc(fmtTs(r.creatoIl))} ·
+  const until = inWindow(r) ? new Date(sentAt(r)+DAY) : null;
+  const meta = `<p class="muted" style="margin:0 0 12px">${esc(r.scout)} · ${r.dataPartita?`${esc(u("matchDate"))} ${esc(fmtISO(r.dataPartita))} · `:""}${esc(u("compiled"))} ${esc(fmtTs(r.creatoIl))} ·
       <span class="pill ${st==="inviata"?"ok":"draft"}">${st==="inviata"?u("stSent"):u("stDraft")}</span>
-      ${st==="inviata"&&!isCoach()?` · ${esc(u("lockedMsg"))}`:""}</p>`;
+      ${st==="inviata"&&!isCoach() ? (until ? ` · ${esc(u("editUntil"))} ${esc(until.toLocaleDateString("de-CH"))} ${esc(until.toLocaleTimeString("de-CH",{hour:"2-digit",minute:"2-digit"}))}` : ` · ${esc(u("lockedMsg"))}`) : ""}</p>`;
   const btns = [copyBtn()];
   if (canEdit(r)) btns.push({label:u("edit"), on:()=>{
     closeModal();
@@ -1422,7 +1495,7 @@ function openScheda(id){
       {label:u("send"),cls:"primary",on:()=>{ closeModal(); run(updateDoc(doc(db,"schede",r.id),{stato:"inviata",inviataIl:serverTimestamp()}).then(()=>toast(u("sentOk")))); }}]);
   }});
   if (st==="inviata" && isCoach()) btns.push({label:u("reopen"), on:()=>{ closeModal(); run(updateDoc(doc(db,"schede",r.id),{stato:"bozza"}).then(()=>toast(u("reopened")))); }});
-  if (canEdit(r)) btns.push({label:u("del"), on:()=> confirmDel(()=> run(deleteDoc(doc(db,"schede",r.id)).then(()=>toast(u("deleted")))))});
+  if (canDel(r)) btns.push({label:u("del"), on:()=> confirmDel(()=> run(deleteDoc(doc(db,"schede",r.id)).then(()=>toast(u("deleted")))))});
   btns.push({label:u("close"), on:closeModal});
   openModal(r.giocatore + (r.partita?` · ${r.partita}`:""), meta + reportBody(r, r.lingua || lang), btns);
   bindReportLang(r);
@@ -1441,6 +1514,70 @@ document.addEventListener("click", e=>{
   const t = e.target.closest("[data-tab]"); if (t){ tab=t.dataset.tab; coachSel=null; render(); }
 });
 $("#modal").onclick = e=>{ if (e.target.id==="modal") closeModal(); };
+
+/* =====================================================================
+   SCORCIATOIE DA TASTIERA (scheda scout)
+   ===================================================================== */
+function showKeys(){
+  openModal(u("kbTitle"), `<table class="kbtable">${u("kbRows").map(([k,d])=>`<tr><td>${esc(k)}</td><td>${esc(d)}</td></tr>`).join("")}</table>`,
+    [{label:u("close"), on:closeModal}]);
+}
+$("#kbBtn").onclick = showKeys;
+let tipsPending = null, tipsTimer = null;
+function setTips(L, v){
+  tips[L].v = v; renderSheet(); renderSummary();
+  document.querySelector(`[data-tip="${L}"][data-v="${v}"]`)?.scrollIntoView({block:"nearest"});
+  toast(`${u("tipsNames")[L]}: ${fmt(v)}`);
+}
+function setPot(v){
+  pot = pot===v ? null : v; renderSheet(); renderSummary();
+  toast(`${L(SEC.potenzial.t)}: ${pot||"–"}`);
+}
+document.addEventListener("keydown", e=>{
+  if (!me || $("#app").classList.contains("hidden")) return;
+  const modalOpen = !$("#modal").classList.contains("hidden");
+  if (e.key==="Escape" && modalOpen){ closeModal(); return; }
+  if (modalOpen) return;
+  const el = document.activeElement;
+  const typing = el && (el.tagName==="INPUT" || el.tagName==="TEXTAREA" || el.tagName==="SELECT" || el.isContentEditable);
+  const ctrl = e.ctrlKey || e.metaKey;
+  if (tab!=="sheet"){ if (!typing && e.key==="?") { e.preventDefault(); showKeys(); } return; }
+
+  // con Ctrl: valgono anche mentre si scrive
+  if (ctrl && (e.key==="s" || e.key==="S")){ e.preventDefault(); saveScheda("bozza"); return; }
+  if (ctrl && e.shiftKey && e.key==="Enter"){ e.preventDefault(); $("#sendBtn").click(); return; }
+  if ((ctrl && (e.key==="k" || e.key==="K")) || (!typing && e.key==="/")){
+    e.preventDefault();
+    if (player){ player=null; query=""; viewSheet(); }
+    $("#q")?.focus(); window.scrollTo(0,0); return;
+  }
+  if (typing || ctrl || e.altKey) return;
+
+  // frecce tra le caselle di una sezione
+  if (el && el.classList.contains("cell") && ["ArrowRight","ArrowLeft","ArrowDown","ArrowUp"].includes(e.key)){
+    const cells = [...document.querySelectorAll("#sheet .cell:not(.free)")];
+    const i = cells.indexOf(el); if (i<0) return;
+    e.preventDefault();
+    const n = cells[i + (e.key==="ArrowRight"||e.key==="ArrowDown" ? 1 : -1)];
+    n?.focus(); return;
+  }
+  const k = e.key.toUpperCase();
+  if (e.key==="?"){ e.preventDefault(); showKeys(); return; }
+  // TIPS: lettera, poi cifra (Maiusc = mezzo punto in più)
+  const digit = (e.code||"").match(/^(?:Digit|Numpad)([1-5])$/);
+  if (tipsPending && digit){
+    e.preventDefault();
+    const v = Math.min(5, parseInt(digit[1],10) + (e.shiftKey && digit[1]!=="5" ? 0.5 : 0));
+    const Lt = tipsPending; tipsPending = null; clearTimeout(tipsTimer);
+    setTips(Lt, v); return;
+  }
+  if (["T","I","P","S"].includes(k) && !e.shiftKey){
+    e.preventDefault(); tipsPending = k; clearTimeout(tipsTimer);
+    tipsTimer = setTimeout(()=> tipsPending = null, 3000);
+    toast(u("tipsKey").replace("{L}", `${k} – ${u("tipsNames")[k]}`)); return;
+  }
+  if (["A","B","C"].includes(k) && !e.shiftKey){ e.preventDefault(); setPot(k); return; }
+});
 renderChrome();
 </script>
 </body>
