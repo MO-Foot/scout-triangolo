@@ -33,6 +33,14 @@ service cloud.firestore {
     match /matches/{id}  { allow read: if active(); allow write: if isCoach(); }
     match /settings/{id} { allow read: if active(); allow write: if isCoach(); }
 
+    // Giocatori "in osservazione" (★) di ogni utente per partita: ognuno vede e cambia solo i propri
+    match /watch/{id} {
+      allow read:   if active() && resource.data.scoutUid == request.auth.uid;
+      allow create, update: if active() && request.resource.data.scoutUid == request.auth.uid
+                            && id == request.auth.uid + '_' + request.resource.data.matchId;
+      allow delete: if active() && resource.data.scoutUid == request.auth.uid;
+    }
+
     // Schede di osservazione
     // - head coach: legge, crea, modifica, invia, riapre ed elimina tutto
     // - scout: legge solo le proprie; crea schede a proprio nome;
