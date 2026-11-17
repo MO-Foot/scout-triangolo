@@ -72,7 +72,7 @@ Da qui in poi gli altri accessi (scout o altri head coach) si creano **dall'app*
 - **Cancellare un account:** dall'app un account si può solo disattivare. Per cancellarlo del tutto: Firebase → Authentication → Utenti → elimina.
 - **Password:** l'head coach non vede e non cambia le password. Può solo far partire l'email di reimpostazione, quindi lo scout deve avere un'email vera.
 - **Creazione non completata:** se la creazione di un accesso si interrompe a metà (rete), l'email resta "già usata". In quel caso elimina l'utente in Authentication e riprova.
-- **Voci in italiano:** sono provvisorie, in attesa della tabella ufficiale.
+- **Voci in italiano e francese:** tabella ufficiale SFV 2026 (Linea guida per Scout SFV).
 - **"Genera testo":** è una bozza. Lo stile si definisce con gli esempi dell'head coach.
 
 ## Test locale (facoltativo, per sviluppatori)

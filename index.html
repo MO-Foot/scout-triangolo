@@ -484,49 +484,49 @@ const UI = {
   needPlayer:"Scegli prima un giocatore",savedOk:"Bozza salvata",saveFail:"Salvataggio non riuscito",
   otherPh:"Altro aspetto…",notePh:"Nota…",close:"Chiudi",cleared:"Scheda svuotata",potHint:"Una sola scelta",tipsHint:"Nota 1–5 · 3 = sufficiente",
   notesT:"Annotazioni",notesPh:"Altre osservazioni, contesto, indicazioni…",tipsNames:{T:"Tecnica",I:"Intelligenza",P:"Personalità",S:"Velocità"},
-  itPending:"Voci della scheda in italiano provvisorie: verranno sostituite con la tabella ufficiale.",
+  itPending:"",
   genText:"Genera testo",genTitle:"Relazione (bozza – lo stile verrà definito con l'head coach)",copy:"Copia",copied:"Copiato",
   noTeamYet:"senza squadra",del:"Elimina",confirmDel:"Eliminare davvero?",yes:"Sì, elimina",permErr:"Permesso negato"}
 };
 
 /* =====================================================================
-   SCHEDA – riferimento DE. Ogni voce: [DE, FR, IT (provvisorio)]
+   SCHEDA – riferimento DE. Ogni voce: [DE, FR, IT (ufficiale SFV 2026)]
    ===================================================================== */
 const SECTIONS = [
   {id:"fuss", t:["Fuss","Pied","Piede"], items:[["R","D","D"],["L","G","S"]]},
-  {id:"position", t:["Spielposition","Rôle / position","Posizione"], items:[
-    ["Aussenverteidiger","Déf. latéral","Terzino"],["Innenverteidiger","Déf. central","Difensore centrale"],["Play / Spielmacher","Playmaker","Regista"],["6er","Milieu","Mediano (6)"],
-    ["8er","N°8 / profil demi-espace","Mezzala (8)"],["Flügel","Ailier","Ala"],["10er","Milieu offensif","Trequartista (10)"],["Stürmer","Attaquant","Attaccante"]]},
-  {id:"spielart", t:["Einstellung / Spielart","Profil","Atteggiamento / stile di gioco"], items:[
-    ["Defensiv","Défensif","Difensivo"],["Spielmacher / Übersicht","Joueur de construction","Regista / visione di gioco"],["Kreativ","Liaison offensive / dernière passe","Creativo"],["Torabschluss / Effizienz","Joueur de box / profil buteur","Finalizzazione / efficacia"],
-    ["Position","Position","Posizione"],["Bewegung / Freilaufverhalten","Mouvement","Movimento / smarcamento"],["Box to box","Box to box","Box to box"],["Aktiv in beiden Spielphasen","Complet dans les deux phases","Attivo in entrambe le fasi"]]},
-  {id:"bio", t:["Biol. Entwicklung","Développement biologique","Sviluppo biologico"], items:[
-    ["Spätentwickler","Tardif","Sviluppo tardivo"],["Wahrscheinlicher Spätentwickler","Plutôt tardif","Probabile sviluppo tardivo"],["Normal","Normal","Normale"],["Wahrscheinlicher Frühentwickler","Plutôt avancé","Probabile sviluppo precoce"],["Frühentwickler","Avancé","Sviluppo precoce"]]},
+  {id:"position", t:["Spielposition","Rôle / position","Ruolo"], items:[
+    ["Aussenverteidiger","Déf. latéral","Dif. esterno"],["Innenverteidiger","Déf. central","Dif. centrale"],["Play / Spielmacher","Playmaker","Play"],["6er","Milieu","Mediano"],
+    ["8er","N°8 / profil demi-espace","Mezzala"],["Flügel","Ailier","Ala"],["10er","Milieu offensif","Trequartista"],["Stürmer","Attaquant","Attaccante"]]},
+  {id:"spielart", t:["Einstellung / Spielart","Profil","Attitudine"], items:[
+    ["Defensiv","Défensif","Difensiva"],["Spielmacher / Übersicht","Joueur de construction","Regia"],["Kreativ","Joueur de liaison offensive / dernière passe","Rifinitura"],["Torabschluss / Effizienz","Joueur de box / profil buteur","Finalizzazione"],
+    ["Position","Position","Posizione"],["Bewegung / Freilaufverhalten","Mouvement","Movimento"],["Box to box","Box to box","Box to box"],["Aktiv in beiden Spielphasen","Complet dans les deux phases","Bifasico"]]},
+  {id:"bio", t:["Biol. Entwicklung","Développement biologique","Sviluppo fisico"], items:[
+    ["Spätentwickler","Tardif","Tardivo"],["Wahrscheinlicher Spätentwickler","Plutôt tardif","Prob. tardivo"],["Normal","Normal","Normale"],["Wahrscheinlicher Frühentwickler","Plutôt avancé","Prob. precoce"],["Frühentwickler","Avancé","Precoce"]]},
   {id:"morph", t:["Morphologie","Morphologie","Morfologia"], items:[
-    ["Langer Körperbau","Longiligne","Corporatura longilinea"],["Ausgewogener / balancierter Körperbau","Normoligne","Corporatura equilibrata"],["Kompakter Körperbau","Bréviligne","Corporatura compatta"]]},
+    ["Langer Körperbau","Longiligne","Longitipo"],["Ausgewogener / balancierter Körperbau","Normoligne","Normotipo"],["Kompakter Körperbau","Bréviligne","Brevitipo"]]},
   {id:"struktur", t:["Struktur","Gabarit","Struttura"], items:[
-    ["Schlanker / drahtiger Typ","Fin","Snello / asciutto"],["Mittlerer / durchschn. Körperbau","Moyen","Corporatura media"],["Robust","Robuste","Robusto"]]},
+    ["Schlanker / drahtiger Typ","Fin","Esile"],["Mittlerer / durchschn. Körperbau","Moyen","Media"],["Robust","Robuste","Robusta"]]},
   {id:"technik", t:["Technik","Technique","Tecnica"], items:[
-    ["Orientierte Ballannahme","Contrôle orienté","Ricezione orientata"],["Qualität in den Aktionen","Conduite","Qualità nelle azioni"],["Dribbling","Dribbling","Dribbling"],["Querpass","Passe horizontale","Passaggio orizzontale"],
-    ["Vertikalpass (Keypass)","Passe vert. (Keypass)","Passaggio verticale (keypass)"],["Diagonalpass","Passe diagonale","Passaggio diagonale"],["Steil- / Linienbrechender Pass (Keypass)","Passe en profondeur (Keypass)","Passaggio filtrante / tra le linee (keypass)"],["Langer – hoher oder flacher Pass","Passe longue","Passaggio lungo – alto o rasoterra"],
+    ["Orientierte Ballannahme","Contrôle orienté","Controllo orientato"],["Qualität in den Aktionen","Conduite","Condotta"],["Dribbling","Dribbling","Dribbling"],["Querpass","Passe horizontale","Passaggio orizzontale"],
+    ["Vertikalpass (Keypass)","Passe vert. (Keypass)","Pass. vert. (Keypass)"],["Diagonalpass","Passe diagonale","Passaggio diagonale"],["Steil- / Linienbrechender Pass (Keypass)","Passe en profondeur (Keypass)","Pass. filtrante (Keypass)"],["Langer – hoher oder flacher Pass","Passe longue","Passaggio lungo"],
     ["Dosierung","Dosage","Dosaggio"],["Variationen","Variation","Variazioni"],["Flanke","Centre","Cross"],["Kopfball","Jeu de tête","Colpo di testa"],
-    ["Standardsituationen","Balles arrêtées","Calci piazzati"],["Zweikampfverhalten","Duels","Duelli"],["Beidfüssig","Utilise les deux pieds","Ambidestro"],["Kurze Pässe","Passe courte","Passaggio corto"]]},
-  {id:"smart", type:"smart", t:["(Spiel-) Intelligenz","Intelligence de jeu","Intelligenza di gioco"], sub:["Wahrnehmung, Entscheidung, Positionierung","Perception, décision, positionnement","Percezione, decisione, posizionamento"], items:[
-    ["S","Bezieht Kontext, Stärken/Schwächen und die Spielidee in Aktionen mit ein","Intègre le contexte, les forces/les faiblesses et l'idée de jeu dans ses actions","Integra contesto, punti di forza/debolezza e idea di gioco nelle sue azioni"],
-    ["M","Antizipiert, bleibt ruhig und agiert im richtigen Moment","Anticipe les situations de jeu, garde son calme et agit au bon moment","Anticipa, resta calmo e agisce al momento giusto"],
-    ["A","Reagiert flexibel, kreativ und mit abgewogenem Risiko auf sich verändernde Spielsituationen","Réagit de manière flexible, créative et prend des risques calculés face à des situations de jeu changeantes","Reagisce in modo flessibile, creativo e con rischio calcolato alle situazioni di gioco che cambiano"],
-    ["R","Orientiert und positioniert sich aktiv, um Möglichkeiten zu schaffen oder Gefahren zu minimieren","S'oriente et se positionne activement afin de créer des opportunités ou de minimiser les dangers","Si orienta e si posiziona attivamente per creare opportunità o ridurre i pericoli"],
-    ["T","Kommuniziert hilfreich, lenkt das Spiel und ermöglicht erfolgversprechende Spielfortsetzungen","Communique de manière utile, influence le jeu et favorise la poursuite prometteuse de l'action de jeu","Comunica in modo utile, guida il gioco e favorisce prosecuzioni promettenti dell'azione"]]},
-  {id:"taktik", type:"taktik", t:["Weitere taktische Aspekte","Autres aspects","Altri aspetti tattici"], items:[
-    ["Pressing","Pressing","Pressing"],["Attackieren eines freien Raums","Attaque de l'espace","Attacco dello spazio libero"],["Abfangen / Antizipation eines Passes","Interception","Intercetto / anticipo del passaggio"],["Präventives Verhalten – OFF/DEF","Préventif OFF / DEF","Comportamento preventivo – OFF/DEF"]]},
+    ["Standardsituationen","Balles arrêtées","Calci piazzati"],["Zweikampfverhalten","Duels","Contrasto"],["Beidfüssig","Utilise les deux pieds","Usa entrambi i piedi"],["Kurze Pässe","Passe courte","Passaggio corto"]]},
+  {id:"smart", type:"smart", t:["(Spiel-) Intelligenz","Intelligence de jeu","Intelligenza"], sub:["Wahrnehmung, Entscheidung, Positionierung","Perception, décision, positionnement","Percezione, decisione, posizionamento"], items:[
+    ["S","Bezieht Kontext, Stärken/Schwächen und die Spielidee in Aktionen mit ein","Intègre le contexte, les forces/les faiblesses et l'idée de jeu dans ses actions","Integra il contesto, i punti di forza e di debolezza e l’idea di gioco nelle proprie azioni"],
+    ["M","Antizipiert, bleibt ruhig und agiert im richtigen Moment","Anticipe les situations de jeu, garde son calme et agit au bon moment","Anticipa le situazioni di gioco, mantiene la calma e agisce al momento opportuno"],
+    ["A","Reagiert flexibel, kreativ und mit abgewogenem Risiko auf sich verändernde Spielsituationen","Réagit de manière flexible, créative et prend des risques calculés face à des situations de jeu changeantes","Reagisce in modo flessibile e creativo e assume rischi calcolati di fronte a situazioni di gioco in continua evoluzione"],
+    ["R","Orientiert und positioniert sich aktiv, um Möglichkeiten zu schaffen oder Gefahren zu minimieren","S'oriente et se positionne activement afin de créer des opportunités ou de minimiser les dangers","Si orienta e si posiziona (attivamente) al fine di creare opportunità e/o ridurre al minimo i pericoli"],
+    ["T","Kommuniziert hilfreich, lenkt das Spiel und ermöglicht erfolgversprechende Spielfortsetzungen","Communique de manière utile, influence le jeu et favorise la poursuite prometteuse de l'action de jeu","Comunica in modo efficace, influenza il gioco e favorisce la prosecuzione promettente dell’azione di gioco"]]},
+  {id:"taktik", type:"taktik", t:["Weitere taktische Aspekte","Autres aspects","Altri aspetti / caratteristiche tattiche"], items:[
+    ["Pressing","Pressing","Pressing"],["Attackieren eines freien Raums","Attaque de l'espace","Attacco dello spazio"],["Abfangen / Antizipation eines Passes","Interception","Intercetto"],["Präventives Verhalten – OFF/DEF","Préventif OFF / DEF","D/A preventiva"]]},
   {id:"pers", t:["Persönlichkeit","Personnalité","Personalità"], items:[
-    ["Teamplayer","Teamplayer","Uomo squadra"],["Positiv","Positif","Positivo"],["Aktiv","Actif","Attivo"],["Leader","Leader","Leader"],
-    ["Kämpferisch / aggressiv / mental stark","Combatif","Combattivo / aggressivo / mentalmente forte"],["Konzentriert","Concentré","Concentrato"],["Motiviert","Motivé","Motivato"],["Mutig","Courageux","Coraggioso"],
-    ["Kommunikativ","Communicatif","Comunicativo"],["Fairplay","Fairplay","Fair play"],["Charakter- / Mentalitätsspieler","Sacrifice","Giocatore di carattere / mentalità"],["Initiativ / Aktiv / Mutig","Entreprenant","Intraprendente / attivo / coraggioso"],
-    ["Fehlende Intensität / Bereitschaft","Nonchalant","Mancanza di intensità / disponibilità"],["Flexibel","Flexible","Flessibile"],["Dominant","Dominant","Dominante"],["Entschlossen","Déterminé","Determinato"]]},
-  {id:"athl", t:["Athl. Aspekte","Profil athlétique","Aspetti atletici"], items:[
-    ["Widerstandsfähig / Belastbar / Ausdauernd","Résistant","Resistente"],["Explosiv","Explosif","Esplosivo"],["Beschleunigung","Accélération","Accelerazione"],["Richtungswechsel","Changement de direction","Cambio di direzione"],
-    ["Agil / Reaktiv","Agile / Réactif","Agile / reattivo"],["Robust / Kraftvoll / Präsent","Fort / puissant","Robusto / potente / presente"],["Schnell","Rapide","Veloce"],["Wiederholende Sprints","Répétition de sprints","Sprint ripetuti"]]},
+    ["Teamplayer","Teamplayer","Teamplayer"],["Positiv","Positif","Positivo"],["Aktiv","Actif","Attivo"],["Leader","Leader","Leader"],
+    ["Kämpferisch / aggressiv / mental stark","Combatif","Agonista"],["Konzentriert","Concentré","Concentrato"],["Motiviert","Motivé","Motivato"],["Mutig","Courageux","Coraggioso"],
+    ["Kommunikativ","Communicatif","Comunicativo"],["Fairplay","Fairplay","Fairplay"],["Charakter- / Mentalitätsspieler","Sacrifice","Sacrificio"],["Initiativ / Aktiv / Mutig","Entreprenant","Intraprendente"],
+    ["Fehlende Intensität / Bereitschaft","Nonchalant","Indolente"],["Flexibel","Flexible","Flessibile"],["Dominant","Dominant","Dominante"],["Entschlossen","Déterminé","Determinato"]]},
+  {id:"athl", t:["Athl. Aspekte","Profil athlétique","Condizionale"], items:[
+    ["Widerstandsfähig / Belastbar / Ausdauernd","Résistant","Resistente"],["Explosiv","Explosif","Esplosivo"],["Beschleunigung","Accélération","Accelerazione"],["Richtungswechsel","Changement de direction","Cambio direzione"],
+    ["Agil / Reaktiv","Agile / Réactif","Agile / reattivo"],["Robust / Kraftvoll / Präsent","Fort / puissant","Forte / potente"],["Schnell","Rapide","Veloce"],["Wiederholende Sprints","Répétition de sprints","Sprint continui"]]},
   {id:"tips", type:"tips", t:["TIPS","TIPS","TIPS"]},
   {id:"potenzial", type:"pot", t:["Potenzial","Potentiel","Potenziale"], items:[
     ["A","Nationalspieler","Joueur équipe nationale","Da nazionale"],["B","Nationalmannschaftspotenzial","Joueur cadre élargi","Da quadro allargato"],["C","Kein Nationalspieler","Pas le profil international","Attualmente da non convocare"]]}
@@ -1080,7 +1080,7 @@ function viewSheet(){
   };
   const pt = player ? team(player.team) : null;
   $("#view").innerHTML = `
-    ${lang==="it"?`<div class="banner">${u("itPending")}</div>`:""}
+    
     <div class="work"><aside class="card queue" id="queue"></aside><div class="center">
     <div class="head-box"><div class="lbl">1 · ${u("match")}</div>
       <select class="t" id="matchSel"><option value="">${esc(u("pickMatch"))}</option>
@@ -1346,14 +1346,14 @@ function roleNameIn(zid, lg){ const z = ZONES.find(z=>z.id===zid); if(!z) return
 const PHR = {
   it:{
     position:["terzino","difensore centrale","regista","mediano","mezzala","ala","trequartista","attaccante"],
-    spielart:["di impostazione difensiva","con visione di gioco","creativo","efficace in zona gol","attento alle posizioni","bravo nello smarcamento","box to box","presente in entrambe le fasi"],
+    spielart:["di impostazione difensiva","con visione di gioco","abile nella rifinitura","efficace in zona gol","attento alle posizioni","bravo nello smarcamento","box to box","presente in entrambe le fasi"],
     bio:["tardivo","probabilmente tardivo","nella norma","probabilmente precoce","precoce"],
     morph:["longilineo","normotipo","brevilineo"],
-    struktur:["snella","media","robusta"],
-    technik:["la ricezione orientata","la qualità nelle azioni","il dribbling","il passaggio orizzontale","il passaggio verticale","il passaggio diagonale","il passaggio filtrante tra le linee","il lancio lungo","il dosaggio","la varietà delle giocate","il cross","il colpo di testa","i calci piazzati","i duelli","l'utilizzo di entrambi i piedi","il gioco corto"],
+    struktur:["esile","media","robusta"],
+    technik:["il controllo orientato","la conduzione della palla","il dribbling","il passaggio orizzontale","il passaggio verticale","il passaggio diagonale","il passaggio filtrante tra le linee","il lancio lungo","il dosaggio","la varietà delle giocate","il cross","il colpo di testa","i calci piazzati","i duelli","l'utilizzo di entrambi i piedi","il gioco corto"],
     takOff:{1:"attacca con decisione lo spazio libero"},
     takDef:{0:"partecipa al pressing",2:"legge le linee di passaggio e anticipa",3:"è attento alla difesa preventiva"},
-    pers:["uomo squadra","positivo","attivo","leader","combattivo","concentrato","motivato","coraggioso","comunicativo","corretto","giocatore di carattere","intraprendente",null,"flessibile","dominante","determinato"],
+    pers:["uomo squadra","positivo","attivo","leader","agonista","concentrato","motivato","coraggioso","comunicativo","corretto","con spirito di sacrificio","intraprendente",null,"flessibile","dominante","determinato"],
     athl:["la resistenza","l'esplosività","l'accelerazione","il cambio di direzione","l'agilità","la presenza fisica","la velocità","la capacità di ripetere gli sprint"],
     smartP:["coglie il contesto e l'idea di gioco","anticipa e sceglie il momento giusto","si adatta con creatività e rischio calcolato","si posiziona per creare opportunità o ridurre i pericoli","comunica e guida il gioco"],
     foot:["destro di piede","mancino","ambidestro"], and:"e", field:"campo",
@@ -1394,14 +1394,14 @@ const PHR = {
   },
   fr:{
     position:["latéral","défenseur central","meneur de jeu","milieu défensif","n°8","ailier","milieu offensif","attaquant"],
-    spielart:["à vocation défensive","avec une bonne vision du jeu","créatif","efficace devant le but","discipliné dans son placement","bon dans les appels","box to box","actif dans les deux phases"],
+    spielart:["à vocation défensive","avec une bonne vision du jeu","fort dans la liaison offensive et la dernière passe","efficace devant le but","discipliné dans son placement","bon dans les appels","box to box","actif dans les deux phases"],
     bio:["tardif","plutôt tardif","normal","plutôt précoce","précoce"],
     morph:["longiligne","normoligne","bréviligne"],
     struktur:["fin","moyen","robuste"],
     technik:["le contrôle orienté","la conduite de balle","le dribble","la passe horizontale","la passe verticale","la passe diagonale","la passe en profondeur","la passe longue","le dosage","la variété","le centre","le jeu de tête","les balles arrêtées","les duels","l'utilisation des deux pieds","le jeu court"],
     takOff:{1:"attaque l'espace libre avec détermination"},
     takDef:{0:"participe au pressing",2:"lit les lignes de passe et intercepte",3:"soigne le comportement préventif"},
-    pers:["joueur d'équipe","positif","actif","leader","combatif","concentré","motivé","courageux","communicatif","fair-play","joueur de caractère","entreprenant",null,"flexible","dominant","déterminé"],
+    pers:["joueur d'équipe","positif","actif","leader","combatif","concentré","motivé","courageux","communicatif","fair-play","prêt à se sacrifier","entreprenant",null,"flexible","dominant","déterminé"],
     athl:["la résistance","l'explosivité","l'accélération","les changements de direction","l'agilité","la puissance","la vitesse","la répétition des sprints"],
     smartP:["saisit le contexte et l'idée de jeu","anticipe et choisit le bon moment","s'adapte avec créativité et un risque calculé","se positionne pour créer des occasions ou réduire les dangers","communique et oriente le jeu"],
     foot:["droitier","gaucher","ambidextre"], and:"et", field:"terrain",
@@ -1421,10 +1421,10 @@ const PHR = {
 const PHR_F = {
   it:{
     position:["terzina","difensore centrale","regista","mediana","mezzala","ala","trequartista","attaccante"],
-    spielart:["di impostazione difensiva","con visione di gioco","creativa","efficace in zona gol","attenta alle posizioni","brava nello smarcamento","box to box","presente in entrambe le fasi"],
+    spielart:["di impostazione difensiva","con visione di gioco","abile nella rifinitura","efficace in zona gol","attenta alle posizioni","brava nello smarcamento","box to box","presente in entrambe le fasi"],
     morph:["longilinea","normotipo","brevilinea"],
     takDef:{0:"partecipa al pressing",2:"legge le linee di passaggio e anticipa",3:"è attenta alla difesa preventiva"},
-    pers:["giocatrice di squadra","positiva","attiva","leader","combattiva","concentrata","motivata","coraggiosa","comunicativa","corretta","giocatrice di carattere","intraprendente",null,"flessibile","dominante","determinata"],
+    pers:["giocatrice di squadra","positiva","attiva","leader","agonista","concentrata","motivata","coraggiosa","comunicativa","corretta","con spirito di sacrificio","intraprendente",null,"flessibile","dominante","determinata"],
     foot:["destra di piede","mancina","ambidestra"], playerW:"Giocatrice"
   },
   de:{
@@ -1441,9 +1441,9 @@ const PHR_F = {
   },
   fr:{
     position:["latérale","défenseuse centrale","meneuse de jeu","milieu défensive","n°8","ailière","milieu offensive","attaquante"],
-    spielart:["à vocation défensive","avec une bonne vision du jeu","créative","efficace devant le but","disciplinée dans son placement","bonne dans les appels","box to box","active dans les deux phases"],
+    spielart:["à vocation défensive","avec une bonne vision du jeu","forte dans la liaison offensive et la dernière passe","efficace devant le but","disciplinée dans son placement","bonne dans les appels","box to box","active dans les deux phases"],
     takOff:{1:"attaque l'espace libre avec détermination"},
-    pers:["joueuse d'équipe","positive","active","leader","combative","concentrée","motivée","courageuse","communicative","fair-play","joueuse de caractère","entreprenante",null,"flexible","dominante","déterminée"],
+    pers:["joueuse d'équipe","positive","active","leader","combative","concentrée","motivée","courageuse","communicative","fair-play","prête à se sacrifier","entreprenante",null,"flexible","dominante","déterminée"],
     foot:["droitière","gauchère","ambidextre"], playerW:"Joueuse",
     phys:(b,shape)=> b ? `Physiquement, elle présente un développement biologique ${b}${shape?` : ${shape}`:""}.` : `Physiquement : ${shape}.`,
     tech:x=>`Techniquement, elle se distingue par ${x}.`,
