@@ -588,7 +588,18 @@ let asScout = false; // anteprima: l'head coach vede l'app come uno scout
 const realCoach = () => me && me.ruolo === "coach";
 const isCoach = () => realCoach() && !asScout;
 const mySchede = () => isCoach() ? D.schede : D.schede.filter(s=>s.scoutUid===me.uid);
-const numTag = p => p && p.numero ? `<span class="num">${esc(p.numero)}</span>` : "";
+// numero di maglia con il colore della squadra (testo scuro sui colori chiari, es. giallo)
+function teamInk(hex){
+  const m = /^#?([0-9a-f]{6})$/i.exec(String(hex||"")); if (!m) return null;
+  const n = parseInt(m[1],16), ch = v => { v/=255; return v<=0.03928 ? v/12.92 : ((v+0.055)/1.055)**2.4; };
+  const L = 0.2126*ch(n>>16&255) + 0.7152*ch(n>>8&255) + 0.0722*ch(n&255);
+  return {bg:"#"+m[1], fg: L > 0.35 ? "#1b1f26" : "#ffffff"};
+}
+const numTag = p => {
+  if (!p || !p.numero) return "";
+  const c = teamInk(team(p.team)?.color);
+  return `<span class="num"${c?` style="background:${c.bg};color:${c.fg}"`:""}>${esc(p.numero)}</span>`;
+};
 const fullName = x => x ? [x.nome, x.cognome].filter(Boolean).join(" ") : "";
 function roleName(zid){ const z = ZONES.find(z=>z.id===zid); if(!z) return ""; return z.pos == null ? u("gk") : L(SEC.position.items[z.pos]); }
 function fmtDay(iso){ if(!iso) return ""; const [y,m,d]=iso.split("-"); return `${d}.${m}.`; }
