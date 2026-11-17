@@ -432,7 +432,7 @@ const UI = {
   importPaste:"Oder Liste einfügen (aus Excel kopiert): Name, Vorname, Geburtsdatum, Verein – eine Zeile pro Spieler",
   parse:"Liste lesen",previewN:"Spieler gelesen",addAll:"Zur Liste hinzufügen",cancel:"Abbrechen",
   colCognome:"Name",colNome:"Vorname",colNascita:"Geburtsdatum",colClub:"Verein",colTeam:"Team",colRole:"Rolle",
-  listTitle:"Spielerliste",addPlayer:"+ Spieler hinzufügen",addBtn:"Hinzufügen",playerAdded:"Spieler hinzugefügt",needName:"Name und Vorname angeben",xlsxFail:"Datei konnte nicht gelesen werden",nothingFound:"Keine Spieler gefunden",added:"Spieler hinzugefügt",
+  listTitle:"Spielerliste",selAll:"Alle auswählen",selTeamPh:"Team auswählen…",delSel:"{n} löschen",delSelT:"{n} Spieler löschen?",delSelB:"Die Spieler werden aus der Liste entfernt. Bereits ausgefüllte Bögen bleiben erhalten.",delSelOk:"{n} Spieler gelöscht",addPlayer:"+ Spieler hinzufügen",addBtn:"Hinzufügen",playerAdded:"Spieler hinzugefügt",needName:"Name und Vorname angeben",xlsxFail:"Datei konnte nicht gelesen werden",nothingFound:"Keine Spieler gefunden",added:"Spieler hinzugefügt",
   teamsTitle:"Teams",addTeam:"+ Team",newTeam:"Neues Team",pool:"Zuzuteilen",poolHint:"Spieler antippen, dann die Rolle auf dem Spielfeld antippen.",
   bench:"Ersatz",gk:"Torhüter",selMsg:"Ausgewählt: {x} – jetzt eine Rolle antippen",allAssigned:"Alle Spieler sind zugeteilt",delTeam:"Team löschen",
   mkTeams:"3 Teams erstellen (Rot, Blau, Grün)",defTeams:["Blau","Rot","Gelb"],noTeams:"Noch keine Teams",
@@ -459,7 +459,7 @@ const UI = {
   importPaste:"Ou coller une liste (copiée d'Excel) : nom, prénom, date de naissance, club – une ligne par joueur",
   parse:"Lire la liste",previewN:"joueurs lus",addAll:"Ajouter à la liste",cancel:"Annuler",
   colCognome:"Nom",colNome:"Prénom",colNascita:"Date de naissance",colClub:"Club",colTeam:"Équipe",colRole:"Rôle",
-  listTitle:"Liste des joueurs",addPlayer:"+ Ajouter un joueur",addBtn:"Ajouter",playerAdded:"Joueur ajouté",needName:"Indiquer nom et prénom",xlsxFail:"Impossible de lire le fichier",nothingFound:"Aucun joueur trouvé",added:"joueurs ajoutés",
+  listTitle:"Liste des joueurs",selAll:"Tout sélectionner",selTeamPh:"Sélectionner une équipe…",delSel:"Supprimer {n}",delSelT:"Supprimer {n} joueurs ?",delSelB:"Les joueurs sont retirés de la liste. Les fiches déjà remplies sont conservées.",delSelOk:"{n} joueurs supprimés",addPlayer:"+ Ajouter un joueur",addBtn:"Ajouter",playerAdded:"Joueur ajouté",needName:"Indiquer nom et prénom",xlsxFail:"Impossible de lire le fichier",nothingFound:"Aucun joueur trouvé",added:"joueurs ajoutés",
   teamsTitle:"Équipes",addTeam:"+ Équipe",newTeam:"Nouvelle équipe",pool:"À attribuer",poolHint:"Touchez un joueur, puis touchez le rôle sur le terrain.",
   bench:"Remplaçants",gk:"Gardien",selMsg:"Sélectionné : {x} – touchez maintenant un rôle",allAssigned:"Tous les joueurs sont attribués",delTeam:"Supprimer l'équipe",
   mkTeams:"Créer 3 équipes (Rouge, Bleu, Vert)",defTeams:["Bleu","Rouge","Jaune"],noTeams:"Pas encore d'équipes",
@@ -486,7 +486,7 @@ const UI = {
   importPaste:"Oppure incolla una lista (copiata da Excel): cognome, nome, data di nascita, club – una riga per giocatore",
   parse:"Leggi lista",previewN:"giocatori letti",addAll:"Aggiungi all'elenco",cancel:"Annulla",
   colCognome:"Cognome",colNome:"Nome",colNascita:"Data di nascita",colClub:"Club",colTeam:"Squadra",colRole:"Ruolo",
-  listTitle:"Elenco giocatori",addPlayer:"+ Aggiungi giocatore",addBtn:"Aggiungi",playerAdded:"Giocatore aggiunto",needName:"Inserisci cognome e nome",xlsxFail:"Non riesco a leggere il file",nothingFound:"Nessun giocatore trovato",added:"giocatori aggiunti",
+  listTitle:"Elenco giocatori",selAll:"Seleziona tutti",selTeamPh:"Seleziona una squadra…",delSel:"Elimina {n}",delSelT:"Eliminare {n} giocatori?",delSelB:"I giocatori vengono tolti dall'elenco. Le schede già compilate restano.",delSelOk:"{n} giocatori eliminati",addPlayer:"+ Aggiungi giocatore",addBtn:"Aggiungi",playerAdded:"Giocatore aggiunto",needName:"Inserisci cognome e nome",xlsxFail:"Non riesco a leggere il file",nothingFound:"Nessun giocatore trovato",added:"giocatori aggiunti",
   teamsTitle:"Squadre",addTeam:"+ Squadra",newTeam:"Nuova squadra",pool:"Da assegnare",poolHint:"Tocca un giocatore, poi tocca il ruolo sul campo.",
   bench:"Panchina",gk:"Portiere",selMsg:"Selezionato: {x} – ora tocca un ruolo",allAssigned:"Tutti i giocatori sono assegnati",delTeam:"Elimina squadra",
   mkTeams:"Crea 3 squadre (Rossi, Blu, Verdi)",defTeams:["Blu","Rosso","Giallo"],noTeams:"Ancora nessuna squadra",
@@ -564,6 +564,7 @@ let me = null;                       // profilo utente collegato
 let tab = null;
 const D = {users:[], players:[], teams:[], matches:[], schede:[], watch:[], logo:null};
 let unsubs = [];
+let pSel = new Set();
 let coachSel = null, curTeam = null, importRows = null, pasteText = "", importMode = "xls", importOpts = [];
 let editing = null, sistema = "", matchDate = "";
 let queueAll = null, lastSavedSnap = null, saveState = {t:null, err:false}, lastPv = "";
@@ -757,10 +758,13 @@ function viewPlayers(){
   <div class="card">
     <div class="row-flex" style="justify-content:space-between;margin-bottom:12px">
       <h3 style="margin:0">${u("listTitle")} <span class="muted">(${rows.length})</span></h3>
-      <button class="btn primary" id="addPlayerBtn">${u("addPlayer")}</button></div>
-    <table class="list"><thead><tr><th>${u("colNum")}</th><th>${u("colCognome")}</th><th>${u("colNome")}</th><th>${u("colNascita")}</th><th>${u("colClub")}</th><th>${u("colTeam")}</th><th>${u("colRole")}</th><th></th></tr></thead>
+      <div class="row-flex">
+        ${D.teams.length?`<select class="t" id="selTeam" style="width:auto"><option value="">${u("selTeamPh")}</option>${D.teams.map(t=>`<option value="${t.id}">● ${esc(t.name)}</option>`).join("")}<option value="-">${u("noTeamYet")}</option></select>`:""}
+        <button class="btn hidden" id="delSel"></button>
+        <button class="btn primary" id="addPlayerBtn">${u("addPlayer")}</button></div></div>
+    <table class="list"><thead><tr><th style="width:32px"><input type="checkbox" id="selAll" title="${esc(u("selAll"))}"></th><th>${u("colNum")}</th><th>${u("colCognome")}</th><th>${u("colNome")}</th><th>${u("colNascita")}</th><th>${u("colClub")}</th><th>${u("colTeam")}</th><th>${u("colRole")}</th><th></th></tr></thead>
     <tbody>${rows.map(p=>{ const t=team(p.team); return `<tr>
-      <td>${numTag(p)}</td><td><b>${esc(p.cognome)}</b>${p.genere==="F"?" ♀":""}</td><td>${esc(p.nome)}</td><td>${esc(p.nascita)}</td><td>${esc(p.club)}</td>
+      <td><input type="checkbox" data-psel="${p.id}" ${pSel.has(p.id)?"checked":""}></td><td>${numTag(p)}</td><td><b>${esc(p.cognome)}</b>${p.genere==="F"?" ♀":""}</td><td>${esc(p.nome)}</td><td>${esc(p.nascita)}</td><td>${esc(p.club)}</td>
       <td>${t?`<span class="dot" style="background:${esc(t.color)}"></span>${esc(t.name)}`:`<span class="muted">${u("noTeamYet")}</span>`}</td>
       <td>${p.ruolo?esc(roleName(p.ruolo)):(t?`<span class="muted">${u("bench")}</span>`:"")}</td>
       <td style="text-align:right;white-space:nowrap"><button class="btn sm" data-editp="${p.id}">${u("edit")}</button> <button class="x" title="${u("del")}" data-delp="${p.id}">×</button></td></tr>`; }).join("")}</tbody></table>
@@ -789,6 +793,33 @@ function viewPlayers(){
     renderPreview();
   };
   document.querySelectorAll("[data-delp]").forEach(b=> b.onclick = ()=> confirmDel(()=> run(deleteDoc(doc(db,"players",b.dataset.delp)))));
+  // selezione multipla per eliminare più giocatori insieme
+  [...pSel].forEach(id=>{ if (!pl(id)) pSel.delete(id); });
+  const syncSel = ()=>{
+    const n = pSel.size, btn = $("#delSel");
+    btn.classList.toggle("hidden", !n); btn.textContent = u("delSel").replace("{n}", n);
+    const all = $("#selAll"); all.checked = n>0 && n===rows.length; all.indeterminate = n>0 && n<rows.length;
+  };
+  document.querySelectorAll("[data-psel]").forEach(c=> c.onchange = ()=>{ c.checked ? pSel.add(c.dataset.psel) : pSel.delete(c.dataset.psel); syncSel(); });
+  $("#selAll").onchange = e=>{ pSel = new Set(e.target.checked ? rows.map(p=>p.id) : []); document.querySelectorAll("[data-psel]").forEach(c=> c.checked = pSel.has(c.dataset.psel)); syncSel(); };
+  if ($("#selTeam")) $("#selTeam").onchange = e=>{
+    const v = e.target.value; e.target.value = ""; if (!v) return;
+    rows.filter(p=> v==="-" ? !team(p.team) : p.team===v).forEach(p=> pSel.add(p.id));
+    document.querySelectorAll("[data-psel]").forEach(c=> c.checked = pSel.has(c.dataset.psel)); syncSel();
+  };
+  $("#delSel").onclick = ()=>{
+    const ids = [...pSel]; if (!ids.length) return;
+    openModal(u("delSelT").replace("{n}", ids.length), `<p>${esc(u("delSelB"))}</p>`, [
+      {label:u("cancel"), on:closeModal},
+      {label:u("delSel").replace("{n}", ids.length), cls:"primary", on:async ()=>{
+        closeModal();
+        try{
+          for (let i=0;i<ids.length;i+=400){ const b = writeBatch(db); ids.slice(i,i+400).forEach(id=> b.delete(doc(db,"players",id))); await b.commit(); }
+          pSel = new Set(); toast(u("delSelOk").replace("{n}", ids.length));
+        }catch(err){ fail(err); }
+      }}]);
+  };
+  syncSel();
 }
 function openPlayerForm(x){
   const f = (id,label,val,ph="") => `<div><label class="f" for="${id}">${label}</label><input class="t" id="${id}" value="${esc(val||"")}" placeholder="${esc(ph)}"></div>`;
