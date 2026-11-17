@@ -29,6 +29,8 @@ service cloud.firestore {
 
     // Dati del torneo: li leggono tutti gli utenti attivi, li scrive solo l'head coach
     match /players/{id}  { allow read: if active(); allow write: if isCoach(); }
+    // dati personali dei giocatori (cognome, nome, data di nascita, club): solo l'head coach
+    match /playersPriv/{id} { allow read, write: if isCoach(); }
     match /teams/{id}    { allow read: if active(); allow write: if isCoach(); }
     match /matches/{id}  { allow read: if active(); allow write: if isCoach(); }
     match /settings/{id} { allow read: if active(); allow write: if isCoach(); }

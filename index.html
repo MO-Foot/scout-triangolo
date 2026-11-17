@@ -79,6 +79,8 @@
   .tedit .trow{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:10px;padding:6px 8px;background:#fff}
   .tedit input[type=color]{width:34px;height:30px;border:0;padding:0;background:none;cursor:pointer}
   .tedit input.t{width:150px;padding:6px 8px}
+  .scoutname{display:flex;align-items:center;gap:10px;margin-top:8px;flex-wrap:wrap}
+  .scoutname input.t{max-width:320px}
   .manual-row{border-top:1px dashed var(--line);color:var(--ch)}
   .pvbar{background:#FFF4CC;color:var(--ink);border-bottom:1px solid #E8B500;padding:8px 24px;font-size:14px;font-weight:600}
   nav.tabs button{border:0;background:transparent;color:rgba(255,255,255,.8);padding:11px 16px;font-weight:600;cursor:pointer;border-bottom:3px solid transparent}
@@ -444,7 +446,7 @@ const UI = {
   status:"Status",active:"aktiv",inactive:"deaktiviert",deactivate:"Deaktivieren",reactivate:"Reaktivieren",sendReset:"Passwort-Mail senden",resetTo:"E-Mail gesendet an",
   created:"Zugang erstellt",pwShort:"Passwort zu kurz (mind. 6 Zeichen)",emailInUse:"Diese E-Mail hat bereits ein Konto",emailBad:"E-Mail ungültig",you:"Sie",
   usersHint:"Nur Personen mit einem aktiven Zugang können sich anmelden. Deaktivierte Zugänge sehen keine Daten mehr.",
-  match:"Spiel",pickMatch:"Spiel wählen…",manualMatch:"✎ Anderes Spiel (von Hand eingeben)…",manualPh:"z. B. Rot – Blau, 14.11., Platz 2",draftRestored:"Nicht gespeicherter Entwurf wiederhergestellt",needMatch:"Bitte zuerst ein Spiel wählen",player:"Spieler",search:"Spieler suchen: Name oder Nummer, z. B. «7 blau»…",noRes:"Kein Spieler gefunden",addManual:"✎ Spieler nicht in der Liste – von Hand eingeben",manualPlT:"Spieler nicht in der Liste",manualPlHint:"Der Spieler wird nur in diesem Bogen gespeichert. Der Head Coach sieht, dass er von Hand eingegeben wurde.",manualTag:"von Hand eingegeben",manNeed:"Bitte Nachname, Vorname und Rückennummer eingeben",shirtNo:"Rückennummer",ok:"OK",
+  match:"Spiel",pickMatch:"Spiel wählen…",manualMatch:"✎ Anderes Spiel (von Hand eingeben)…",manualPh:"z. B. Rot – Blau, 14.11., Platz 2",draftRestored:"Nicht gespeicherter Entwurf wiederhergestellt",needMatch:"Bitte zuerst ein Spiel wählen",player:"Spieler",search:"Spieler suchen: Name oder Nummer, z. B. «7 blau»…",searchScout:"Spieler suchen: Nummer und Team, z. B. «7 blau»…",noRes:"Kein Spieler gefunden",addManual:"✎ Spieler nicht in der Liste – von Hand eingeben",manualPlT:"Spieler nicht in der Liste",manualPlHint:"Der Spieler wird nur in diesem Bogen gespeichert (Nummer und Team). Der Head Coach sieht, dass er von Hand eingegeben wurde.",manualTag:"von Hand eingegeben",manNeed:"Bitte die Rückennummer eingeben",scoutNamePh:"Name (freiwillig, nur für dich)",scoutNameHint:"Wird nach dem Turnier vom Head Coach gelöscht.",purgeNames:"Von Scouts notierte Namen löschen ({n})",purgeT:"Von Scouts notierte Namen löschen?",purgeB:"In {n} Bögen hat ein Scout einen Namen notiert. Diese Namen werden gelöscht; der Rest der Bögen bleibt.",purgeGo:"Namen löschen",purgeOk:"Namen in {n} Bögen gelöscht",shirtNo:"Rückennummer",ok:"OK",
   change:"Ändern",existing:"Bögen",date:"Datum",obsDate:"Datum der Beobachtung",qNoPlayers:"Noch keine Spieler erfasst",save:"Entwurf speichern",clear:"Neuer Bogen",marked:"Merkmale markiert",noPlayer:"Kein Spieler gewählt",
   needPlayer:"Bitte zuerst einen Spieler wählen",savedOk:"Bogen gespeichert",saveFail:"Speichern fehlgeschlagen",
   otherPh:"Weiterer Aspekt…",notePh:"Notiz…",close:"Schliessen",cleared:"Bogen geleert",potHint:"Eine Auswahl",tipsHint:"Note 1–5 · 3 = genügend",
@@ -471,7 +473,7 @@ const UI = {
   status:"Statut",active:"actif",inactive:"désactivé",deactivate:"Désactiver",reactivate:"Réactiver",sendReset:"Envoyer e-mail mot de passe",resetTo:"E-mail envoyé à",
   created:"Accès créé",pwShort:"Mot de passe trop court (min. 6 caractères)",emailInUse:"Cet e-mail a déjà un compte",emailBad:"E-mail non valide",you:"vous",
   usersHint:"Seules les personnes avec un accès actif peuvent se connecter. Les accès désactivés ne voient plus aucune donnée.",
-  match:"Match",pickMatch:"Choisir le match…",manualMatch:"✎ Autre match (saisir à la main)…",manualPh:"p. ex. Rouge – Bleu, 14.11, terrain 2",draftRestored:"Brouillon non enregistré restauré",needMatch:"Choisir d'abord un match",player:"Joueur",search:"Chercher un joueur : nom ou numéro, p. ex. «7 bleu»…",noRes:"Aucun joueur trouvé",addManual:"✎ Joueur absent de la liste – saisir à la main",manualPlT:"Joueur absent de la liste",manualPlHint:"Le joueur est enregistré uniquement dans cette fiche. Le head coach voit qu'il a été saisi à la main.",manualTag:"saisi à la main",manNeed:"Indiquer nom, prénom et numéro de maillot",shirtNo:"Numéro de maillot",ok:"OK",
+  match:"Match",pickMatch:"Choisir le match…",manualMatch:"✎ Autre match (saisir à la main)…",manualPh:"p. ex. Rouge – Bleu, 14.11, terrain 2",draftRestored:"Brouillon non enregistré restauré",needMatch:"Choisir d'abord un match",player:"Joueur",search:"Chercher un joueur : nom ou numéro, p. ex. «7 bleu»…",searchScout:"Chercher un joueur : numéro et équipe, p. ex. «7 bleu»…",noRes:"Aucun joueur trouvé",addManual:"✎ Joueur absent de la liste – saisir à la main",manualPlT:"Joueur absent de la liste",manualPlHint:"Le joueur est enregistré uniquement dans cette fiche (numéro et équipe). Le head coach voit qu'il a été saisi à la main.",manualTag:"saisi à la main",manNeed:"Indiquer le numéro de maillot",scoutNamePh:"Nom (facultatif, pour toi)",scoutNameHint:"Sera supprimé par le head coach après le tournoi.",purgeNames:"Supprimer les noms notés par les scouts ({n})",purgeT:"Supprimer les noms notés par les scouts ?",purgeB:"Dans {n} fiches un scout a noté un nom. Ces noms seront supprimés ; le reste des fiches est conservé.",purgeGo:"Supprimer les noms",purgeOk:"Noms supprimés dans {n} fiches",shirtNo:"Numéro de maillot",ok:"OK",
   change:"Changer",existing:"fiches",date:"Date",obsDate:"Date de l'observation",qNoPlayers:"Aucun joueur enregistré",save:"Enregistrer brouillon",clear:"Nouvelle fiche",marked:"caractéristiques cochées",noPlayer:"Aucun joueur choisi",
   needPlayer:"Choisir d'abord un joueur",savedOk:"Fiche enregistrée",saveFail:"Échec de l'enregistrement",
   otherPh:"Autre aspect…",notePh:"Note…",close:"Fermer",cleared:"Fiche vidée",potHint:"Un seul choix",tipsHint:"Note 1–5 · 3 = suffisant",
@@ -498,7 +500,7 @@ const UI = {
   status:"Stato",active:"attivo",inactive:"disattivato",deactivate:"Disattiva",reactivate:"Riattiva",sendReset:"Invia email password",resetTo:"Email inviata a",
   created:"Accesso creato",pwShort:"Password troppo corta (min. 6 caratteri)",emailInUse:"Questa email ha già un account",emailBad:"Email non valida",you:"tu",
   usersHint:"Solo chi ha un accesso attivo può entrare. Gli accessi disattivati non vedono più nessun dato.",
-  match:"Partita",pickMatch:"Scegli la partita…",manualMatch:"✎ Altra partita (inserisci a mano)…",manualPh:"es. Rossi – Blu, 14.11., campo 2",draftRestored:"Bozza non salvata ripristinata",needMatch:"Scegli prima la partita",player:"Giocatore",search:"Cerca giocatore: nome o numero, es. «7 blu»…",noRes:"Nessun giocatore trovato",addManual:"✎ Giocatore non in elenco – inseriscilo a mano",manualPlT:"Giocatore non in elenco",manualPlHint:"Il giocatore viene salvato solo in questa scheda. L'head coach vedrà che è stato inserito a mano.",manualTag:"inserito a mano",manNeed:"Inserisci cognome, nome e numero di maglia",shirtNo:"Numero di maglia",ok:"OK",
+  match:"Partita",pickMatch:"Scegli la partita…",manualMatch:"✎ Altra partita (inserisci a mano)…",manualPh:"es. Rossi – Blu, 14.11., campo 2",draftRestored:"Bozza non salvata ripristinata",needMatch:"Scegli prima la partita",player:"Giocatore",search:"Cerca giocatore: nome o numero, es. «7 blu»…",searchScout:"Cerca giocatore: numero e squadra, es. «7 blu»…",noRes:"Nessun giocatore trovato",addManual:"✎ Giocatore non in elenco – inseriscilo a mano",manualPlT:"Giocatore non in elenco",manualPlHint:"Il giocatore viene salvato solo in questa scheda (numero e squadra). L'head coach vedrà che è stato inserito a mano.",manualTag:"inserito a mano",manNeed:"Inserisci il numero di maglia",scoutNamePh:"Nome (facoltativo, solo per te)",scoutNameHint:"Verrà eliminato dall'head coach dopo il torneo.",purgeNames:"Elimina i nomi scritti dagli scout ({n})",purgeT:"Eliminare i nomi scritti dagli scout?",purgeB:"In {n} schede uno scout ha scritto un nome. Questi nomi vengono eliminati; il resto delle schede resta.",purgeGo:"Elimina i nomi",purgeOk:"Nomi eliminati in {n} schede",shirtNo:"Numero di maglia",ok:"OK",
   change:"Cambia",existing:"schede",date:"Data",obsDate:"Data dell'osservazione",qNoPlayers:"Nessun giocatore inserito",save:"Salva bozza",clear:"Nuova scheda",marked:"caratteristiche spuntate",noPlayer:"Nessun giocatore scelto",
   needPlayer:"Scegli prima un giocatore",savedOk:"Scheda salvata",saveFail:"Salvataggio non riuscito",
   otherPh:"Altro aspetto…",notePh:"Nota…",close:"Chiudi",cleared:"Scheda svuotata",potHint:"Una sola scelta",tipsHint:"Nota 1–5 · 3 = sufficiente",
@@ -563,7 +565,44 @@ const ZONES = [
 let lang = (()=>{ try{ return localStorage.getItem("st_lang") || "it"; }catch(e){ return "it"; } })();
 let me = null;                       // profilo utente collegato
 let tab = null;
-const D = {users:[], players:[], teams:[], matches:[], schede:[], watch:[], logo:null};
+const D = {users:[], players:[], playersPub:[], playersPriv:[], teams:[], matches:[], schede:[], watch:[], logo:null};
+// Dati personali (cognome, nome, data di nascita, club) in «playersPriv»: li legge SOLO l'head coach.
+// Gli scout vedono di ogni giocatore solo numero, squadra, ruolo e genere.
+const PRIV = ["cognome","nome","nascita","club"];
+const splitP = d => { const pub = {}, priv = {}; Object.entries(d).forEach(([k,v])=>{ if (v===undefined) return; (PRIV.includes(k) ? priv : pub)[k] = v; }); return {pub, priv}; };
+function mergePlayers(){
+  const pv = Object.fromEntries(D.playersPriv.map(x=>[x.id,x]));
+  const nr = p => { const n = parseInt(p.numero,10); return isNaN(n) ? 999 : n; };
+  D.players = D.playersPub.map(p=>({...p, ...(pv[p.id]||{}), id:p.id}))
+    .sort((a,b)=> (a.cognome||"").localeCompare(b.cognome||"") || (team(a.team)?.ordine??99)-(team(b.team)?.ordine??99) || nr(a)-nr(b));
+}
+// nome visibile: all'head coach il nome vero, agli scout (e in «Vista scout») numero · squadra · ruolo
+const pLabel = p => { if (!p) return ""; const t = team(p.team);
+  return [p.numero ? "N° "+p.numero : "", t ? t.name : "", p.ruolo ? roleName(p.ruolo) : ""].filter(Boolean).join(" · "); };
+const pName = p => (isCoach() && p && (p.cognome || p.nome)) ? `${p.cognome||""}, ${p.nome||""}`.replace(/^, |, $/,"") : pLabel(p);
+// una volta sola: sposta i dati personali dai vecchi documenti «players» a «playersPriv» e toglie i nomi dalle schede
+let privMigrated = false;
+async function migratePrivacy(){
+  if (privMigrated || !realCoach()) return;
+  const todo = D.playersPub.filter(p=> PRIV.some(k=> p[k]!==undefined));
+  const recs = D.schede.filter(r=> r.giocatore && !/^N° |^N°$|^\?/.test(r.giocatore) && !r._lbl);
+  if (!todo.length && !recs.length) { privMigrated = true; return; }
+  privMigrated = true;
+  try{
+    for (let i=0;i<todo.length;i+=200){
+      const b = writeBatch(db);
+      todo.slice(i,i+200).forEach(({id, ...d})=>{ const {pub, priv} = splitP(d); b.set(doc(db,"playersPriv",id), priv, {merge:true}); b.set(doc(db,"players",id), pub); });
+      await b.commit();
+    }
+    for (let i=0;i<recs.length;i+=400){
+      const b = writeBatch(db);
+      recs.slice(i,i+400).forEach(r=>{ const p = pl(r.giocatoreId) || {numero:r.giocatoreNumero, team:r.giocatoreSquadra};
+        b.update(doc(db,"schede",r.id), {giocatore: recLabel(p)}); });
+      await b.commit();
+    }
+  }catch(e){ console.error("Migrazione privacy:", e); privMigrated = false; }
+}
+const recLabel = p => { const t = team(p?.team); return [p?.numero ? "N° "+p.numero : "N° ?", t ? t.name : ""].filter(Boolean).join(" · "); };
 let unsubs = [];
 let pSel = new Set();
 let coachSel = null, curTeam = null, importRows = null, pasteText = "", importMode = "xls", importOpts = [];
@@ -691,16 +730,20 @@ $("#asScoutBtn").onclick = ()=>{
    ===================================================================== */
 function listen(name, sortFn, src){
   return onSnapshot(src || collection(db,name), snap=>{
-    D[name] = snap.docs.map(d=>({id:d.id, ...d.data()}));
-    if (sortFn) D[name].sort(sortFn);
-    if (name==="players" && player) player = pl(player.id) || player;
-    if (name==="players" && draftPlayerId && !player){ player = pl(draftPlayerId) || null; if (player) draftPlayerId = null; }
+    const key = name==="players" ? "playersPub" : name;
+    D[key] = snap.docs.map(d=>({id:d.id, ...d.data()}));
+    if (sortFn) D[key].sort(sortFn);
+    if (name==="players" || name==="playersPriv" || name==="teams") mergePlayers();
+    if (name==="playersPriv" || name==="players" || name==="schede") setTimeout(migratePrivacy, 1500);
+    if ((name==="players"||name==="playersPriv") && player && !player.manuale) player = pl(player.id) || player;
+    if ((name==="players"||name==="playersPriv") && draftPlayerId && !player){ player = pl(draftPlayerId) || null; if (player) draftPlayerId = null; }
     if ((name==="schede" || name==="watch") && tab==="sheet" && $("#queue")){ renderQueue(); return; }
     scheduleRender();
   }, fail);
 }
 function startListeners(){
-  unsubs.push(listen("players", (a,b)=>(a.cognome||"").localeCompare(b.cognome||"")));
+  unsubs.push(listen("players"));
+  if (isCoach()) unsubs.push(listen("playersPriv"));
   unsubs.push(listen("teams", (a,b)=>(a.ordine??0)-(b.ordine??0)));
   unsubs.push(listen("matches", (a,b)=>((a.giorno||"")+(a.ora||"")).localeCompare((b.giorno||"")+(b.ora||""))));
   const bySaved = (a,b)=> tsMs(b.creatoIl) - tsMs(a.creatoIl);
@@ -810,7 +853,7 @@ function viewPlayers(){
     if (!importRows.length){ toast(u("nothingFound")); importRows=null; }
     renderPreview();
   };
-  document.querySelectorAll("[data-delp]").forEach(b=> b.onclick = ()=> confirmDel(()=> run(deleteDoc(doc(db,"players",b.dataset.delp)))));
+  document.querySelectorAll("[data-delp]").forEach(el=> el.onclick = ()=> confirmDel(()=>{ const b = writeBatch(db), id = el.dataset.delp; b.delete(doc(db,"players",id)); b.delete(doc(db,"playersPriv",id)); run(b.commit()); }));
   // selezione multipla per eliminare più giocatori insieme
   [...pSel].forEach(id=>{ if (!pl(id)) pSel.delete(id); });
   const syncSel = ()=>{
@@ -832,7 +875,7 @@ function viewPlayers(){
       {label:u("delSel").replace("{n}", ids.length), cls:"primary", on:async ()=>{
         closeModal();
         try{
-          for (let i=0;i<ids.length;i+=400){ const b = writeBatch(db); ids.slice(i,i+400).forEach(id=> b.delete(doc(db,"players",id))); await b.commit(); }
+          for (let i=0;i<ids.length;i+=200){ const b = writeBatch(db); ids.slice(i,i+200).forEach(id=>{ b.delete(doc(db,"players",id)); b.delete(doc(db,"playersPriv",id)); }); await b.commit(); }
           pSel = new Set(); toast(u("delSelOk").replace("{n}", ids.length));
         }catch(err){ fail(err); }
       }}]);
@@ -858,8 +901,11 @@ function openPlayerForm(x){
     const d = {cognome:v("apC"), nome:v("apN"), nascita:v("apD"), club:v("apK"), numero:v("apNr"), genere:$("#apG").value, team:$("#apT").value||null, ruolo:$("#apR").value||null};
     if (!d.cognome || !d.nome){ toast(u("needName")); return; }
     try{
-      if (x) await updateDoc(doc(db,"players",x.id), d);
-      else await addDoc(collection(db,"players"), d);
+      const {pub, priv} = splitP(d), b = writeBatch(db);
+      const ref = x ? doc(db,"players",x.id) : doc(collection(db,"players"));
+      if (x) b.update(ref, pub); else b.set(ref, pub);
+      b.set(doc(db,"playersPriv",ref.id), priv, {merge:true});
+      await b.commit();
       closeModal(); toast(`${x?u("playerSaved"):u("playerAdded")}: ${d.cognome} ${d.nome}`);
     }catch(err){ fail(err); }
   };
@@ -930,13 +976,19 @@ function renderPreview(){
         });
         await tb.commit();
       }
-      for (let i=0;i<rows.length;i+=400){
+      for (let i=0;i<rows.length;i+=200){
         const b = writeBatch(db);
-        rows.slice(i,i+400).forEach(({existing, teamRef, check, posizione, ...p})=>{
+        rows.slice(i,i+200).forEach(({existing, teamRef, check, posizione, ...p})=>{
           const extra = pdf ? {team:teamIds[teamRef]||null, ruolo:p.ruolo||null, posizione:posizione||""} : {};
           delete p.ruolo;
-          if (existing){ const upd = {club:p.club, nascita:p.nascita, ...extra}; if (p.numero) upd.numero = p.numero; if (p.genere) upd.genere = p.genere; b.update(doc(db,"players",existing), upd); }
-          else b.set(doc(collection(db,"players")), {...p, genere:p.genere||"M", team:null, ruolo:null, ...extra});
+          if (existing){
+            const upd = {...extra}; if (p.numero) upd.numero = p.numero; if (p.genere) upd.genere = p.genere;
+            if (Object.keys(upd).length) b.update(doc(db,"players",existing), upd);
+            b.set(doc(db,"playersPriv",existing), {club:p.club, nascita:p.nascita}, {merge:true});
+          } else {
+            const ref = doc(collection(db,"players")), {pub, priv} = splitP({...p, genere:p.genere||"M", team:null, ruolo:null, ...extra});
+            b.set(ref, pub); b.set(doc(db,"playersPriv",ref.id), priv);
+          }
         });
         await b.commit();
       }
@@ -1296,17 +1348,22 @@ function viewSheet(){
       <div></div>
       <div class="span2"><input class="t" id="sistema" placeholder="${esc(u("systemPh"))}" value="${esc(sistema)}"></div></div>
     <div class="head-box"><div class="lbl">2 · ${u("player")}</div>
-      <div>${player?`<div class="chosen"><span class="name">${numTag(player)}${esc(player.cognome)}, ${esc(player.nome)}</span>
-          <span class="meta">${player.manuale?`✎ ${esc(u("manualTag"))}`:`${esc(player.nascita)} · ${esc(player.club)}`}${pt?` · <span class="dot" style="background:${esc(pt.color)}"></span>${esc(pt.name)}${player.ruolo?" · "+esc(roleName(player.ruolo)):""}`:""}</span>
-          <span class="pill">${nSchede} ${u("existing")}</span><button class="btn sm" id="changePlayer">${u("change")}</button></div>`
+      <div>${player?`<div class="chosen"><span class="name">${numTag(player)}${esc(isCoach() && !player.manuale ? pName(player) : (pt ? pt.name : ""))}</span>
+          <span class="meta">${[player.manuale ? `✎ ${esc(u("manualTag"))}` : "",
+              isCoach() && !player.manuale ? esc([player.nascita, player.club].filter(Boolean).join(" · ")) : "",
+              isCoach() && !player.manuale && pt ? `<span class="dot" style="background:${esc(pt.color)}"></span>${esc(pt.name)}` : "",
+              player.ruolo ? esc(roleName(player.ruolo)) : ""].filter(Boolean).join(" · ")}</span>
+          <span class="pill">${nSchede} ${u("existing")}</span><button class="btn sm" id="changePlayer">${u("change")}</button></div>
+          <div class="scoutname"><input class="t" id="nomeScout" placeholder="${esc(u("scoutNamePh"))}" value="${esc(nomeScout)}" autocomplete="off"><small class="muted">${esc(u("scoutNameHint"))}</small></div>`
         :`<div class="search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
-          <input class="t" id="q" placeholder="${esc(u("search"))}" value="${esc(query)}" autocomplete="off"><div class="results hidden" id="res"></div></div>`}</div>
+          <input class="t" id="q" placeholder="${esc(u(isCoach()?"search":"searchScout"))}" value="${esc(query)}" autocomplete="off"><div class="results hidden" id="res"></div></div>`}</div>
       <div></div></div>
     <div class="sheet" id="sheet"></div></div>
     <aside class="card preview" id="preview"><h3 style="font-size:18px;margin:0">${u("previewT")}</h3><pre class="pvtext" id="pvText"></pre></aside></div>`;
   $("#sistema").oninput = e=>{ sistema = e.target.value; };
   $("#matchDate").onchange = e=>{ matchDate = e.target.value || todayISO(); matchTouched = true; renderQueue(); };
-  if (player) $("#changePlayer").onclick = ()=>{ player=null; query=""; viewSheet(); $("#q")?.focus(); };
+  if (player){ $("#changePlayer").onclick = ()=>{ player=null; query=""; viewSheet(); $("#q")?.focus(); };
+    $("#nomeScout").oninput = e=>{ nomeScout = e.target.value; renderSummary(); }; }
   else {
     const q=$("#q");
     q.oninput = ()=>{ query=q.value; showResults(); };
@@ -1353,7 +1410,7 @@ function renderQueue(){
       return `<div class="qteam"><span class="dot" style="background:${esc(t?.color||"#bbb")}"></span>${esc(t?.name||u("noTeamYet"))}</div>` + ps.map(p=>`
       <div class="qrow ${player&&player.id===p.id?"cur":""}" data-q="${p.id}">
         <button class="qstar ${q.stars.includes(p.id)?"on":""}" data-star="${p.id}" title="★">${q.stars.includes(p.id)?"★":"☆"}</button>
-        <span class="qn">${numTag(p)}${esc(p.cognome)} ${esc((p.nome||"")[0]||"")}.</span>${status(p)}</div>`).join(""); }).join("")}
+        <span class="qn">${numTag(p)}${isCoach() ? `${esc(p.cognome||"")} ${esc((p.nome||"")[0]||"")}.` : `<span class="muted">${esc(p.ruolo ? roleName(p.ruolo) : "")}</span>`}</span>${status(p)}</div>`).join(""); }).join("")}
     <button class="btn sm" id="copyAllBtn" style="width:100%;margin-top:10px">${u("copyAll")}</button>`;
   box.querySelectorAll("[data-qmode]").forEach(b=> b.onclick = ()=>{ queueAll = b.dataset.qmode==="all"; renderQueue(); });
   box.querySelectorAll("[data-star]").forEach(b=> b.onclick = e=>{ e.stopPropagation(); toggleStar(b.dataset.star); });
@@ -1453,11 +1510,9 @@ let resList = [], resHl = 0;
 function searchPlayers(qs){
   const toks = norm(qs).replace(/,/g," ").split(" ").filter(Boolean);
   if (!toks.length) return [];
-  const m = D.matches.find(x=>x.id===matchId);
-  const inMatch = p => m && (p.team===m.a || p.team===m.b);
   const ok = p => {
     const tname = norm(team(p.team)?.name);
-    const hay = norm(`${p.cognome} ${p.nome} ${team(p.team)?.name||""}`);
+    const hay = norm(`${isCoach() ? `${p.cognome||""} ${p.nome||""}` : ""} ${team(p.team)?.name||""} ${p.ruolo ? roleName(p.ruolo) : ""}`);
     return toks.every(w=>{
       if (/^\d+$/.test(w)) return String(p.numero||"").trim()===w;
       const mm = w.match(/^([a-z]+)(\d+)$/);
@@ -1465,14 +1520,14 @@ function searchPlayers(qs){
       return hay.includes(w);
     });
   };
-  return D.players.filter(ok).sort((a,b)=> (inMatch(b)?1:0)-(inMatch(a)?1:0) || (a.cognome||"").localeCompare(b.cognome||""));
+  return D.players.filter(ok);
 }
 function pickPlayer(id){ query=""; resList=[]; document.activeElement?.blur(); openPlayer(id); }
 function showResults(){
   const res=$("#res"); if(!res) return;
   resList = searchPlayers(query); resHl = 0;
   if (!query.trim()){ res.classList.add("hidden"); return; }
-  res.innerHTML = (resList.length ? resList.map((p,i)=>{const t=team(p.team);return `<div data-id="${p.id}" class="${i===resHl?"hl":""}"><span>${numTag(p)}<b>${esc(p.cognome)}</b>, ${esc(p.nome)}</span><span class="meta">${esc(p.club)}${t?` · ${esc(t.name)}`:""}</span></div>`;}).join("")
+  res.innerHTML = (resList.length ? resList.map((p,i)=>{const t=team(p.team);return `<div data-id="${p.id}" class="${i===resHl?"hl":""}"><span>${numTag(p)}<b>${esc(isCoach() ? pName(p) : (t ? t.name : ""))}</b></span><span class="meta">${isCoach() ? esc(p.club||"")+(t?` · ${esc(t.name)}`:"") : esc(p.ruolo ? roleName(p.ruolo) : "")}</span></div>`;}).join("")
     : `<div class="meta">${u("noRes")}</div>`) + `<div data-manual="1" class="manual-row"><span><b>${esc(u("addManual"))}</b></span></div>`;
   res.classList.remove("hidden");
   res.querySelector("[data-manual]").onmousedown = e=>{ e.preventDefault(); const qq=query; query=""; resList=[]; document.activeElement?.blur(); askManualPlayer(qq); };
@@ -1490,32 +1545,31 @@ function searchKey(e){
 }
 /* Giocatore non presente nel sistema: lo scout scrive cognome e nome; resta solo nella scheda */
 function askManualPlayer(text){
-  const raw = String(text||"").trim(), nm = raw.match(/^(\d{1,3})\s*/) || raw.match(/\s(\d{1,3})$/);
+  const raw = String(text||"").trim(), nm = raw.match(/(?:^|\s)(\d{1,3})(?:\s|$)/);
   const num0 = nm ? nm[1] : "";
-  const parts = raw.replace(/^\d{1,3}\s*/,"").replace(/\s\d{1,3}$/,"").split(/\s+/).filter(Boolean);
-  const cog0 = parts[0] ? parts[0].charAt(0).toUpperCase()+parts[0].slice(1) : "";
-  const nom0 = parts.slice(1).map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(" ");
+  const rest = norm(raw.replace(/\d{1,3}/,""));
+  const t0 = D.teams.find(t=> rest && norm(t.name).startsWith(rest.split(" ")[0]));
   openModal(u("manualPlT"), `<p class="muted" style="margin-top:0">${esc(u("manualPlHint"))}</p>
-    <label class="f">${esc(u("uSurname"))}</label><input class="t" id="mpCog" value="${esc(cog0)}" autocomplete="off">
-    <label class="f">${esc(u("uFirst"))}</label><input class="t" id="mpNom" value="${esc(nom0)}" autocomplete="off">
     <label class="f">${esc(u("shirtNo"))}</label><input class="t" id="mpNum" value="${esc(num0)}" inputmode="numeric" maxlength="3" autocomplete="off" style="max-width:120px">
+    <label class="f">${esc(u("colTeam"))}</label><select class="t" id="mpTeam"><option value="">–</option>${D.teams.map(t=>`<option value="${t.id}" ${t0&&t0.id===t.id?"selected":""}>${esc(t.name)}</option>`).join("")}</select>
+    <label class="f">${esc(u("scoutNamePh"))}</label><input class="t" id="mpName" autocomplete="off"><small class="muted">${esc(u("scoutNameHint"))}</small>
     <label class="f">${esc(u("colGender"))}</label><select class="t" id="mpGen"><option value="M">${esc(u("gM"))}</option><option value="F">${esc(u("gF"))}</option></select>`,
     [{label:u("cancel"), on:()=>{ closeModal(); viewSheet(); }},
      {label:u("ok"), cls:"primary", on:()=>{
-       const cognome=$("#mpCog").value.trim(), nome=$("#mpNom").value.trim(), numero=$("#mpNum").value.trim();
-       if (!cognome || !nome || !/^\d{1,3}$/.test(numero)){ toast(u("manNeed")); (!cognome?$("#mpCog"):!nome?$("#mpNom"):$("#mpNum")).focus(); return; }
+       const numero=$("#mpNum").value.trim(), squadra=$("#mpTeam").value||null, nomeS=$("#mpName").value.trim();
+       if (!/^\d{1,3}$/.test(numero)){ toast(u("manNeed")); $("#mpNum").focus(); return; }
        closeModal();
-       openManualPlayer({id:"man_"+Date.now().toString(36)+Math.random().toString(36).slice(2,6), cognome, nome, numero, genere:$("#mpGen").value, nascita:"", club:"", manuale:true});
+       openManualPlayer({id:"man_"+Date.now().toString(36)+Math.random().toString(36).slice(2,6), numero, team:squadra, genere:$("#mpGen").value, manuale:true}, nomeS);
      }}]);
-  setTimeout(()=> $(!cog0 ? "#mpCog" : !nom0 ? "#mpNom" : "#mpNum")?.focus(), 50);
+  setTimeout(()=> $("#mpNum")?.focus(), 50);
 }
-async function openManualPlayer(p){
+async function openManualPlayer(p, nomeS=""){
   await autosave();
   const keepMatch = {matchId, matchManual, matchDate, sistema};
   resetSheet();
   ({matchId, matchManual, matchDate, sistema} = keepMatch); matchTouched = true;
-  player = p; query = "";
-  lastSavedSnap = snapOf(); saveState = {t:null, err:false};
+  player = p; query = ""; nomeScout = nomeS;
+  lastSavedSnap = null; saveState = {t:null, err:false};
   viewSheet();
 }
 function sectionCount(sec){ let n=[...checks].filter(k=>k.startsWith(sec.id+":")).length; if(sec.type==="taktik") n+=free.filter(f=>f.trim()).length; return n; }
@@ -1563,7 +1617,7 @@ function renderSheet(){
 function updateCounts(){ SECTIONS.forEach(sec=>{ const el=document.querySelector(`[data-cnt="${sec.id}"]`); if(el) el.textContent=sectionCount(sec)||""; }); }
 function renderSummary(){
   const n = checks.size + free.filter(f=>f.trim()).length;
-  const who = player?`<b>${esc(player.cognome)}, ${esc(player.nome)}</b>`:u("noPlayer");
+  const who = player?`<b>${esc(isCoach() && !player.manuale ? pName(player) : recLabel(player))}</b>${nomeScout.trim()?` (${esc(nomeScout.trim())})`:""}`:u("noPlayer");
   const ed = "";
   $("#summary").innerHTML = `${ed}${who} · <b>${n}</b> ${u("marked")}${pot?` · ${esc(L(SEC.potenzial.t))}: <b>${pot}</b>`:""}<span id="saveState"></span>`;
   renderSaveState();
@@ -1782,7 +1836,7 @@ const copyBtn = ()=>({label:u("copy"), cls:"primary", on:async ()=>{ const ta=$(
 
 function buildRecord(stato){
   const base = editing || {};
-  const rec = {giocatoreId:player.id, giocatore:`${player.cognome}, ${player.nome}`, partitaId:null, partita:(editing && editing.partita) || "", partitaManuale:false, dataPartita:curMatchDate(), genere:(player.genere||"M"), giocatoreManuale:!!player.manuale, ...(player.manuale ? {giocatoreNumero:String(player.numero||"")} : {}), sistema:sistema.trim(),
+  const rec = {giocatoreId:player.id, giocatore:recLabel(player), nomeScout:nomeScout.trim(), partitaId:null, partita:(editing && editing.partita) || "", partitaManuale:false, dataPartita:curMatchDate(), genere:(player.genere||"M"), giocatoreManuale:!!player.manuale, ...(player.manuale ? {giocatoreNumero:String(player.numero||""), giocatoreSquadra:player.team||null} : {}), sistema:sistema.trim(),
     scoutUid: base.scoutUid || me.uid, scout: base.scout || fullName(me), lingua: base.lingua || lang, annotazioni:note.trim(), stato};
   SECTIONS.forEach(sec=>{
     if (sec.type==="tips") rec.tips = Object.fromEntries(Object.entries(tips).map(([k,t])=>[k,{nota:t.v,commento:t.n}]));
@@ -1802,7 +1856,7 @@ function needBoth(){
 /* ---------- Bozza locale: salvataggio automatico nel browser, per non perdere una scheda ---------- */
 const draftKey = ()=> me ? "st_draft_"+me.uid : null;
 function sheetEmpty(){
-  return !editing && !player && !draftPlayerId && checks.size===0 && !note.trim() && !pot && free.every(f=>!f.trim())
+  return !editing && !player && !draftPlayerId && !nomeScout.trim() && checks.size===0 && !note.trim() && !pot && free.every(f=>!f.trim())
     && Object.values(tips).every(t=>t.v==null && !t.n.trim());
 }
 function saveDraft(){
@@ -1810,7 +1864,7 @@ function saveDraft(){
   try{
     if (sheetEmpty()) { localStorage.removeItem(k); return; }
     localStorage.setItem(k, JSON.stringify({matchId, matchManual, matchTouched, playerId: player?.id || draftPlayerId, manualPlayer: player && player.manuale ? player : null,
-      checks:[...checks], free, pot, tips, note, editing, sistema, matchDate, t:Date.now()}));
+      checks:[...checks], free, pot, tips, note, editing, sistema, matchDate, nomeScout, t:Date.now()}));
   }catch(e){}
 }
 function restoreDraft(){
@@ -1820,7 +1874,7 @@ function restoreDraft(){
     draftPlayerId = d.playerId || null; player = null; editing = d.editing || null;
     if (d.manualPlayer && d.manualPlayer.manuale){ player = d.manualPlayer; draftPlayerId = null; }
     checks = new Set(d.checks||[]); free = d.free || ["","","",""]; pot = d.pot || null;
-    tips = d.tips || freshTips(); note = d.note || ""; sistema = d.sistema || ""; matchDate = d.matchDate || "";
+    tips = d.tips || freshTips(); note = d.note || ""; sistema = d.sistema || ""; matchDate = d.matchDate || ""; nomeScout = d.nomeScout || "";
     setTimeout(()=> toast(u("draftRestored")), 800);
     return true;
   }catch(e){ return false; }
@@ -1828,7 +1882,8 @@ function restoreDraft(){
 setInterval(saveDraft, 1500);
 addEventListener("pagehide", saveDraft);
 document.addEventListener("visibilitychange", saveDraft);
-function resetSheet(){ sistema=""; checks=new Set(); free=["","","",""]; pot=null; tips=freshTips(); note=""; player=null; draftPlayerId=null; query=""; editing=null; saveDraft(); }
+let nomeScout = "";
+function resetSheet(){ nomeScout=""; sistema=""; checks=new Set(); free=["","","",""]; pot=null; tips=freshTips(); note=""; player=null; draftPlayerId=null; query=""; editing=null; saveDraft(); }
 
 /* Carica una scheda salvata nel modulo per modificarla */
 function loadRecord(rec){
@@ -1847,8 +1902,8 @@ function loadRecord(rec){
   matchId = null; matchManual = null;
   matchDate = recDate(rec) || "";
   matchTouched = true;
-  const [cog="", nom=""] = (rec.giocatore||"").split(", ");
-  player = pl(rec.giocatoreId) || {id:rec.giocatoreId, cognome:cog, nome:nom, nascita:"", club:"", genere:rec.genere||"M", numero:rec.giocatoreNumero||"", manuale:!!rec.giocatoreManuale};
+  nomeScout = rec.nomeScout || "";
+  player = pl(rec.giocatoreId) || {id:rec.giocatoreId, genere:rec.genere||"M", numero:rec.giocatoreNumero||"", team:rec.giocatoreSquadra||null, manuale:!!rec.giocatoreManuale};
   tab = "sheet"; render(); window.scrollTo(0,0);
   lastSavedSnap = snapOf(); saveState = {t:null, err:false};
 }
@@ -1916,7 +1971,7 @@ function filteredSchede(){
     const d = recDate(r);
     if (SF.from && d < SF.from) return false;
     if (SF.to && d > SF.to) return false;
-    if (q && !norm([r.giocatore, r.partita, r.scout, p.numero].join(" ")).includes(q)) return false;
+    if (q && !norm([r.giocatore, r.nomeScout, isCoach()&&p.cognome?pName(p):"", r.scout, p.numero].join(" ")).includes(q)) return false;
     return true;
   });
 }
@@ -1926,7 +1981,7 @@ function viewSchede(){
   $("#view").innerHTML = `<div class="card">
     <div class="row-flex" style="justify-content:space-between;margin-bottom:10px">
       <h3 style="margin:0">${u(isCoach()?"schedeAll":"schedeMine")} <span class="muted" id="schedeN"></span></h3>
-      <div class="row-flex"><button class="btn sm" id="sfReset">${u("fReset")}</button><button class="btn sm primary" id="xlsOut">⬇ ${u("exportXls")}</button></div></div>
+      <div class="row-flex">${isCoach() && D.schede.some(r=>r.nomeScout) ? `<button class="btn sm" id="purgeNames">${esc(u("purgeNames").replace("{n}", D.schede.filter(r=>r.nomeScout).length))}</button>` : ""}<button class="btn sm" id="sfReset">${u("fReset")}</button><button class="btn sm primary" id="xlsOut">⬇ ${u("exportXls")}</button></div></div>
     <div class="filters">
       <input class="t" id="sfQ" placeholder="${esc(u("filterPh"))}" value="${esc(SF.q)}">
       <select class="t" data-sf="team">${opt("",u("fAllTeams"),SF.team)}${D.teams.map(t=>opt(t.id,t.name,SF.team)).join("")}</select>
@@ -1940,6 +1995,13 @@ function viewSchede(){
   $("#sfQ").oninput = e=>{ SF.q = e.target.value; renderSchedeRows(); };
   document.querySelectorAll("[data-sf]").forEach(el=> el.onchange = ()=>{ SF[el.dataset.sf] = el.value; renderSchedeRows(); });
   $("#sfReset").onclick = ()=>{ Object.keys(SF).forEach(k=>SF[k]=""); viewSchede(); };
+  if ($("#purgeNames")) $("#purgeNames").onclick = ()=>{
+    const rs = D.schede.filter(r=>r.nomeScout);
+    openModal(u("purgeT"), `<p>${esc(u("purgeB").replace("{n}", rs.length))}</p>`, [{label:u("cancel"), on:closeModal},
+      {label:u("purgeGo"), cls:"primary", on:async ()=>{ closeModal();
+        try{ for (let i=0;i<rs.length;i+=400){ const b = writeBatch(db); rs.slice(i,i+400).forEach(r=> b.update(doc(db,"schede",r.id), {nomeScout:""})); await b.commit(); } toast(u("purgeOk").replace("{n}", rs.length)); }
+        catch(e){ fail(e); } }}]);
+  };
   $("#xlsOut").onclick = ()=> exportSchede(filteredSchede());
   renderSchedeRows();
 }
@@ -1948,8 +2010,8 @@ function renderSchedeRows(){
   $("#schedeN").textContent = `(${rows.length})`;
   $("#schedeRows").innerHTML = rows.length ? `<table class="list clickable"><thead><tr>
       <th>${u("date")}</th><th>${u("colNum")}</th><th>${u("player")}</th><th>${u("colTeam")}</th>${isCoach()?`<th>${u("roleScout")}</th>`:""}<th>TIPS</th><th>${u("colPot")}</th></tr></thead><tbody>
-    ${rows.map(r=>{ const p = pl(r.giocatoreId) || (r.giocatoreNumero ? {numero:r.giocatoreNumero} : null); const t = r.tips||{}; return `<tr data-open="${r.id}">
-      <td>${esc(r.dataPartita ? fmtISO(r.dataPartita) : fmtTs(r.creatoIl))}</td><td>${numTag(p)}</td><td><b>${esc(r.giocatore)}</b>${r.giocatoreManuale?` <span class="muted" title="${esc(u("manualTag"))}">✎</span>`:""}</td><td>${(t2=>t2?`<span class="dot" style="background:${esc(t2.color)}"></span>${esc(t2.name)}`:"")(team((pl(r.giocatoreId)||{}).team))}</td>
+    ${rows.map(r=>{ const p = pl(r.giocatoreId) || (r.giocatoreNumero ? {numero:r.giocatoreNumero, team:r.giocatoreSquadra||null} : null); const t = r.tips||{}; return `<tr data-open="${r.id}">
+      <td>${esc(r.dataPartita ? fmtISO(r.dataPartita) : fmtTs(r.creatoIl))}</td><td>${numTag(p)}</td><td><b>${esc(isCoach() && pl(r.giocatoreId) ? pName(pl(r.giocatoreId)) : r.giocatore)}</b>${r.nomeScout?` <span class="muted">(${esc(r.nomeScout)})</span>`:""}${r.giocatoreManuale?` <span class="muted" title="${esc(u("manualTag"))}">✎</span>`:""}</td><td>${(t2=>t2?`<span class="dot" style="background:${esc(t2.color)}"></span>${esc(t2.name)}`:"")(team((pl(r.giocatoreId)||{}).team || r.giocatoreSquadra))}</td>
       ${isCoach()?`<td>${esc(r.scout)}</td>`:""}
       <td class="tipsmini">${["T","I","P","S"].map(k=> t[k]?.nota!=null ? `<span class="badge ${col(t[k].nota)}">${fmt(t[k].nota)}</span>` : `<span class="badge">–</span>`).join("")}</td>
       <td>${r.potenziale?`<span class="potpill p${r.potenziale}">${r.potenziale}</span>`:""}</td></tr>`; }).join("")}</tbody></table>`
@@ -1977,7 +2039,7 @@ function exportSchede(rows){
   voci.forEach(sec=> sec.items.forEach(it=> head.push(`${L(sec.t)}: ${sec.type==="smart" ? it[0] : L(it)}`)));
   head.push(`${L(SEC.taktik.t)}: ✎`, u("notesT"), u("genText"));
   const aoa = [head, ...rows.map(r=>{
-    const p = pl(r.giocatoreId) || {}, [cog="", nom=""] = (r.giocatore||"").split(", "), t = r.tips || {};
+    const p = pl(r.giocatoreId) || {}, cog = p.cognome || "", nom = p.nome || r.nomeScout || "", t = r.tips || {};
     const row = [r.dataPartita ? fmtISO(r.dataPartita) : "", r.partita||"", p.numero||r.giocatoreNumero||"", cog, nom, p.nascita||"", p.club||"", team(p.team)?.name||"",
       (p.genere||r.genere||"M"), r.scout||"", (r.lingua||"").toUpperCase(), r.sistema||"",
       ...["T","I","P","S"].map(k=> t[k]?.nota ?? ""), ...["T","I","P","S"].map(k=> t[k]?.commento || ""), r.potenziale||""];
@@ -2149,7 +2211,7 @@ function openScheda(id){
   }});
   if (canDel(r)) btns.push({label:u("del"), on:()=> confirmDel(()=> run(deleteDoc(doc(db,"schede",r.id)).then(()=>toast(u("deleted")))))});
   btns.push({label:u("close"), on:closeModal});
-  openModal(r.giocatore + (r.partita?` · ${r.partita}`:""), meta + reportBody(r, r.lingua || lang), btns);
+  openModal((isCoach() && pl(r.giocatoreId) ? pName(pl(r.giocatoreId)) : r.giocatore) + (r.nomeScout?` (${r.nomeScout})`:""), meta + reportBody(r, r.lingua || lang), btns);
   bindReportLang(r);
 }
 
