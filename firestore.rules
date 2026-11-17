@@ -42,29 +42,18 @@ service cloud.firestore {
     }
 
     // Schede di osservazione
-    // - head coach: legge, crea, modifica, invia, riapre ed elimina tutto
-    // - scout: legge solo le proprie; crea schede a proprio nome;
-    //   modifica/elimina solo le proprie finché sono "bozza"; dopo l'invio può correggerle per 24 ore (non eliminarle)
+    // - head coach: legge, crea, modifica ed elimina tutto
+    // - scout: legge, crea, modifica ed elimina solo le proprie (nessun blocco: la versione
+    //   definitiva viene poi inserita nel portale della federazione)
     match /schede/{id} {
-      function stato(d) { return d.get('stato', 'bozza'); }
       allow read:   if isCoach() || (active() && resource.data.scoutUid == request.auth.uid);
       allow create: if isCoach()
-                    || (active() && request.resource.data.scoutUid == request.auth.uid
-                        && stato(request.resource.data) in ['bozza', 'inviata']);
+                    || (active() && request.resource.data.scoutUid == request.auth.uid);
       allow update: if isCoach()
                     || (active() && resource.data.scoutUid == request.auth.uid
-                        && request.resource.data.scoutUid == request.auth.uid
-                        && (
-                          // bozza: si modifica o si invia
-                          (stato(resource.data) == 'bozza' && stato(request.resource.data) in ['bozza', 'inviata'])
-                          // inviata: correzione entro 24 ore dall'invio, resta inviata e l'ora d'invio non cambia
-                          || (stato(resource.data) == 'inviata' && stato(request.resource.data) == 'inviata'
-                              && resource.data.inviataIl is timestamp
-                              && request.resource.data.inviataIl == resource.data.inviataIl
-                              && request.time < resource.data.inviataIl + duration.value(24, 'h'))
-                        ));
+                        && request.resource.data.scoutUid == request.auth.uid);
       allow delete: if isCoach()
-                    || (active() && resource.data.scoutUid == request.auth.uid && stato(resource.data) == 'bozza');
+                    || (active() && resource.data.scoutUid == request.auth.uid);
     }
   }
 }
