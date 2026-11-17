@@ -654,8 +654,9 @@ onAuthStateChanged(auth, async user=>{
     return;
   }
   if (me.lingua && UI[me.lingua]) lang = me.lingua;
-  tab = isCoach() ? "players" : "sheet";
-  if (restoreDraft()) tab = "sheet";
+  restoreDraft();   // la bozza locale torna nella scheda, ma senza forzare la pagina
+  let saved = null; try{ saved = localStorage.getItem("st_tab_"+me.uid); }catch(err){}
+  tab = allowedTabs().includes(saved) ? saved : (isCoach() ? "players" : "sheet");
   startListeners();
   show("app"); render();
 });
@@ -731,14 +732,19 @@ function renderChrome(){
   const sb = $("#asScoutBtn"); sb.classList.toggle("hidden", !realCoach()); sb.textContent = asScout ? u("backCoach") : u("viewScout");
   $("#previewBar").classList.toggle("hidden", !asScout); $("#previewBar").textContent = asScout ? u("previewMsg") : "";
   $("#userName").textContent = fullName(me);
-  const tabs = isCoach() ? ["players","sheet","schede","eval","users","logo"] : ["sheet","schede"];
+  const tabs = allowedTabs();
   const names = {eval:"navEval",schede: isCoach() ? "navSchede" : "navMine",players:"tabPlayers",teams:"tabTeams",matches:"tabMatches",sheet:"tabSheet",users:"tabUsers",logo:"tabLogo"};
   $("#tabs").innerHTML = tabs.map(t=>`<button class="${t===tab?"on":""}" data-tab="${t}">${u(names[t])}</button>`).join("");
   $("#tabs").classList.toggle("hidden", !tabs.length);
 }
+const allowedTabs = ()=> isCoach() ? ["players","sheet","schede","eval","users","logo"] : ["sheet","schede"];
+let yellowFixed = false;
 function render(){
   renderChrome();
   if (!me) return;
+  if (!asScout){ try{ localStorage.setItem("st_tab_"+me.uid, tab); }catch(err){} }
+  // giallo delle squadre già create: una volta sola, porta il vecchio giallo chiaro a quello più scuro
+  if (realCoach() && !yellowFixed){ const old = D.teams.filter(t=>String(t.color).toLowerCase()==="#e8b500"); if (old.length){ yellowFixed = true; old.forEach(t=> updateDoc(doc(db,"teams",t.id),{color:TEAM_COLORS[2]}).catch(()=>{})); } }
   $("#footbar").classList.toggle("hidden", tab!=="sheet");
   $("#view").classList.toggle("wide", tab==="sheet");
   ({eval:viewEval,schede:viewSchede,players:viewPlayers,teams:viewTeams,matches:viewMatches,sheet:viewSheet,users:viewUsers,logo:viewLogo})[tab]();
@@ -940,7 +946,7 @@ function renderPreview(){
   };
 }
 /* ---------- Import dal PDF ASF «Impiego Scouting (Torneo)» ---------- */
-const TEAM_COLORS = ["#2b5fd9","#d52b1e","#E8B500"]; // Blu, Rosso, Giallo
+const TEAM_COLORS = ["#2b5fd9","#d52b1e","#C99A00"]; // Blu, Rosso, Giallo (giallo scuro, leggibile)
 const PDFJS = "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/";
 // pagine: [[{s,x,y}]] con y verso il basso. Restituisce {teams, players}
 function parseAsfPdf(pages){
