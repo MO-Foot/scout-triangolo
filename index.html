@@ -71,6 +71,8 @@
   header.top .lang button.on{background:#fff;color:var(--ch)}
   header.top .btn{background:transparent;color:#fff;border-color:rgba(255,255,255,.4);padding:6px 12px;font-size:14px}
   nav.tabs{display:flex;gap:4px;padding:0 24px;background:var(--ch-dark)}
+  tr.chk td{background:#FFF8E1}
+  input.t.sm{padding:5px 8px;font-size:14px;min-width:120px}
   .manual-row{border-top:1px dashed var(--line);color:var(--ch)}
   .pvbar{background:#FFF4CC;color:var(--ink);border-bottom:1px solid #E8B500;padding:8px 24px;font-size:14px;font-weight:600}
   nav.tabs button{border:0;background:transparent;color:rgba(255,255,255,.8);padding:11px 16px;font-weight:600;cursor:pointer;border-bottom:3px solid transparent}
@@ -384,6 +386,7 @@
   </div>
 </div>
 <input type="file" id="fileXlsx" accept=".xlsx,.xls,.csv" class="hidden">
+<input type="file" id="filePdf" accept="application/pdf,.pdf" class="hidden">
 <input type="file" id="fileLogo" accept="image/png,image/svg+xml,image/jpeg" class="hidden">
 
 <script type="module">
@@ -419,14 +422,14 @@ const UI = {
   needEmail:"Zuerst die E-Mail eingeben",resetSent:"Falls die Adresse existiert, wurde eine E-Mail zum Zurücksetzen gesendet.",loading:"Laden…",netErr:"Verbindungsfehler – bitte erneut versuchen",
   roleCoach:"Head Coach",roleScout:"Scout",logout:"Abmelden",viewScout:"Scout-Ansicht",backCoach:"Zurück zum Head Coach",previewMsg:"Vorschau: So sieht ein Scout die App. Sie sehen nur Ihre eigenen Bögen.",
   tabPlayers:"Spieler",tabTeams:"Teams & Spielfeld",tabMatches:"Spiele",tabSheet:"Scout-Bogen",tabUsers:"Scouts",tabLogo:"Logo",
-  importTitle:"Spieler importieren",importExcel:"Excel-Datei (Aufgebot) laden",importExcelHint:"Spalten werden automatisch erkannt: Name, Vorname, Geburtsdatum, Verein",
+  importTitle:"Spieler importieren",importExcel:"Excel-Datei (Aufgebot) laden",importPdf:"SFV-PDF laden (Spielerliste des Turniers)",importPdfHint:"Liest Name, Vorname, Geburtsdatum, Nummer und Position. Danach fragt die App, welches Team welche Farbe hat.",pdfRead:"PDF wird gelesen…",pdfFail:"PDF konnte nicht gelesen werden",pdfNone:"Keine Spieler im PDF gefunden",mapT:"Welche Farbe hat welches Team?",mapHint:"Teams im PDF gefunden. Wählen Sie für jedes Team die Farbe (jede nur einmal).",mapPick:"— Farbe wählen —",mapNeed:"Jedem Team eine andere Farbe zuweisen",mapNew:"neu",colPos:"Position im PDF",impHintPdf:"Team und Position werden aus dem PDF übernommen (auch für bereits erfasste Spieler). Namen mit 3 oder mehr Wörtern prüfen: Name und Vorname sind nicht immer eindeutig.",checkName:"prüfen",dupNum:"Nummer doppelt",importExcelHint:"Spalten werden automatisch erkannt: Name, Vorname, Geburtsdatum, Verein",
   importPaste:"Oder Liste einfügen (aus Excel kopiert): Name, Vorname, Geburtsdatum, Verein – eine Zeile pro Spieler",
   parse:"Liste lesen",previewN:"Spieler gelesen",addAll:"Zur Liste hinzufügen",cancel:"Abbrechen",
   colCognome:"Name",colNome:"Vorname",colNascita:"Geburtsdatum",colClub:"Verein",colTeam:"Team",colRole:"Rolle",
   listTitle:"Spielerliste",addPlayer:"+ Spieler hinzufügen",addBtn:"Hinzufügen",playerAdded:"Spieler hinzugefügt",needName:"Name und Vorname angeben",xlsxFail:"Datei konnte nicht gelesen werden",nothingFound:"Keine Spieler gefunden",added:"Spieler hinzugefügt",
   teamsTitle:"Teams",addTeam:"+ Team",newTeam:"Neues Team",pool:"Zuzuteilen",poolHint:"Spieler antippen, dann die Rolle auf dem Spielfeld antippen.",
   bench:"Ersatz",gk:"Torhüter",selMsg:"Ausgewählt: {x} – jetzt eine Rolle antippen",allAssigned:"Alle Spieler sind zugeteilt",delTeam:"Team löschen",
-  mkTeams:"3 Teams erstellen (Rot, Blau, Grün)",defTeams:["Rot","Blau","Grün"],noTeams:"Noch keine Teams",
+  mkTeams:"3 Teams erstellen (Rot, Blau, Grün)",defTeams:["Blau","Rot","Gelb"],noTeams:"Noch keine Teams",
   matchesTitle:"Spiele des Turniers",addMatch:"Spiel hinzufügen",teamA:"Team A",teamB:"Team B",day:"Tag",time:"Zeit",field:"Platz",
   roundRobin:"Jeder gegen jeden erstellen",noMatches:"Noch keine Spiele",sameTeam:"Zwei verschiedene Teams wählen",
   logoTitle:"Logo",logoHint:"Logo hochladen (PNG, SVG oder JPG, max. 700 KB): es erscheint oben anstelle des Schweizerkreuzes.",logoUpload:"Logo hochladen",logoRemove:"Logo entfernen",logoTooBig:"Logo zu gross (max. 700 KB)",
@@ -446,14 +449,14 @@ const UI = {
   needEmail:"Saisir d'abord l'e-mail",resetSent:"Si l'adresse existe, un e-mail de réinitialisation a été envoyé.",loading:"Chargement…",netErr:"Erreur de connexion – réessayer",
   roleCoach:"Head coach",roleScout:"Scout",logout:"Déconnexion",viewScout:"Vue scout",backCoach:"Retour head coach",previewMsg:"Aperçu : voici l'app telle qu'un scout la voit. Seules vos propres fiches sont affichées.",
   tabPlayers:"Joueurs",tabTeams:"Équipes & terrain",tabMatches:"Matchs",tabSheet:"Fiche scout",tabUsers:"Scouts",tabLogo:"Logo",
-  importTitle:"Importer des joueurs",importExcel:"Charger le fichier Excel (convocation)",importExcelHint:"Colonnes reconnues automatiquement : nom, prénom, date de naissance, club",
+  importTitle:"Importer des joueurs",importExcel:"Charger le fichier Excel (convocation)",importPdf:"Charger le PDF ASF (liste des joueurs du tournoi)",importPdfHint:"Lit nom, prénom, date de naissance, numéro et poste. Ensuite l'app demande quelle équipe a quelle couleur.",pdfRead:"Lecture du PDF…",pdfFail:"Impossible de lire le PDF",pdfNone:"Aucun joueur trouvé dans le PDF",mapT:"Quelle équipe a quelle couleur ?",mapHint:"Équipes trouvées dans le PDF. Choisissez la couleur de chaque équipe (une seule fois chacune).",mapPick:"— choisir la couleur —",mapNeed:"Donner une couleur différente à chaque équipe",mapNew:"nouvelle",colPos:"Poste dans le PDF",impHintPdf:"Équipe et poste sont repris du PDF (aussi pour les joueurs déjà présents). Vérifier les noms de 3 mots ou plus : nom et prénom ne sont pas toujours clairs.",checkName:"à vérifier",dupNum:"numéro en double",importExcelHint:"Colonnes reconnues automatiquement : nom, prénom, date de naissance, club",
   importPaste:"Ou coller une liste (copiée d'Excel) : nom, prénom, date de naissance, club – une ligne par joueur",
   parse:"Lire la liste",previewN:"joueurs lus",addAll:"Ajouter à la liste",cancel:"Annuler",
   colCognome:"Nom",colNome:"Prénom",colNascita:"Date de naissance",colClub:"Club",colTeam:"Équipe",colRole:"Rôle",
   listTitle:"Liste des joueurs",addPlayer:"+ Ajouter un joueur",addBtn:"Ajouter",playerAdded:"Joueur ajouté",needName:"Indiquer nom et prénom",xlsxFail:"Impossible de lire le fichier",nothingFound:"Aucun joueur trouvé",added:"joueurs ajoutés",
   teamsTitle:"Équipes",addTeam:"+ Équipe",newTeam:"Nouvelle équipe",pool:"À attribuer",poolHint:"Touchez un joueur, puis touchez le rôle sur le terrain.",
   bench:"Remplaçants",gk:"Gardien",selMsg:"Sélectionné : {x} – touchez maintenant un rôle",allAssigned:"Tous les joueurs sont attribués",delTeam:"Supprimer l'équipe",
-  mkTeams:"Créer 3 équipes (Rouge, Bleu, Vert)",defTeams:["Rouge","Bleu","Vert"],noTeams:"Pas encore d'équipes",
+  mkTeams:"Créer 3 équipes (Rouge, Bleu, Vert)",defTeams:["Bleu","Rouge","Jaune"],noTeams:"Pas encore d'équipes",
   matchesTitle:"Matchs du tournoi",addMatch:"Ajouter un match",teamA:"Équipe A",teamB:"Équipe B",day:"Jour",time:"Heure",field:"Terrain",
   roundRobin:"Créer tous contre tous",noMatches:"Pas encore de matchs",sameTeam:"Choisir deux équipes différentes",
   logoTitle:"Logo",logoHint:"Charger le logo (PNG, SVG ou JPG, max. 700 Ko) : il apparaît en haut à la place de la croix suisse.",logoUpload:"Charger le logo",logoRemove:"Retirer le logo",logoTooBig:"Logo trop grand (max. 700 Ko)",
@@ -473,14 +476,14 @@ const UI = {
   needEmail:"Scrivi prima l'email",resetSent:"Se l'indirizzo esiste, è stata inviata un'email per reimpostare la password.",loading:"Caricamento…",netErr:"Errore di connessione – riprova",
   roleCoach:"Head coach",roleScout:"Scout",logout:"Esci",viewScout:"Vista scout",backCoach:"Torna head coach",previewMsg:"Anteprima: così uno scout vede l'app. Sono mostrate solo le tue schede.",
   tabPlayers:"Giocatori",tabTeams:"Squadre e campetto",tabMatches:"Partite",tabSheet:"Scheda scout",tabUsers:"Scout",tabLogo:"Logo",
-  importTitle:"Importa giocatori",importExcel:"Carica file Excel (call up)",importExcelHint:"Le colonne vengono riconosciute da sole: cognome, nome, data di nascita, club",
+  importTitle:"Importa giocatori",importExcel:"Carica file Excel (call up)",importPdf:"Carica il PDF ASF (lista giocatori del torneo)",importPdfHint:"Legge cognome, nome, data di nascita, numero e ruolo. Poi l'app ti chiede quale squadra ha quale colore.",pdfRead:"Lettura del PDF…",pdfFail:"Impossibile leggere il PDF",pdfNone:"Nessun giocatore trovato nel PDF",mapT:"Quale squadra ha quale colore?",mapHint:"Squadre trovate nel PDF. Scegli il colore di ciascuna (ogni colore una sola volta).",mapPick:"— scegli il colore —",mapNeed:"Assegna a ogni squadra un colore diverso",mapNew:"nuova",colPos:"Ruolo nel PDF",impHintPdf:"Squadra e ruolo vengono presi dal PDF (anche per i giocatori già presenti). Controlla i nomi di 3 o più parole: cognome e nome non sono sempre chiari.",checkName:"da controllare",dupNum:"numero doppio",importExcelHint:"Le colonne vengono riconosciute da sole: cognome, nome, data di nascita, club",
   importPaste:"Oppure incolla una lista (copiata da Excel): cognome, nome, data di nascita, club – una riga per giocatore",
   parse:"Leggi lista",previewN:"giocatori letti",addAll:"Aggiungi all'elenco",cancel:"Annulla",
   colCognome:"Cognome",colNome:"Nome",colNascita:"Data di nascita",colClub:"Club",colTeam:"Squadra",colRole:"Ruolo",
   listTitle:"Elenco giocatori",addPlayer:"+ Aggiungi giocatore",addBtn:"Aggiungi",playerAdded:"Giocatore aggiunto",needName:"Inserisci cognome e nome",xlsxFail:"Non riesco a leggere il file",nothingFound:"Nessun giocatore trovato",added:"giocatori aggiunti",
   teamsTitle:"Squadre",addTeam:"+ Squadra",newTeam:"Nuova squadra",pool:"Da assegnare",poolHint:"Tocca un giocatore, poi tocca il ruolo sul campo.",
   bench:"Panchina",gk:"Portiere",selMsg:"Selezionato: {x} – ora tocca un ruolo",allAssigned:"Tutti i giocatori sono assegnati",delTeam:"Elimina squadra",
-  mkTeams:"Crea 3 squadre (Rossi, Blu, Verdi)",defTeams:["Rossi","Blu","Verdi"],noTeams:"Ancora nessuna squadra",
+  mkTeams:"Crea 3 squadre (Rossi, Blu, Verdi)",defTeams:["Blu","Rosso","Giallo"],noTeams:"Ancora nessuna squadra",
   matchesTitle:"Partite del torneo",addMatch:"Aggiungi partita",teamA:"Squadra A",teamB:"Squadra B",day:"Giorno",time:"Ora",field:"Campo",
   roundRobin:"Crea tutti contro tutti",noMatches:"Ancora nessuna partita",sameTeam:"Scegli due squadre diverse",
   logoTitle:"Logo",logoHint:"Carica il logo (PNG, SVG o JPG, max 700 KB): comparirà in alto al posto della croce svizzera.",logoUpload:"Carica logo",logoRemove:"Rimuovi logo",logoTooBig:"Logo troppo grande (max 700 KB)",
@@ -555,7 +558,7 @@ let me = null;                       // profilo utente collegato
 let tab = null;
 const D = {users:[], players:[], teams:[], matches:[], schede:[], watch:[], logo:null};
 let unsubs = [];
-let coachSel = null, curTeam = null, importRows = null, pasteText = "";
+let coachSel = null, curTeam = null, importRows = null, pasteText = "", importMode = "xls", importOpts = [];
 let editing = null, sistema = "", matchDate = "";
 let queueAll = null, lastSavedSnap = null, saveState = {t:null, err:false}, lastPv = "";
 let matchId = null, player = null, query = "", matchManual = null, matchTouched = false, draftPlayerId = null;
@@ -730,7 +733,8 @@ function viewPlayers(){
   $("#view").innerHTML = `
   <div class="grid2" style="margin-bottom:16px">
     <div class="card"><h3>${u("importTitle")}</h3>
-      <div class="drop" id="dropX"><b>📄 ${u("importExcel")}</b><div class="muted" style="margin-top:6px">${u("importExcelHint")}</div></div>
+      <div class="drop" id="dropP"><b>📑 ${u("importPdf")}</b><div class="muted" style="margin-top:6px">${u("importPdfHint")}</div></div>
+      <div class="drop" id="dropX" style="margin-top:8px"><b>📄 ${u("importExcel")}</b><div class="muted" style="margin-top:6px">${u("importExcelHint")}</div></div>
       <button class="btn sm" id="tplBtn" style="margin-top:8px">⬇ ${u("template")}</button></div>
     <div class="card"><h3>&nbsp;</h3>
       <div class="muted" style="margin-bottom:8px">${u("importPaste")}</div>
@@ -751,6 +755,7 @@ function viewPlayers(){
   </div>`;
   renderPreview();
   $("#dropX").onclick = ()=> $("#fileXlsx").click();
+  $("#dropP").onclick = ()=> $("#filePdf").click();
   $("#tplBtn").onclick = downloadTemplate;
   $("#addPlayerBtn").onclick = ()=> openPlayerForm(null);
   document.querySelectorAll("[data-editp]").forEach(b=> b.onclick = ()=> openPlayerForm(pl(b.dataset.editp)));
@@ -811,32 +816,165 @@ function mapRows(rows){
 const norm = v => String(v||"").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\s+/g," ");
 function pKey(p){ return [norm(p.cognome), norm(p.nome), norm(p.nascita)].join("|");
 }
+function pdfPreviewTable(){
+  const optOf = ref => importOpts.find(o=>o.v===ref) || {};
+  const dup = new Set(); const seen = {};
+  importRows.forEach(p=>{ const k = p.teamRef+"|"+p.numero; if (p.numero){ if (seen[k]) dup.add(k); seen[k]=1; } });
+  return `<table class="list"><thead><tr><th>${u("colTeam")}</th><th>${u("colNum")}</th><th>${u("colCognome")}</th><th>${u("colNome")}</th><th>${u("colNascita")}</th><th>${u("colPos")}</th><th>${u("colRole")}</th><th></th></tr></thead>
+    <tbody>${importRows.map((p,i)=>{ const o = optOf(p.teamRef), d = dup.has(p.teamRef+"|"+p.numero); return `<tr${p.check?' class="chk"':""}>
+      <td style="white-space:nowrap"><span class="dot" style="background:${esc(o.color||"#999")}"></span>${esc((o.label||"").replace(/ \(.*\)$/,""))}</td>
+      <td>${esc(p.numero)}${d?` <span class="pill draft" title="${esc(u("dupNum"))}">!</span>`:""}</td>
+      <td>${p.check?`<input class="t sm" data-imp="${i}:cognome" value="${esc(p.cognome)}">`:esc(p.cognome)}</td>
+      <td>${p.check?`<input class="t sm" data-imp="${i}:nome" value="${esc(p.nome)}"> <small class="muted">${esc(u("checkName"))}</small>`:esc(p.nome)}</td>
+      <td>${esc(p.nascita)}</td><td>${esc(p.posizione)}</td><td>${p.ruolo?esc(roleName(p.ruolo)):`<span class="muted">${u("bench")}</span>`}</td>
+      <td><span class="pill ${p.existing?"draft":"ok"}">${p.existing?u("stUpd"):u("stNew")}</span></td></tr>`; }).join("")}</tbody></table>`;
+}
 function renderPreview(){
   const box = $("#preview"); if (!box) return;
   if (!importRows){ box.innerHTML=""; return; }
   box.innerHTML = `<div class="card" style="margin-bottom:16px;border-color:var(--ch)">
     <div class="row-flex" style="justify-content:space-between;margin-bottom:8px"><b>${importRows.length} ${u("previewN")} · ${importRows.filter(p=>!p.existing).length} ${u("impNew")} · ${importRows.filter(p=>p.existing).length} ${u("impUpd")}</b>
       <div class="row-flex"><button class="btn" id="impCancel">${u("cancel")}</button><button class="btn primary" id="impOk">${u("impApply")}</button></div></div>
-    <p class="muted" style="margin:0 0 8px">${u("impHint")}</p>
-    <table class="list"><thead><tr><th>${u("colNum")}</th><th>${u("colCognome")}</th><th>${u("colNome")}</th><th>${u("colNascita")}</th><th>${u("colClub")}</th><th></th></tr></thead>
+    <p class="muted" style="margin:0 0 8px">${u(importMode==="pdf"?"impHintPdf":"impHint")}</p>
+    ${importMode==="pdf" ? pdfPreviewTable() : `<table class="list"><thead><tr><th>${u("colNum")}</th><th>${u("colCognome")}</th><th>${u("colNome")}</th><th>${u("colNascita")}</th><th>${u("colClub")}</th><th></th></tr></thead>
     <tbody>${importRows.map(p=>`<tr><td>${esc(p.numero)}</td><td>${esc(p.cognome)}</td><td>${esc(p.nome)}</td><td>${esc(p.nascita)}</td><td>${esc(p.club)}</td>
-      <td><span class="pill ${p.existing?"draft":"ok"}">${p.existing?u("stUpd"):u("stNew")}</span></td></tr>`).join("")}</tbody></table></div>`;
-  $("#impCancel").onclick = ()=>{ importRows=null; renderPreview(); };
+      <td><span class="pill ${p.existing?"draft":"ok"}">${p.existing?u("stUpd"):u("stNew")}</span></td></tr>`).join("")}</tbody></table>`}</div>`;
+  document.querySelectorAll("[data-imp]").forEach(inp=> inp.oninput = ()=>{ const [i,k] = inp.dataset.imp.split(":"); importRows[+i][k] = inp.value.trim(); });
+  $("#impCancel").onclick = ()=>{ importRows=null; importMode="xls"; renderPreview(); };
   $("#impOk").onclick = async ()=>{
-    const rows = importRows, n = rows.length;
+    const rows = importRows, n = rows.length, pdf = importMode==="pdf";
+    if (rows.some(p=>!p.cognome || !p.nome)){ toast(u("needNames")); return; }
+    rows.forEach(p=>{ p.existing = D.players.find(x=>pKey(x)===pKey(p))?.id || null; });
     try{
+      // squadre nuove (Blu/Rosso/Giallo) da creare prima dei giocatori
+      const teamIds = {};
+      if (pdf){
+        const need = [...new Set(rows.map(p=>p.teamRef))];
+        const tb = writeBatch(db); let k = D.teams.length;
+        need.forEach(ref=>{
+          if (ref.startsWith("t:")) teamIds[ref] = ref.slice(2);
+          else { const i = +ref.slice(2), r = doc(collection(db,"teams")); tb.set(r, {name:u("defTeams")[i], color:TEAM_COLORS[i], ordine:k++}); teamIds[ref] = r.id; }
+        });
+        await tb.commit();
+      }
       for (let i=0;i<rows.length;i+=400){
         const b = writeBatch(db);
-        rows.slice(i,i+400).forEach(({existing, ...p})=>{
-          if (existing){ const upd = {club:p.club, nascita:p.nascita}; if (p.numero) upd.numero = p.numero; if (p.genere) upd.genere = p.genere; b.update(doc(db,"players",existing), upd); }
-          else b.set(doc(collection(db,"players")), {...p, genere:p.genere||"M", team:null, ruolo:null});
+        rows.slice(i,i+400).forEach(({existing, teamRef, check, posizione, ...p})=>{
+          const extra = pdf ? {team:teamIds[teamRef]||null, ruolo:p.ruolo||null, posizione:posizione||""} : {};
+          delete p.ruolo;
+          if (existing){ const upd = {club:p.club, nascita:p.nascita, ...extra}; if (p.numero) upd.numero = p.numero; if (p.genere) upd.genere = p.genere; b.update(doc(db,"players",existing), upd); }
+          else b.set(doc(collection(db,"players")), {...p, genere:p.genere||"M", team:null, ruolo:null, ...extra});
         });
         await b.commit();
       }
+      importMode = "xls";
       importRows = null; pasteText = ""; toast(`${rows.filter(p=>!p.existing).length} ${u("impNew")} · ${rows.filter(p=>p.existing).length} ${u("impUpd")}`); render();
     }catch(e){ fail(e); }
   };
 }
+/* ---------- Import dal PDF ASF «Impiego Scouting (Torneo)» ---------- */
+const TEAM_COLORS = ["#2b5fd9","#d52b1e","#E8B500"]; // Blu, Rosso, Giallo
+const PDFJS = "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/";
+// pagine: [[{s,x,y}]] con y verso il basso. Restituisce {teams, players}
+function parseAsfPdf(pages){
+  const players = [], teams = [];
+  let team = null, cols = null, role = "", block = null;
+  const isRoleText = t => t && !/^\d/.test(t) && t!=="–" && !/^mirwald$/i.test(t) && !/^[TIPS]$/.test(t);
+  const dateRe = /^(\d{2}\.\d{2}\.\d{4})(?:,\s*([A-Z]{2,3}))?$/;
+  const teamRe = /^(?:lista dei giocatori|spielerliste|liste des joueurs)\s*(?:SFV\/ASF\s*)?(.+)$/i;
+  for (const items of pages){
+    const sorted = items.filter(i=>i.s.trim()).sort((a,b)=> a.y-b.y || a.x-b.x);
+    const lines = [];
+    for (const it of sorted){ const L = lines.find(l=> Math.abs(l.y-it.y) < 2.5); if (L) L.items.push(it); else lines.push({y:it.y, items:[it]}); }
+    lines.sort((a,b)=>a.y-b.y);
+    for (const L of lines){
+      L.items.sort((a,b)=>a.x-b.x);
+      const text = L.items.map(i=>i.s.trim()).join(" ").replace(/\s+/g," ").trim();
+      const tm = text.match(teamRe);
+      if (tm){ team = tm[1].trim(); if (!teams.includes(team)) teams.push(team); block = null; role = ""; continue; }
+      const hG = L.items.find(i=>/^(giocatori|spieler|joueurs)$/i.test(i.s.trim()));
+      const hP = L.items.find(i=>/^(posizione|position)/i.test(i.s.trim()));
+      if (hG && hP){ const hT = L.items.find(i=>i.s.trim()==="T" && i.x>hP.x); cols = {g:hG.x-6, p:hP.x-6, t: hT ? hT.x-6 : Infinity}; continue; }
+      if (!cols || !team) continue;
+      const col = k => L.items.filter(i=> k==="n" ? i.x < cols.g : k==="g" ? (i.x>=cols.g && i.x<cols.p) : (i.x>=cols.p && i.x<cols.t)).map(i=>i.s.trim()).join(" ").replace(/\s+/g," ").trim();
+      const n = col("n"), g = col("g"), p = col("p");
+      if (p && isRoleText(p) && !g && !n){ role = p; continue; }
+      if (g){
+        if (!block) block = {parts:[], num:"", role};
+        if (n && /^\d{1,3}$/.test(n)) block.num = n;
+        const dm = g.match(dateRe);
+        if (dm){ players.push({team, numero:block.num, nomeCompleto:block.parts.join(" "), nascita:dm[1], posizione:block.role}); block = null; role = ""; }
+        else block.parts.push(g);
+      } else if (n && block && /^\d{1,3}$/.test(n)) block.num = n;
+    }
+  }
+  return {teams, players};
+}
+// testo del ruolo (IT/DE/FR) -> zona del campetto
+function zoneFromPos(t){
+  const s = norm(t);
+  if (!s) return null;
+  if (/portier|torh|goal|gardien/.test(s)) return "tw";
+  if (/(centrale|al centro|innenverteid|central)/.test(s) && /(dif|verteid|defen|déf|def)/.test(s)) return "iv";
+  if (/(esterno|difesa a|aussenverteid|lateral|latéral)/.test(s) && /(dif|verteid|lateral|latéral)/.test(s)) return /(destr|rechts|droit)/.test(s) ? "avR" : "avL";
+  if (/^ala|flügel|fluegel|ailier/.test(s)) return /(destr|rechts|droit)/.test(s) ? "flR" : "flL";
+  if (/attacc|punta|sturm|stürm|attaq|avant-centre/.test(s)) return "st";
+  if (/trequart|offensiv|10er/.test(s)) return "z10";
+  if (/mediano|difensiv|defensiv|sechser|6er|récup/.test(s)) return "z6";
+  if (/(interno|centrocamp|mittelfeld|milieu)/.test(s)) return /(destr|rechts|droit)/.test(s) ? "play" : "z8";
+  return null;
+}
+async function readPdfPages(file){
+  const pdfjs = await import(PDFJS + "pdf.min.mjs");
+  pdfjs.GlobalWorkerOptions.workerSrc = PDFJS + "pdf.worker.min.mjs";
+  const pdf = await pdfjs.getDocument({data: new Uint8Array(await file.arrayBuffer())}).promise;
+  const pages = [];
+  for (let i=1;i<=pdf.numPages;i++){
+    const pg = await pdf.getPage(i), vp = pg.getViewport({scale:1}), tc = await pg.getTextContent();
+    pages.push(tc.items.filter(it=>"str" in it).map(it=>({s:it.str, x:it.transform[4], y:vp.height-it.transform[5]})));
+  }
+  return pages;
+}
+function splitName(full){
+  const w = String(full||"").trim().split(/\s+/).filter(Boolean);
+  if (w.length<2) return {cognome:w[0]||"", nome:"", check:true};
+  return {cognome:w.slice(0,-1).join(" "), nome:w.at(-1), check:w.length>2};
+}
+$("#filePdf").onchange = async e=>{
+  const f = e.target.files[0]; e.target.value=""; if(!f) return;
+  toast(u("pdfRead"));
+  let res;
+  try{ res = parseAsfPdf(await readPdfPages(f)); }catch(err){ console.error(err); toast(u("pdfFail")); return; }
+  if (!res.players.length){ toast(u("pdfNone")); return; }
+  askTeamColors(res);
+};
+function askTeamColors(res){
+  // opzioni: squadre già nell'app + i colori standard Blu/Rosso/Giallo che mancano (verranno create)
+  const opts = D.teams.map(t=>({v:"t:"+t.id, label:t.name, color:t.color}));
+  u("defTeams").forEach((n,i)=>{ if (!D.teams.some(t=>norm(t.name)===norm(n) || norm(t.color)===norm(TEAM_COLORS[i]))) opts.push({v:"n:"+i, label:`${n} (${u("mapNew")})`, color:TEAM_COLORS[i]}); });
+  const cnt = tn => res.players.filter(p=>p.team===tn).length;
+  openModal(u("mapT"), `<p class="muted" style="margin-top:0">${esc(u("mapHint"))}</p>
+    ${res.teams.map((tn,i)=>`<label class="f">${esc(tn)} <span class="muted">(${cnt(tn)})</span></label>
+      <select class="t" data-map="${i}"><option value="">${esc(u("mapPick"))}</option>${opts.map(o=>`<option value="${esc(o.v)}">● ${esc(o.label)}</option>`).join("")}</select>`).join("")}`,
+    [{label:u("cancel"), on:closeModal},
+     {label:u("impApply"), cls:"primary", on:()=>{
+       const sel = [...document.querySelectorAll("[data-map]")].map(x=>x.value);
+       if (sel.some(v=>!v) || new Set(sel).size!==sel.length){ toast(u("mapNeed")); return; }
+       closeModal();
+       const map = Object.fromEntries(res.teams.map((tn,i)=>[tn, sel[i]]));
+       const seen = new Set();
+       importRows = res.players.map(p=>{
+         const nm = splitName(p.nomeCompleto);
+         return {cognome:nm.cognome, nome:nm.nome, nascita:p.nascita, club:p.team.replace(/^[A-Z]{2}-\d{2}\s*-\s*/,""), numero:p.numero, genere:"",
+                 teamRef:map[p.team], ruolo:zoneFromPos(p.posizione), posizione:p.posizione, check:nm.check};
+       }).filter(p=>{ const k=pKey(p); if (seen.has(k)) return false; seen.add(k); return true; })
+         .map(p=>({...p, existing: D.players.find(x=>pKey(x)===pKey(p))?.id || null}));
+       importMode = "pdf"; importOpts = opts;
+       renderPreview(); $("#preview")?.scrollIntoView({behavior:"smooth", block:"start"});
+     }}]);
+  document.querySelectorAll("[data-map]").forEach(s=> s.onchange = ()=>{ const o = opts.find(o=>o.v===s.value); s.style.borderLeft = o ? `8px solid ${o.color}` : ""; });
+}
+
 $("#fileXlsx").onchange = async e=>{
   const f = e.target.files[0]; e.target.value=""; if(!f) return;
   try{
@@ -861,7 +999,7 @@ function viewTeams(){
     $("#view").innerHTML = `<div class="card"><h3>${u("teamsTitle")}</h3><p class="muted">${u("noTeams")}</p>
       <div class="row-flex"><button class="btn primary" id="mkTeams">${u("mkTeams")}</button><button class="btn" id="addTeam">${u("addTeam")}</button></div></div>`;
     $("#mkTeams").onclick = ()=>{
-      const b = writeBatch(db); const cols = ["#d52b1e","#2b5fd9","#2e9e5b"];
+      const b = writeBatch(db); const cols = TEAM_COLORS;
       u("defTeams").forEach((n,i)=> b.set(doc(collection(db,"teams")), {name:n,color:cols[i],ordine:i}));
       run(b.commit());
     };
