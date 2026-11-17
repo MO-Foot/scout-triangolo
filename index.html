@@ -1188,7 +1188,9 @@ function copyAllReports(){
   const recs = D.schede.filter(s=>s.partitaId===q.m.id && (isCoach() || s.scoutUid===me.uid));
   const nr = r => { const n = parseInt(pl(r.giocatoreId)?.numero,10); return isNaN(n)?999:n; };
   recs.sort((a,b)=> nr(a)-nr(b));
-  const txt = recs.map(r=> reportFrom(r, lang)).join("\n\n————————————\n\n");
+  const tag = r => { const p = pl(r.giocatoreId) || {}; const n = p.numero || r.giocatoreNumero; const t = team(p.team);
+    return `— ${n ? "N° "+n : "?"}${t ? " · "+t.name : ""} —`; };
+  const txt = recs.map(r=> tag(r) + "\n" + reportFrom(r, lang)).join("\n\n");
   openModal(`${u("copyAllT")} · ${matchLabel(q.m)}`, recs.length ? `<textarea id="repText">${esc(txt)}</textarea>` : `<p>${u("noReports")}</p>`,
     recs.length ? [copyBtn(), {label:u("close"), on:closeModal}] : [{label:u("close"), on:closeModal}]);
 }
@@ -1514,12 +1516,11 @@ function reportFrom(rec, lg){
   const [cog="", nom=""] = (rec.giocatore||"").split(", ");
   const out = [];
 
-  // Intestazione: Cognome Nome (data di nascita, club) + partita
-  const extra = [p.nascita, p.club].filter(Boolean).join(", ");
+  // Intestazione: solo la partita (il nome del giocatore non compare nella relazione)
   const mt = rec.partitaId && D.matches.find(x=>x.id===rec.partitaId);
   const mlab = mt ? `${team(mt.a)?.name||"?"} – ${team(mt.b)?.name||"?"} (${fmtDay(mt.giorno)}${mt.campo?`, ${P.field} ${mt.campo}`:""})`
                   : (rec.partita||"") + (rec.partita && rec.dataPartita ? ` (${fmtDay(rec.dataPartita)})` : "");
-  out.push(`${cog} ${nom}`.trim() + (extra?` (${extra})`:"") + (mlab?`\n${P.matchL}${colon} ${mlab}`:""));
+  if (mlab) out.push(`${P.matchL}${colon} ${mlab}`);
 
   // Ruolo, sistema, piede
   let roles = ph("position");
