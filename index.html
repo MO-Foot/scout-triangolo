@@ -567,8 +567,9 @@ let me = null;                       // profilo utente collegato
 let tab = null;
 const D = {users:[], players:[], playersPub:[], playersPriv:[], teams:[], matches:[], schede:[], watch:[], logo:null};
 // Dati personali (cognome, nome, data di nascita, club) in «playersPriv»: li legge SOLO l'head coach.
-// Gli scout vedono di ogni giocatore solo numero, squadra, ruolo e genere.
-const PRIV = ["cognome","nome","nascita","club"];
+// Anche ruolo e posizione sono riservati (gli allenatori spostano spesso i giocatori).
+// Gli scout vedono di ogni giocatore solo numero, squadra e genere.
+const PRIV = ["cognome","nome","nascita","club","ruolo","posizione"];
 const splitP = d => { const pub = {}, priv = {}; Object.entries(d).forEach(([k,v])=>{ if (v===undefined) return; (PRIV.includes(k) ? priv : pub)[k] = v; }); return {pub, priv}; };
 function mergePlayers(){
   const pv = Object.fromEntries(D.playersPriv.map(x=>[x.id,x]));
@@ -576,9 +577,9 @@ function mergePlayers(){
   D.players = D.playersPub.map(p=>({...p, ...(pv[p.id]||{}), id:p.id}))
     .sort((a,b)=> (a.cognome||"").localeCompare(b.cognome||"") || (team(a.team)?.ordine??99)-(team(b.team)?.ordine??99) || nr(a)-nr(b));
 }
-// nome visibile: all'head coach il nome vero, agli scout (e in «Vista scout») numero · squadra · ruolo
+// nome visibile: all'head coach il nome vero, agli scout (e in «Vista scout») numero · squadra
 const pLabel = p => { if (!p) return ""; const t = team(p.team);
-  return [p.numero ? "N° "+p.numero : "", t ? t.name : "", p.ruolo ? roleName(p.ruolo) : ""].filter(Boolean).join(" · "); };
+  return [p.numero ? "N° "+p.numero : "", t ? t.name : ""].filter(Boolean).join(" · "); };
 const pName = p => (isCoach() && p && (p.cognome || p.nome)) ? `${p.cognome||""}, ${p.nome||""}`.replace(/^, |, $/,"") : pLabel(p);
 // una volta sola: sposta i dati personali dai vecchi documenti «players» a «playersPriv» e toglie i nomi dalle schede
 let privMigrated = false;
@@ -841,7 +842,7 @@ function viewPlayers(){
   document.querySelectorAll("[data-tdel]").forEach(el=> el.onclick = ()=> confirmDel(async ()=>{
     try{
       const id = el.dataset.tdel, b = writeBatch(db);
-      D.players.filter(p=>p.team===id).forEach(p=> b.update(doc(db,"players",p.id),{team:null,ruolo:null}));
+      D.players.filter(p=>p.team===id).forEach(p=>{ b.update(doc(db,"players",p.id),{team:null}); b.set(doc(db,"playersPriv",p.id),{ruolo:null},{merge:true}); });
       b.delete(doc(db,"teams",id)); await b.commit();
     }catch(e){ fail(e); }
   }));
@@ -983,8 +984,9 @@ function renderPreview(){
           delete p.ruolo;
           if (existing){
             const upd = {...extra}; if (p.numero) upd.numero = p.numero; if (p.genere) upd.genere = p.genere;
-            if (Object.keys(upd).length) b.update(doc(db,"players",existing), upd);
-            b.set(doc(db,"playersPriv",existing), {club:p.club, nascita:p.nascita}, {merge:true});
+            const sp = splitP({...upd, club:p.club, nascita:p.nascita});
+            if (Object.keys(sp.pub).length) b.update(doc(db,"players",existing), sp.pub);
+            b.set(doc(db,"playersPriv",existing), sp.priv, {merge:true});
           } else {
             const ref = doc(collection(db,"players")), {pub, priv} = splitP({...p, genere:p.genere||"M", team:null, ruolo:null, ...extra});
             b.set(ref, pub); b.set(doc(db,"playersPriv",ref.id), priv);
@@ -1352,7 +1354,7 @@ function viewSheet(){
           <span class="meta">${[player.manuale ? `✎ ${esc(u("manualTag"))}` : "",
               isCoach() && !player.manuale ? esc([player.nascita, player.club].filter(Boolean).join(" · ")) : "",
               isCoach() && !player.manuale && pt ? `<span class="dot" style="background:${esc(pt.color)}"></span>${esc(pt.name)}` : "",
-              player.ruolo ? esc(roleName(player.ruolo)) : ""].filter(Boolean).join(" · ")}</span>
+              isCoach() && player.ruolo ? esc(roleName(player.ruolo)) : ""].filter(Boolean).join(" · ")}</span>
           <span class="pill">${nSchede} ${u("existing")}</span><button class="btn sm" id="changePlayer">${u("change")}</button></div>
           <div class="scoutname"><input class="t" id="nomeScout" placeholder="${esc(u("scoutNamePh"))}" value="${esc(nomeScout)}" autocomplete="off"><small class="muted">${esc(u("scoutNameHint"))}</small></div>`
         :`<div class="search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
@@ -1410,7 +1412,7 @@ function renderQueue(){
       return `<div class="qteam"><span class="dot" style="background:${esc(t?.color||"#bbb")}"></span>${esc(t?.name||u("noTeamYet"))}</div>` + ps.map(p=>`
       <div class="qrow ${player&&player.id===p.id?"cur":""}" data-q="${p.id}">
         <button class="qstar ${q.stars.includes(p.id)?"on":""}" data-star="${p.id}" title="★">${q.stars.includes(p.id)?"★":"☆"}</button>
-        <span class="qn">${numTag(p)}${isCoach() ? `${esc(p.cognome||"")} ${esc((p.nome||"")[0]||"")}.` : `<span class="muted">${esc(p.ruolo ? roleName(p.ruolo) : "")}</span>`}</span>${status(p)}</div>`).join(""); }).join("")}
+        <span class="qn">${numTag(p)}${isCoach() ? `${esc(p.cognome||"")} ${esc((p.nome||"")[0]||"")}.` : ""}</span>${status(p)}</div>`).join(""); }).join("")}
     <button class="btn sm" id="copyAllBtn" style="width:100%;margin-top:10px">${u("copyAll")}</button>`;
   box.querySelectorAll("[data-qmode]").forEach(b=> b.onclick = ()=>{ queueAll = b.dataset.qmode==="all"; renderQueue(); });
   box.querySelectorAll("[data-star]").forEach(b=> b.onclick = e=>{ e.stopPropagation(); toggleStar(b.dataset.star); });
@@ -1512,7 +1514,7 @@ function searchPlayers(qs){
   if (!toks.length) return [];
   const ok = p => {
     const tname = norm(team(p.team)?.name);
-    const hay = norm(`${isCoach() ? `${p.cognome||""} ${p.nome||""}` : ""} ${team(p.team)?.name||""} ${p.ruolo ? roleName(p.ruolo) : ""}`);
+    const hay = norm(`${isCoach() ? `${p.cognome||""} ${p.nome||""} ${p.ruolo ? roleName(p.ruolo) : ""}` : ""} ${team(p.team)?.name||""}`);
     return toks.every(w=>{
       if (/^\d+$/.test(w)) return String(p.numero||"").trim()===w;
       const mm = w.match(/^([a-z]+)(\d+)$/);
@@ -1527,7 +1529,7 @@ function showResults(){
   const res=$("#res"); if(!res) return;
   resList = searchPlayers(query); resHl = 0;
   if (!query.trim()){ res.classList.add("hidden"); return; }
-  res.innerHTML = (resList.length ? resList.map((p,i)=>{const t=team(p.team);return `<div data-id="${p.id}" class="${i===resHl?"hl":""}"><span>${numTag(p)}<b>${esc(isCoach() ? pName(p) : (t ? t.name : ""))}</b></span><span class="meta">${isCoach() ? esc(p.club||"")+(t?` · ${esc(t.name)}`:"") : esc(p.ruolo ? roleName(p.ruolo) : "")}</span></div>`;}).join("")
+  res.innerHTML = (resList.length ? resList.map((p,i)=>{const t=team(p.team);return `<div data-id="${p.id}" class="${i===resHl?"hl":""}"><span>${numTag(p)}<b>${esc(isCoach() ? pName(p) : (t ? t.name : ""))}</b></span><span class="meta">${isCoach() ? esc(p.club||"")+(t?` · ${esc(t.name)}`:"") : ""}</span></div>`;}).join("")
     : `<div class="meta">${u("noRes")}</div>`) + `<div data-manual="1" class="manual-row"><span><b>${esc(u("addManual"))}</b></span></div>`;
   res.classList.remove("hidden");
   res.querySelector("[data-manual]").onmousedown = e=>{ e.preventDefault(); const qq=query; query=""; resList=[]; document.activeElement?.blur(); askManualPlayer(qq); };
