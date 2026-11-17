@@ -66,6 +66,7 @@
   header.top .lang button.on{background:#fff;color:var(--ch)}
   header.top .btn{background:transparent;color:#fff;border-color:rgba(255,255,255,.4);padding:6px 12px;font-size:14px}
   nav.tabs{display:flex;gap:4px;padding:0 24px;background:var(--ch-dark)}
+  .preview{background:#FFF4CC;color:var(--ink);border-bottom:1px solid #E8B500;padding:8px 24px;font-size:14px;font-weight:600}
   nav.tabs button{border:0;background:transparent;color:rgba(255,255,255,.8);padding:11px 16px;font-weight:600;cursor:pointer;border-bottom:3px solid transparent}
   nav.tabs button.on{color:#fff;border-bottom-color:#fff}
   main{max-width:1260px;margin:0 auto;padding:20px 24px 120px}
@@ -201,8 +202,8 @@
   .fdate .t{flex:none;width:auto}
   .tipsmini .badge{min-width:30px;padding:2px 5px;margin-right:3px;font-size:12.5px}
   .prog{padding:10px 0;border-top:1px solid var(--line-2)} .prog:first-of-type{border-top:0}
-  .bar{display:flex;height:10px;border-radius:5px;background:var(--line-2);overflow:hidden;margin:6px 0}
-  .bar .b-ok{background:var(--green)} .bar .b-dr{background:var(--yellow)}
+  .pbar{display:flex;height:10px;border-radius:5px;background:var(--line-2);overflow:hidden;margin:6px 0}
+  .pbar .b-ok{background:var(--green)} .pbar .b-dr{background:var(--yellow)}
   .prog details{margin-top:4px} .prog summary{cursor:pointer;color:var(--ink-2)}
   .chipline{display:inline-flex;align-items:center;margin:4px 8px 0 0;font-size:13px;color:var(--ink-2)}
   .kpi{text-align:center;min-width:70px} .kpi .muted{font-size:12px;margin-bottom:3px}
@@ -349,9 +350,11 @@
       <div class="sp"></div>
       <div class="who"><span class="role" id="roleTag"></span><b id="userName"></b></div>
       <div class="lang" data-lang-switch></div>
+      <button class="btn hidden" id="asScoutBtn"></button>
       <button class="btn" id="logout" data-ui="logout"></button>
     </div>
     <nav class="tabs" id="tabs"></nav>
+    <div class="preview hidden" id="previewBar"></div>
   </header>
   <main id="view"></main>
   <div class="footbar hidden" id="footbar">
@@ -408,7 +411,7 @@ const UI = {
  de:{loginTitle:"Anmeldung",tabEval:"Auswertung",fReset:"Filter zurücksetzen",exportXls:"Excel exportieren",fAllMatches:"Alle Spiele",fAllTeams:"Alle Teams",fAllRoles:"Alle Positionen",fAllPot:"Jedes Potenzial",fNoPot:"Ohne Potenzial",fAllScouts:"Alle Scouts",fFrom:"von",fTo:"bis",template:"Excel-Vorlage herunterladen",progT:"Fortschritt pro Spiel",pSent:"mit gesendetem Bogen",pDraft:"nur Entwurf",pNone:"von niemandem beobachtet",pShowNone:"Zeigen, wer fehlt",evPlayers:"Spieler",evSearch:"Spieler suchen (Name, Nummer, Verein)…",compareBtn:"Vergleichen",sName:"Sortieren: Name",sN:"Sortieren: Anzahl Bögen",sTips:"Sortieren: TIPS-Durchschnitt",sPot:"Sortieren: Potenzial",sentOnly:"Nur gesendete Bögen",evHint:"Zeile anklicken für die Spielerseite. Bis zu 3 Spieler ankreuzen und «Vergleichen».",max3:"Höchstens 3 Spieler",byScout:"Bewertung pro Scout",topVoci:"Am häufigsten markiert",allReports:"Alle Berichte",openBtn:"Öffnen",compareT:"Spielervergleich",saveNext:"Speichern & weiter",queueT:"Spieler im Spiel",qMine:"★ Meine",qAll:"Alle",qHint:"Mit ★ die Spieler markieren, die Sie beobachten.",qNoMatch:"Spiel aus der Liste wählen, um die Spieler zu sehen.",qTodo:"offen",copyAll:"Alle Berichte des Spiels kopieren",copyAllT:"Berichte des Spiels",noReports:"Noch keine Bögen für dieses Spiel",savedAt:"Gespeichert um",saveRetry:"Nicht gespeichert: neuer Versuch in 10 s",queueEnd:"Ende der Liste erreicht",prefilled:"Stabile Merkmale aus dem Bogen vom {d} übernommen",previewT:"Vorschau Bericht",previewEmpty:"Spieler wählen, um den Bericht zu sehen.",savedNow:"Gespeichert",totalN:"Bögen insgesamt",colGender:"Geschlecht",gM:"männlich",gF:"weiblich",colNum:"Nr.",editPlayer:"Spieler bearbeiten",playerSaved:"Spieler gespeichert",impNew:"neu",impUpd:"aktualisiert",impApply:"Übernehmen",stNew:"neu",stUpd:"aktualisieren",impHint:"Bereits erfasste Spieler (gleicher Name, Vorname und Geburtsdatum) werden aktualisiert, nicht verdoppelt. Team und Rolle bleiben.",matchDate:"Spieldatum",compiled:"ausgefüllt am",editUntil:"Korrektur möglich bis",correctSaved:"Korrektur gespeichert",kbTitle:"Tastenkürzel",tipsKey:"TIPS {L}: Taste 1–5 (Umschalt = +0,5)",kbRows:[["Ctrl+K oder /", "Spieler suchen (Name oder Nummer)"], ["Ctrl+S", "Sofort speichern"], ["Ctrl+Enter", "Speichern & nächster Spieler"], ["Alt+↑ / Alt+↓", "Vorheriger / nächster Spieler der Liste"], ["Ctrl+Umschalt+Enter", "Senden"], ["T, I, P, S dann 1–5", "TIPS-Note (mit Umschalt +0,5: Umschalt+3 = 3,5)"], ["A, B, C", "Potenzial"], ["Tab / Pfeiltasten + Leertaste", "Zwischen Feldern bewegen und ankreuzen"], ["↑ ↓ + Enter in der Suche", "Spieler auswählen"], ["Esc", "Fenster schliessen"], ["?", "Diese Liste"]],systemPh:"Spielsystem (optional), z. B. 1-4-3-3",uSurname:"Name",uFirst:"Vorname",editUser:"Zugang bearbeiten",saveBtn:"Speichern",userSaved:"Zugang aktualisiert",emailFixed:"Die E-Mail ist die Anmeldung und kann hier nicht geändert werden.",needNames:"Name und Vorname angeben",tabSchede:"Bögen",schedeAll:"Alle Bögen",schedeMine:"Meine Bögen",filterPh:"Filtern nach Spieler, Spiel, Scout…",allStates:"Alle",stDraft:"Entwurf",stSent:"Gesendet",colDate:"Datum",colPot:"Pot.",noSchede:"Noch keine Bögen",edit:"Bearbeiten",send:"Senden",sendConfirmT:"Bogen senden?",sendConfirmB:"Nach dem Senden können Sie den Bogen nicht mehr ändern.",sendConfirmCoach:"Der Bogen wird als gesendet markiert. Als Head Coach können Sie ihn weiterhin ändern.",sentOk:"Bogen gesendet",reopen:"Wieder öffnen (Entwurf)",reopened:"Bogen wieder als Entwurf geöffnet",deleted:"Bogen gelöscht",lockedMsg:"gesendet, nicht mehr änderbar",replaceT:"Aktuellen Bogen ersetzen?",replaceB:"Der Bogen, den Sie gerade ausfüllen, wird durch den gespeicherten ersetzt.",editingLbl:"Bearbeitung eines gespeicherten Bogens",viewIn:"Anzeigen in:",origLang:"Sprache des Scouts",freeTextNote:"Freie Texte (Notizen, Bemerkungen) bleiben in der Originalsprache.",email:"E-Mail",pw:"Passwort",loginBtn:"Anmelden",forgot:"Passwort vergessen?",
   badCreds:"E-Mail oder Passwort falsch",noAccess:"Kein Zugang: Ihr Konto wurde nicht vom Head Coach freigeschaltet oder ist deaktiviert.",
   needEmail:"Zuerst die E-Mail eingeben",resetSent:"Falls die Adresse existiert, wurde eine E-Mail zum Zurücksetzen gesendet.",loading:"Laden…",netErr:"Verbindungsfehler – bitte erneut versuchen",
-  roleCoach:"Head Coach",roleScout:"Scout",logout:"Abmelden",
+  roleCoach:"Head Coach",roleScout:"Scout",logout:"Abmelden",viewScout:"Scout-Ansicht",backCoach:"Zurück zum Head Coach",previewMsg:"Vorschau: So sieht ein Scout die App. Sie sehen nur Ihre eigenen Bögen.",
   tabPlayers:"Spieler",tabTeams:"Teams & Spielfeld",tabMatches:"Spiele",tabSheet:"Scout-Bogen",tabUsers:"Scouts",tabLogo:"Logo",
   importTitle:"Spieler importieren",importExcel:"Excel-Datei (Aufgebot) laden",importExcelHint:"Spalten werden automatisch erkannt: Name, Vorname, Geburtsdatum, Verein",
   importPaste:"Oder Liste einfügen (aus Excel kopiert): Name, Vorname, Geburtsdatum, Verein – eine Zeile pro Spieler",
@@ -435,7 +438,7 @@ const UI = {
  fr:{loginTitle:"Connexion",tabEval:"Évaluation",fReset:"Réinitialiser",exportXls:"Exporter Excel",fAllMatches:"Tous les matchs",fAllTeams:"Toutes les équipes",fAllRoles:"Tous les postes",fAllPot:"Tout potentiel",fNoPot:"Sans potentiel",fAllScouts:"Tous les scouts",fFrom:"du",fTo:"au",template:"Télécharger le modèle Excel",progT:"Avancement par match",pSent:"avec fiche envoyée",pDraft:"seulement brouillon",pNone:"vus par personne",pShowNone:"Voir qui manque",evPlayers:"Joueurs",evSearch:"Chercher un joueur (nom, numéro, club)…",compareBtn:"Comparer",sName:"Trier : nom",sN:"Trier : nombre de fiches",sTips:"Trier : moyenne TIPS",sPot:"Trier : potentiel",sentOnly:"Seulement les fiches envoyées",evHint:"Cliquer sur une ligne pour la page du joueur. Cocher jusqu'à 3 joueurs puis « Comparer ».",max3:"3 joueurs au maximum",byScout:"Évaluation par scout",topVoci:"Les plus cochés",allReports:"Tous les rapports",openBtn:"Ouvrir",compareT:"Comparaison des joueurs",saveNext:"Enregistrer et suivant",queueT:"Joueurs du match",qMine:"★ Mes joueurs",qAll:"Tous",qHint:"Marquez avec ★ les joueurs que vous observez.",qNoMatch:"Choisir un match de la liste pour voir les joueurs.",qTodo:"à faire",copyAll:"Copier tous les rapports du match",copyAllT:"Rapports du match",noReports:"Pas encore de fiches pour ce match",savedAt:"Enregistré à",saveRetry:"Non enregistré : nouvel essai dans 10 s",queueEnd:"Fin de la liste",prefilled:"Éléments stables repris de la fiche du {d}",previewT:"Aperçu du rapport",previewEmpty:"Choisir un joueur pour voir le rapport.",savedNow:"Enregistré",totalN:"fiches au total",colGender:"Genre",gM:"masculin",gF:"féminin",colNum:"N°",editPlayer:"Modifier le joueur",playerSaved:"Joueur enregistré",impNew:"nouveaux",impUpd:"mis à jour",impApply:"Appliquer",stNew:"nouveau",stUpd:"mise à jour",impHint:"Les joueurs déjà présents (même nom, prénom et date de naissance) sont mis à jour, pas dupliqués. Équipe et rôle restent.",matchDate:"Date du match",compiled:"remplie le",editUntil:"modifiable jusqu'au",correctSaved:"Correction enregistrée",kbTitle:"Raccourcis clavier",tipsKey:"TIPS {L} : touche 1–5 (Maj = +0,5)",kbRows:[["Ctrl+K ou /", "Chercher un joueur (nom ou numéro)"], ["Ctrl+S", "Enregistrer tout de suite"], ["Ctrl+Entrée", "Enregistrer et joueur suivant"], ["Alt+↑ / Alt+↓", "Joueur précédent / suivant de la liste"], ["Ctrl+Maj+Entrée", "Envoyer"], ["T, I, P, S puis 1–5", "Note TIPS (avec Maj +0,5 : Maj+3 = 3,5)"], ["A, B, C", "Potentiel"], ["Tab / flèches + Espace", "Se déplacer entre les cases et cocher"], ["↑ ↓ + Entrée dans la recherche", "Choisir le joueur"], ["Échap", "Fermer la fenêtre"], ["?", "Cette liste"]],systemPh:"Système de jeu (facultatif), p. ex. 1-4-3-3",uSurname:"Nom",uFirst:"Prénom",editUser:"Modifier l'accès",saveBtn:"Enregistrer",userSaved:"Accès mis à jour",emailFixed:"L'e-mail sert à la connexion et ne peut pas être modifiée ici.",needNames:"Indiquer nom et prénom",tabSchede:"Fiches",schedeAll:"Toutes les fiches",schedeMine:"Mes fiches",filterPh:"Filtrer par joueur, match, scout…",allStates:"Toutes",stDraft:"Brouillon",stSent:"Envoyée",colDate:"Date",colPot:"Pot.",noSchede:"Pas encore de fiches",edit:"Modifier",send:"Envoyer",sendConfirmT:"Envoyer la fiche ?",sendConfirmB:"Après l'envoi, vous ne pourrez plus modifier la fiche.",sendConfirmCoach:"La fiche sera marquée comme envoyée. En tant que head coach, vous pourrez encore la modifier.",sentOk:"Fiche envoyée",reopen:"Rouvrir (brouillon)",reopened:"Fiche rouverte comme brouillon",deleted:"Fiche supprimée",lockedMsg:"envoyée, plus modifiable",replaceT:"Remplacer la fiche en cours ?",replaceB:"La fiche en cours sera remplacée par celle enregistrée.",editingLbl:"Modification d'une fiche enregistrée",viewIn:"Afficher en :",origLang:"langue du scout",freeTextNote:"Les textes libres (notes, remarques) restent dans la langue d'origine.",email:"E-mail",pw:"Mot de passe",loginBtn:"Se connecter",forgot:"Mot de passe oublié ?",
   badCreds:"E-mail ou mot de passe incorrect",noAccess:"Accès refusé : votre compte n'a pas été activé par le head coach ou il est désactivé.",
   needEmail:"Saisir d'abord l'e-mail",resetSent:"Si l'adresse existe, un e-mail de réinitialisation a été envoyé.",loading:"Chargement…",netErr:"Erreur de connexion – réessayer",
-  roleCoach:"Head coach",roleScout:"Scout",logout:"Déconnexion",
+  roleCoach:"Head coach",roleScout:"Scout",logout:"Déconnexion",viewScout:"Vue scout",backCoach:"Retour head coach",previewMsg:"Aperçu : voici l'app telle qu'un scout la voit. Seules vos propres fiches sont affichées.",
   tabPlayers:"Joueurs",tabTeams:"Équipes & terrain",tabMatches:"Matchs",tabSheet:"Fiche scout",tabUsers:"Scouts",tabLogo:"Logo",
   importTitle:"Importer des joueurs",importExcel:"Charger le fichier Excel (convocation)",importExcelHint:"Colonnes reconnues automatiquement : nom, prénom, date de naissance, club",
   importPaste:"Ou coller une liste (copiée d'Excel) : nom, prénom, date de naissance, club – une ligne par joueur",
@@ -462,7 +465,7 @@ const UI = {
  it:{loginTitle:"Accesso",tabEval:"Valutazioni",fReset:"Azzera filtri",exportXls:"Esporta Excel",fAllMatches:"Tutte le partite",fAllTeams:"Tutte le squadre",fAllRoles:"Tutti i ruoli",fAllPot:"Ogni potenziale",fNoPot:"Senza potenziale",fAllScouts:"Tutti gli scout",fFrom:"dal",fTo:"al",template:"Scarica il modello Excel",progT:"Avanzamento per partita",pSent:"con scheda inviata",pDraft:"solo bozza",pNone:"non visti da nessuno",pShowNone:"Mostra chi manca",evPlayers:"Giocatori",evSearch:"Cerca giocatore (nome, numero, club)…",compareBtn:"Confronta",sName:"Ordina: nome",sN:"Ordina: numero di schede",sTips:"Ordina: media TIPS",sPot:"Ordina: potenziale",sentOnly:"Solo schede inviate",evHint:"Clicca una riga per la pagina del giocatore. Spunta fino a 3 giocatori e premi «Confronta».",max3:"Al massimo 3 giocatori",byScout:"Valutazione per scout",topVoci:"Voci più segnalate",allReports:"Tutte le relazioni",openBtn:"Apri",compareT:"Confronto tra giocatori",saveNext:"Salva e prossimo",queueT:"Giocatori della partita",qMine:"★ I miei",qAll:"Tutti",qHint:"Segna con ★ i giocatori che osservi.",qNoMatch:"Scegli una partita dall'elenco per vedere i giocatori.",qTodo:"da fare",copyAll:"Copia tutte le relazioni della partita",copyAllT:"Relazioni della partita",noReports:"Ancora nessuna scheda per questa partita",savedAt:"Salvato alle",saveRetry:"Non salvato: riprovo tra 10 secondi",queueEnd:"Fine della lista",prefilled:"Voci stabili riprese dalla scheda del {d}",previewT:"Anteprima relazione",previewEmpty:"Scegli un giocatore per vedere la relazione.",savedNow:"Salvato",totalN:"schede in totale",colGender:"Genere",gM:"maschile",gF:"femminile",colNum:"N°",editPlayer:"Modifica giocatore",playerSaved:"Giocatore salvato",impNew:"nuovi",impUpd:"aggiornati",impApply:"Applica",stNew:"nuovo",stUpd:"aggiorna",impHint:"I giocatori già presenti (stesso cognome, nome e data di nascita) vengono aggiornati, non duplicati. Squadra e ruolo restano.",matchDate:"Data della partita",compiled:"compilata il",editUntil:"correggibile fino al",correctSaved:"Correzione salvata",kbTitle:"Scorciatoie da tastiera",tipsKey:"TIPS {L}: premi 1–5 (Maiusc = +0,5)",kbRows:[["Ctrl+K oppure /", "Cerca giocatore (nome o numero)"], ["Ctrl+S", "Salva subito"], ["Ctrl+Invio", "Salva e passa al prossimo giocatore"], ["Alt+↑ / Alt+↓", "Giocatore precedente / successivo della lista"], ["Ctrl+Maiusc+Invio", "Invia"], ["T, I, P, S poi 1–5", "Voto TIPS (con Maiusc +0,5: Maiusc+3 = 3,5)"], ["A, B, C", "Potenziale"], ["Tab / frecce + Spazio", "Muoversi tra le caselle e spuntarle"], ["↑ ↓ + Invio nella ricerca", "Scegliere il giocatore"], ["Esc", "Chiudere la finestra"], ["?", "Questo elenco"]],systemPh:"Sistema di gioco (facoltativo), es. 1-4-3-3",uSurname:"Cognome",uFirst:"Nome",editUser:"Modifica accesso",saveBtn:"Salva",userSaved:"Accesso aggiornato",emailFixed:"L'email serve per l'accesso e qui non si può modificare.",needNames:"Inserisci cognome e nome",tabSchede:"Schede",schedeAll:"Tutte le schede",schedeMine:"Le mie schede",filterPh:"Filtra per giocatore, partita, scout…",allStates:"Tutte",stDraft:"Bozza",stSent:"Inviata",colDate:"Data",colPot:"Pot.",noSchede:"Ancora nessuna scheda",edit:"Modifica",send:"Invia",sendConfirmT:"Inviare la scheda?",sendConfirmB:"Dopo l'invio non potrai più modificare la scheda.",sendConfirmCoach:"La scheda sarà segnata come inviata. Come head coach potrai comunque modificarla.",sentOk:"Scheda inviata",reopen:"Riapri (torna bozza)",reopened:"Scheda riaperta come bozza",deleted:"Scheda eliminata",lockedMsg:"inviata, non più modificabile",replaceT:"Sostituire la scheda in corso?",replaceB:"La scheda che stai compilando verrà sostituita da quella salvata.",editingLbl:"Stai modificando una scheda salvata",viewIn:"Mostra in:",origLang:"lingua dello scout",freeTextNote:"I testi liberi (note TIPS, annotazioni) restano nella lingua in cui sono stati scritti.",email:"Email",pw:"Password",loginBtn:"Accedi",forgot:"Password dimenticata?",
   badCreds:"Email o password errati",noAccess:"Accesso negato: il tuo account non è stato abilitato dall'head coach oppure è disattivato.",
   needEmail:"Scrivi prima l'email",resetSent:"Se l'indirizzo esiste, è stata inviata un'email per reimpostare la password.",loading:"Caricamento…",netErr:"Errore di connessione – riprova",
-  roleCoach:"Head coach",roleScout:"Scout",logout:"Esci",
+  roleCoach:"Head coach",roleScout:"Scout",logout:"Esci",viewScout:"Vista scout",backCoach:"Torna head coach",previewMsg:"Anteprima: così uno scout vede l'app. Sono mostrate solo le tue schede.",
   tabPlayers:"Giocatori",tabTeams:"Squadre e campetto",tabMatches:"Partite",tabSheet:"Scheda scout",tabUsers:"Scout",tabLogo:"Logo",
   importTitle:"Importa giocatori",importExcel:"Carica file Excel (call up)",importExcelHint:"Le colonne vengono riconosciute da sole: cognome, nome, data di nascita, club",
   importPaste:"Oppure incolla una lista (copiata da Excel): cognome, nome, data di nascita, club – una riga per giocatore",
@@ -565,7 +568,10 @@ const col = v => v == null ? "" : v >= 4 ? "g" : v >= 2.5 ? "y" : "r";
 const fmt = v => v == null ? "–" : (v % 1 ? v.toFixed(1) : String(v));
 const team = id => D.teams.find(t=>t.id===id);
 const pl = id => D.players.find(p=>p.id===id);
-const isCoach = () => me && me.ruolo === "coach";
+let asScout = false; // anteprima: l'head coach vede l'app come uno scout
+const realCoach = () => me && me.ruolo === "coach";
+const isCoach = () => realCoach() && !asScout;
+const mySchede = () => isCoach() ? D.schede : D.schede.filter(s=>s.scoutUid===me.uid);
 const numTag = p => p && p.numero ? `<span class="num">${esc(p.numero)}</span>` : "";
 const fullName = x => x ? [x.nome, x.cognome].filter(Boolean).join(" ") : "";
 function roleName(zid){ const z = ZONES.find(z=>z.id===zid); if(!z) return ""; return z.pos == null ? u("gk") : L(SEC.position.items[z.pos]); }
@@ -604,7 +610,7 @@ function loginError(msg){ const e=$("#loginErr"); e.textContent=msg; e.classList
 onAuthStateChanged(auth, async user=>{
   stopListeners();
   saveDraft();
-  me = null;
+  me = null; asScout = false;
   checks=new Set(); free=["","","",""]; pot=null; tips=freshTips(); note=""; player=null; draftPlayerId=null; query="";
   matchId=null; matchManual=null; matchTouched=false; editing=null; sistema=""; matchDate=""; queueAll=null; lastSavedSnap=null; saveState={t:null,err:false};
   if (!user){ renderChrome(); show("login"); return; }
@@ -642,7 +648,14 @@ $("#forgot").onclick = async e=>{
   try{ await sendPasswordResetEmail(auth, em); }catch(err){}
   loginError(""); toast(u("resetSent"));
 };
-$("#logout").onclick = ()=> signOut(auth);
+$("#logout").onclick = ()=> { asScout = false; signOut(auth); };
+$("#asScoutBtn").onclick = ()=>{
+  if (!realCoach()) return;
+  asScout = !asScout;
+  tab = asScout ? "sheet" : "players";
+  queueAll = null; if (typeof SF !== "undefined" && SF) SF.scout = "";
+  render(); window.scrollTo(0,0);
+};
 
 /* =====================================================================
    DATI IN TEMPO REALE
@@ -687,6 +700,8 @@ function renderChrome(){
   document.documentElement.lang = lang;
   if (!me) return;
   $("#roleTag").textContent = isCoach() ? u("roleCoach") : u("roleScout");
+  const sb = $("#asScoutBtn"); sb.classList.toggle("hidden", !realCoach()); sb.textContent = asScout ? u("backCoach") : u("viewScout");
+  $("#previewBar").classList.toggle("hidden", !asScout); $("#previewBar").textContent = asScout ? u("previewMsg") : "";
   $("#userName").textContent = fullName(me);
   const tabs = isCoach() ? ["players","teams","matches","sheet","schede","eval","users","logo"] : ["sheet","schede"];
   const names = {eval:"tabEval",schede:"tabSchede",players:"tabPlayers",teams:"tabTeams",matches:"tabMatches",sheet:"tabSheet",users:"tabUsers",logo:"tabLogo"};
@@ -1069,7 +1084,7 @@ function viewSheet(){
   if (matchId && D.matches.length && !D.matches.find(x=>x.id===matchId)) matchId = null;
   proposeMatch();
   const ms = D.matches, m = D.matches.find(x=>x.id===matchId);
-  const nSchede = player ? D.schede.filter(s=>s.giocatoreId===player.id).length : 0;
+  const nSchede = player ? mySchede().filter(s=>s.giocatoreId===player.id).length : 0;
   const rosterOf = tid => {
     const t = team(tid); if(!t) return "";
     const zi = id => { const i = ZONES.findIndex(z=>z.id===id); return i<0 ? 99 : i; };
@@ -1677,7 +1692,7 @@ const SF = {q:"", stato:"", match:"", team:"", pos:"", pot:"", scout:"", from:""
 const recDate = r => r.dataPartita || (tsDate(r.creatoIl)?.toISOString().slice(0,10) ?? "");
 function filteredSchede(){
   const q = norm(SF.q);
-  return D.schede.filter(r=>{
+  return mySchede().filter(r=>{
     const p = pl(r.giocatoreId) || {};
     if (SF.stato && statoOf(r)!==SF.stato) return false;
     if (SF.match && r.partitaId!==SF.match) return false;
@@ -1698,7 +1713,7 @@ function filteredSchede(){
 }
 function viewSchede(){
   const opt = (v,l,cur) => `<option value="${esc(v)}" ${v===cur?"selected":""}>${esc(l)}</option>`;
-  const scouts = [...new Map(D.schede.map(r=>[r.scoutUid, r.scout])).entries()].sort((a,b)=>(a[1]||"").localeCompare(b[1]||""));
+  const scouts = [...new Map(mySchede().map(r=>[r.scoutUid, r.scout])).entries()].sort((a,b)=>(a[1]||"").localeCompare(b[1]||""));
   $("#view").innerHTML = `<div class="card">
     <div class="row-flex" style="justify-content:space-between;margin-bottom:10px">
       <h3 style="margin:0">${u(isCoach()?"schedeAll":"schedeMine")} <span class="muted" id="schedeN"></span></h3>
@@ -1808,7 +1823,7 @@ function viewEval(){
     const pct = Math.round(g.sent.length / g.ps.length * 100);
     return `<div class="prog">
       <div class="row-flex" style="justify-content:space-between"><b>${esc(matchLabel(m))}</b><span class="muted">${g.nRs} ${u("tabSchede").toLowerCase()}</span></div>
-      <div class="bar"><span class="b-ok" style="width:${pct}%"></span><span class="b-dr" style="width:${Math.round(g.draft.length/g.ps.length*100)}%"></span></div>
+      <div class="pbar"><span class="b-ok" style="width:${pct}%"></span><span class="b-dr" style="width:${Math.round(g.draft.length/g.ps.length*100)}%"></span></div>
       <div class="muted" style="font-size:13px">${g.sent.length}/${g.ps.length} ${u("pSent")} · ${g.draft.length} ${u("pDraft")} · <b style="color:var(--ch-dark)">${g.none.length} ${u("pNone")}</b>
         ${g.none.length?`<details><summary>${u("pShowNone")}</summary>${g.none.map(p=>`<span class="chipline">${numTag(p)}${esc(p.cognome)} ${esc(p.nome)} · ${esc(team(p.team)?.name||"")}</span>`).join("")}</details>`:""}</div></div>`; }).join("");
   const q = norm(EV.q);
