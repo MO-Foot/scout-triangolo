@@ -1744,8 +1744,8 @@ const PHR_F = {
 };
 const genderOf = rec => ((pl(rec.giocatoreId)||{}).genere || rec.genere || "M").toUpperCase()==="F" ? "F" : "M";
 const cap = s => s ? s.charAt(0).toUpperCase()+s.slice(1) : s;
-// Lunghezza della relazione: «breve» (max 3 frasi) o «completa». Scelta ricordata nel browser.
-let repLen = (()=>{ try{ return localStorage.getItem("st_replen")==="short" ? "short" : "full"; }catch(e){ return "full"; } })();
+// Lunghezza della relazione: «breve» (max 3 frasi, predefinita) o «completa». Scelta ricordata nel browser.
+let repLen = (()=>{ try{ return localStorage.getItem("st_replen")==="full" ? "full" : "short"; }catch(e){ return "short"; } })();  // predefinita: breve
 const SHORT = {
   it:{strong:"Punti forti", today:"Oggi", grow:"da migliorare l'intensità", pot:"potenziale"},
   de:{strong:"Stärken", today:"Heute", grow:"Entwicklungsbedarf bei der Intensität", pot:"Potenzial"},
