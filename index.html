@@ -242,19 +242,9 @@
   table.clickable tbody tr{cursor:pointer} table.clickable tbody tr:hover td{background:var(--ch-soft)}
   .pill.draft{background:var(--yellow-soft);color:#7a5d00}
   .potpill{display:inline-block;min-width:26px;text-align:center;font-weight:700;border-radius:6px;padding:2px 6px}
-  .potpill small{font-size:.75em;font-weight:600;margin-left:1px}
-  .potbar{padding:12px 16px 10px;max-width:640px}
-  .pb-track{display:grid;grid-template-columns:repeat(5,1fr);height:22px;border-radius:11px;overflow:hidden}
-  .pb-seg{border:0;padding:0;margin:0;cursor:pointer;position:relative}
-  .pb-seg:hover{filter:brightness(1.06)}
-  .pb-seg.on::after{content:"";position:absolute;left:50%;top:50%;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;background:#fff;border:3px solid var(--ink);box-sizing:border-box}
-  .pb-track{overflow:visible}.pb-seg:first-child{border-radius:11px 0 0 11px}.pb-seg:last-child{border-radius:0 11px 11px 0}
-  .pb-lbl{display:grid;grid-template-columns:repeat(5,1fr);text-align:center;font-family:"Barlow Condensed";font-weight:700;font-size:20px;margin-top:6px}
-  .pb-out{font-size:14px;color:var(--ink-3);margin-top:4px}
-  .pb-out b{color:var(--ink)}
-  .pbar2{display:inline-flex;width:150px;height:12px;border-radius:6px;overflow:hidden;vertical-align:middle;gap:1px;background:#fff}
-  .pbar2 i{flex:1}.pbar2 i.nop{background:#cfd3d8}
-  .pbn{margin-left:8px;font-size:13px;color:var(--ink-3);vertical-align:middle}
+  .pbar3{display:inline-flex;vertical-align:middle;width:150px;height:14px;border-radius:7px;overflow:hidden}.pbar3 i{display:block;height:100%}
+  .pbn{margin-left:10px;color:#6b7280;font-size:14px;vertical-align:middle}
+  .potpill.pA{background:#5f9b2c;color:#fff}.potpill.pB{background:#eba133}.potpill.pC{background:#e04f4f;color:#fff}
   .lang-light button.on{background:var(--ch);color:#fff}
   @media (max-width:1100px){ .span2{grid-column:auto} }
   .footbar{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.97);border-top:1px solid var(--line);z-index:20}
@@ -461,7 +451,7 @@ const UI = {
   match:"Spiel",pickMatch:"Spiel wählen…",manualMatch:"✎ Anderes Spiel (von Hand eingeben)…",manualPh:"z. B. Rot – Blau, 14.11., Platz 2",draftRestored:"Nicht gespeicherter Entwurf wiederhergestellt",needMatch:"Bitte zuerst ein Spiel wählen",player:"Spieler",search:"Spieler suchen: Name oder Nummer, z. B. «7 blau»…",searchScout:"Spieler suchen: Nummer und Team, z. B. «7 blau»…",noRes:"Kein Spieler gefunden",addManual:"✎ Spieler nicht in der Liste – von Hand eingeben",manualPlT:"Spieler nicht in der Liste",manualPlHint:"Der Spieler wird nur in diesem Bogen gespeichert (Nummer und Team). Der Head Coach sieht, dass er von Hand eingegeben wurde.",manualTag:"von Hand eingegeben",manNeed:"Bitte die Rückennummer eingeben",scoutNamePh:"Name (freiwillig, nur für dich)",scoutNameHint:"Wird nach dem Turnier vom Head Coach gelöscht.",purgeNames:"Von Scouts notierte Namen löschen ({n})",purgeT:"Von Scouts notierte Namen löschen?",purgeB:"In {n} Bögen hat ein Scout einen Namen notiert. Diese Namen werden gelöscht; der Rest der Bögen bleibt.",purgeGo:"Namen löschen",purgeOk:"Namen in {n} Bögen gelöscht",shirtNo:"Rückennummer",ok:"OK",
   change:"Ändern",existing:"Bögen",date:"Datum",obsDate:"Datum der Beobachtung",qNoPlayers:"Noch keine Spieler erfasst",save:"Entwurf speichern",clear:"Neuer Bogen",marked:"Merkmale markiert",noPlayer:"Kein Spieler gewählt",
   needPlayer:"Bitte zuerst einen Spieler wählen",savedOk:"Bogen gespeichert",saveFail:"Speichern fehlgeschlagen",
-  otherPh:"Weiterer Aspekt…",notePh:"Notiz…",close:"Schliessen",cleared:"Bogen geleert",potHint:"Eine Auswahl",potPick:"Klicken Sie auf die Leiste: A, B, C oder dazwischen",tipsHint:"Note 1–5 · 3 = genügend",
+  otherPh:"Weiterer Aspekt…",notePh:"Notiz…",close:"Schliessen",cleared:"Bogen geleert",potHint:"Eine Auswahl",tipsHint:"Note 1–5 · 3 = genügend",
   notesT:"Bemerkungen",perfToday:"Heutige Leistung",notesPh:"Weitere Beobachtungen, Kontext, Hinweise…",tipsNames:{T:"Technik",I:"Intelligenz",P:"Persönlichkeit",S:"Schnelligkeit"},itPending:"",
   genText:"Text generieren",genTitle:"Bericht (Entwurf – Stil wird mit dem Head Coach festgelegt)",copy:"Kopieren",copied:"Kopiert",
   noTeamYet:"ohne Team",del:"Löschen",confirmDel:"Wirklich löschen?",yes:"Ja, löschen",permErr:"Keine Berechtigung"},
@@ -488,7 +478,7 @@ const UI = {
   match:"Match",pickMatch:"Choisir le match…",manualMatch:"✎ Autre match (saisir à la main)…",manualPh:"p. ex. Rouge – Bleu, 14.11, terrain 2",draftRestored:"Brouillon non enregistré restauré",needMatch:"Choisir d'abord un match",player:"Joueur",search:"Chercher un joueur : nom ou numéro, p. ex. «7 bleu»…",searchScout:"Chercher un joueur : numéro et équipe, p. ex. «7 bleu»…",noRes:"Aucun joueur trouvé",addManual:"✎ Joueur absent de la liste – saisir à la main",manualPlT:"Joueur absent de la liste",manualPlHint:"Le joueur est enregistré uniquement dans cette fiche (numéro et équipe). Le head coach voit qu'il a été saisi à la main.",manualTag:"saisi à la main",manNeed:"Indiquer le numéro de maillot",scoutNamePh:"Nom (facultatif, pour toi)",scoutNameHint:"Sera supprimé par le head coach après le tournoi.",purgeNames:"Supprimer les noms notés par les scouts ({n})",purgeT:"Supprimer les noms notés par les scouts ?",purgeB:"Dans {n} fiches un scout a noté un nom. Ces noms seront supprimés ; le reste des fiches est conservé.",purgeGo:"Supprimer les noms",purgeOk:"Noms supprimés dans {n} fiches",shirtNo:"Numéro de maillot",ok:"OK",
   change:"Changer",existing:"fiches",date:"Date",obsDate:"Date de l'observation",qNoPlayers:"Aucun joueur enregistré",save:"Enregistrer brouillon",clear:"Nouvelle fiche",marked:"caractéristiques cochées",noPlayer:"Aucun joueur choisi",
   needPlayer:"Choisir d'abord un joueur",savedOk:"Fiche enregistrée",saveFail:"Échec de l'enregistrement",
-  otherPh:"Autre aspect…",notePh:"Note…",close:"Fermer",cleared:"Fiche vidée",potHint:"Un seul choix",potPick:"Cliquez sur la barre : A, B, C ou entre les deux",tipsHint:"Note 1–5 · 3 = suffisant",
+  otherPh:"Autre aspect…",notePh:"Note…",close:"Fermer",cleared:"Fiche vidée",potHint:"Un seul choix",tipsHint:"Note 1–5 · 3 = suffisant",
   notesT:"Remarques",perfToday:"Performance du jour",notesPh:"Autres observations, contexte, indications…",tipsNames:{T:"Technique",I:"Intelligence",P:"Personnalité",S:"Vitesse"},itPending:"",
   genText:"Générer le texte",genTitle:"Rapport (brouillon – le style sera défini avec le head coach)",copy:"Copier",copied:"Copié",
   noTeamYet:"sans équipe",del:"Supprimer",confirmDel:"Vraiment supprimer ?",yes:"Oui, supprimer",permErr:"Pas d'autorisation"},
@@ -515,7 +505,7 @@ const UI = {
   match:"Partita",pickMatch:"Scegli la partita…",manualMatch:"✎ Altra partita (inserisci a mano)…",manualPh:"es. Rossi – Blu, 14.11., campo 2",draftRestored:"Bozza non salvata ripristinata",needMatch:"Scegli prima la partita",player:"Giocatore",search:"Cerca giocatore: nome o numero, es. «7 blu»…",searchScout:"Cerca giocatore: numero e squadra, es. «7 blu»…",noRes:"Nessun giocatore trovato",addManual:"✎ Giocatore non in elenco – inseriscilo a mano",manualPlT:"Giocatore non in elenco",manualPlHint:"Il giocatore viene salvato solo in questa scheda (numero e squadra). L'head coach vedrà che è stato inserito a mano.",manualTag:"inserito a mano",manNeed:"Inserisci il numero di maglia",scoutNamePh:"Nome (facoltativo, solo per te)",scoutNameHint:"Verrà eliminato dall'head coach dopo il torneo.",purgeNames:"Elimina i nomi scritti dagli scout ({n})",purgeT:"Eliminare i nomi scritti dagli scout?",purgeB:"In {n} schede uno scout ha scritto un nome. Questi nomi vengono eliminati; il resto delle schede resta.",purgeGo:"Elimina i nomi",purgeOk:"Nomi eliminati in {n} schede",shirtNo:"Numero di maglia",ok:"OK",
   change:"Cambia",existing:"schede",date:"Data",obsDate:"Data dell'osservazione",qNoPlayers:"Nessun giocatore inserito",save:"Salva bozza",clear:"Nuova scheda",marked:"caratteristiche spuntate",noPlayer:"Nessun giocatore scelto",
   needPlayer:"Scegli prima un giocatore",savedOk:"Scheda salvata",saveFail:"Salvataggio non riuscito",
-  otherPh:"Altro aspetto…",notePh:"Nota…",close:"Chiudi",cleared:"Scheda svuotata",potHint:"Una sola scelta",potPick:"Clicca sulla barra: A, B, C o una posizione intermedia",tipsHint:"Nota 1–5 · 3 = sufficiente",
+  otherPh:"Altro aspetto…",notePh:"Nota…",close:"Chiudi",cleared:"Scheda svuotata",potHint:"Una sola scelta",tipsHint:"Nota 1–5 · 3 = sufficiente",
   notesT:"Annotazioni",perfToday:"Prestazione odierna",notesPh:"Altre osservazioni, contesto, indicazioni…",tipsNames:{T:"Tecnica",I:"Intelligenza",P:"Personalità",S:"Velocità"},
   itPending:"",
   genText:"Genera testo",genTitle:"Relazione (bozza – lo stile verrà definito con l'head coach)",copy:"Copia",copied:"Copiato",
@@ -623,14 +613,6 @@ let editing = null, sistema = "", matchDate = "";
 let queueAll = null, lastSavedSnap = null, saveState = {t:null, err:false}, lastPv = "";
 let matchId = null, player = null, query = "", matchManual = null, matchTouched = false, draftPlayerId = null;
 const MANUAL = "__manual";
-// Potenziale su 7 posizioni: A · A→B · B→A · B · B→C · C→B · C   (pot = indice 0..6 oppure null)
-const POTS = [["A",""],["A","B"],["B",""],["B","C"],["C",""]];
-const POT_COL = ["#1a9641","#a6d96a","#ffd633","#fdae61","#d7191c"];
-const POT_INK = ["#ffffff","#1b1f26","#1b1f26","#1b1f26","#ffffff"];
-const potIdx = r => !r ? null : Number.isInteger(r.potIdx) ? r.potIdx : (({A:0,B:2,C:4})[r.potenziale] ?? null);
-const potStr = (p, t, lg) => !t ? p : lg==="de" ? `zwischen ${p} und ${t}` : lg==="fr" ? `entre ${p} et ${t}` : `tra ${p} e ${t}`;
-const potText = (i, lg=lang) => i==null ? "" : potStr(POTS[i][0], POTS[i][1], lg);
-const potPill = i => i==null ? "" : `<span class="potpill" style="background:${POT_COL[i]};color:${POT_INK[i]}" title="${esc(potText(i))}">${POTS[i][0]}${POTS[i][1]?`–${POTS[i][1]}`:""}</span>`;
 let checks = new Set(), free = ["","","",""], pot = null, tips = freshTips(), note = "";
 function freshTips(){ return {T:{v:null,n:""},I:{v:null,n:""},P:{v:null,n:""},S:{v:null,n:""}}; }
 
@@ -1609,10 +1591,7 @@ function renderSheet(){
         <div class="scale">${vals.map(v=>`<button type="button" data-tip="${Lt}" data-v="${v}" class="${col(v)} ${v%1?"half":""} ${t.v===v?"on":""}">${fmt(v)}</button>`).join("")}</div>
         <textarea data-note="${Lt}" placeholder="${esc(u("notePh"))}">${esc(t.n)}</textarea></div>`;}).join("")+`</div>`;
     } else if (sec.type==="pot"){
-      const main = pot==null ? null : sec.items.find(it=>it[0]===POTS[pot][0]);
-      body = `<div class="potbar"><div class="pb-track">${POTS.map((pp,i)=>`<button type="button" class="pb-seg ${pot===i?"on":""} ${pp[1]?"mid":"main"}" data-pi="${i}" style="background:${POT_COL[i]}" aria-label="${esc(potText(i))}"></button>`).join("")}</div>
-        <div class="pb-lbl"><span>A</span><span></span><span>B</span><span></span><span>C</span></div>
-        <div class="pb-out">${pot==null ? esc(u("potPick")) : `<b>${esc(L(sec.t))}: ${esc(potText(pot))}</b>${POTS[pot][1] ? "" : ` · ${esc(L(main.slice(1)))}`}`}</div></div>`;
+      body = `<div><div class="pot">`+sec.items.map(it=>`<button type="button" data-v="${it[0]}" class="${pot===it[0]?"on":""}"><span class="big">${it[0]}</span><span class="sm">${esc(L(it.slice(1)))}</span></button>`).join("")+`</div><div class="pot-hint">${u("potHint")}</div></div>`;
     } else {
       body = `<div class="cells">`+sec.items.map((it,i)=>{const k=sec.id+":"+i;return `<button type="button" class="cell ${checks.has(k)?"on":""}" data-k="${k}">${esc(L(it))}</button>`;}).join("");
       if (sec.type==="taktik") body += free.map((f,i)=>`<label class="cell free ${f.trim()?"on":""}"><input data-free="${i}" value="${esc(f)}" placeholder="${esc(u("otherPh"))}"></label>`).join("");
@@ -1637,14 +1616,14 @@ function renderSheet(){
   });
   $("#notes").oninput = e=>{ note = e.target.value; };
   sh.querySelectorAll("[data-note]").forEach(t=> t.oninput = ()=>{ tips[t.dataset.note].n=t.value; });
-  sh.querySelectorAll(".pb-seg").forEach(b=> b.onclick = ()=>{ const i = +b.dataset.pi; pot = pot===i ? null : i; renderSheet(); renderSummary(); });
+  sh.querySelectorAll(".pot button").forEach(b=> b.onclick = ()=>{ pot = pot===b.dataset.v?null:b.dataset.v; sh.querySelectorAll(".pot button").forEach(x=>x.classList.toggle("on",x.dataset.v===pot)); renderSummary(); });
 }
 function updateCounts(){ SECTIONS.forEach(sec=>{ const el=document.querySelector(`[data-cnt="${sec.id}"]`); if(el) el.textContent=sectionCount(sec)||""; }); }
 function renderSummary(){
   const n = checks.size + free.filter(f=>f.trim()).length;
   const who = player?`<b>${esc(isCoach() && !player.manuale ? pName(player) : recLabel(player))}</b>${nomeScout.trim()?` (${esc(nomeScout.trim())})`:""}`:u("noPlayer");
   const ed = "";
-  $("#summary").innerHTML = `${ed}${who} · <b>${n}</b> ${u("marked")}${pot!=null?` · ${esc(L(SEC.potenzial.t))}: <b>${esc(potText(pot))}</b>`:""}<span id="saveState"></span>`;
+  $("#summary").innerHTML = `${ed}${who} · <b>${n}</b> ${u("marked")}${pot?` · ${esc(L(SEC.potenzial.t))}: <b>${pot}</b>`:""}<span id="saveState"></span>`;
   renderSaveState();
 }
 function selected(id){ return SEC[id].items.map((it,i)=>checks.has(id+":"+i)?it:null).filter(Boolean); }
@@ -1678,7 +1657,7 @@ const PHR = {
     smart:x=>`Nella lettura del gioco ${x}.`,
     off:x=>`In fase offensiva ${x}.`, def:x=>`In fase difensiva ${x}.`, also:x=>`Inoltre: ${x}.`,
     persS:x=>`Personalità: ${x}.`, neg:"Deve però crescere in intensità e disponibilità.",
-    tips:"Valutazione TIPS", pot:(a,b)=>`Potenziale: ${a}${b?` – ${b}`:""}.`
+    tips:"Valutazione TIPS", pot:(a,b)=>`Potenziale: ${a} – ${b}.`
   },
   de:{
     position:["Aussenverteidiger","Innenverteidiger","Spielmacher","6er","8er","Flügelspieler","10er","Stürmer"],
@@ -1702,7 +1681,7 @@ const PHR = {
     smart:x=>`Im Spiel ${x}.`.replace("Im Spiel ","Er "),
     off:x=>`Offensiv: ${x}.`, def:x=>`Defensiv: ${x}.`, also:x=>`Ausserdem: ${x}.`,
     persS:x=>`Persönlichkeit: ${x}.`, neg:"Bei Intensität und Bereitschaft muss er sich noch steigern.",
-    tips:"TIPS-Bewertung", pot:(a,b)=>`Potenzial: ${a}${b?` – ${b}`:""}.`
+    tips:"TIPS-Bewertung", pot:(a,b)=>`Potenzial: ${a} – ${b}.`
   },
   fr:{
     position:["latéral","défenseur central","meneur de jeu","milieu défensif","n°8","ailier","milieu offensif","attaquant"],
@@ -1726,7 +1705,7 @@ const PHR = {
     smart:x=>`Dans la lecture du jeu, il ${x}.`,
     off:x=>`En phase offensive, il ${x}.`, def:x=>`En phase défensive, il ${x}.`, also:x=>`En outre : ${x}.`,
     persS:x=>`Personnalité : ${x}.`, neg:"Il peut toutefois paraître nonchalant.",
-    tips:"Évaluation TIPS", pot:(a,b)=>`Potentiel : ${a}${b?` – ${b}`:""}.`
+    tips:"Évaluation TIPS", pot:(a,b)=>`Potentiel : ${a} – ${b}.`
   }
 };
 /* Forme al femminile (giocatrici): sovrascrivono solo le voci che cambiano */
@@ -1798,7 +1777,7 @@ function reportShort(rec, lg){
   let potTxt = "";
   if (rec.potenziale){ const it = SEC.potenzial.items.find(x=>x[0]===rec.potenziale);
     const lbl = P.potL ? P.potL[rec.potenziale] : (lg==="de" ? LL(it.slice(1)) : lc(LL(it.slice(1))));
-    potTxt = `${S.pot} ${potStr(rec.potenziale, rec.potTend, lg)}${rec.potTend ? "" : ` (${lbl})`}`; }
+    potTxt = `${S.pot} ${rec.potenziale} (${lbl})`; }
   const s3 = [nums.length ? `TIPS ${nums.join(" · ")}` : "", potTxt].filter(Boolean).join("; ");
   if (s3) out.push(`${S.today}${colon} ${s3}.`);
   out.push(`— ${rec.scout||""}`);
@@ -1875,7 +1854,7 @@ function reportFrom(rec, lg, len = repLen){
   if ((rec.annotazioni||"").trim()) out.push(rec.annotazioni.trim());
   if (rec.potenziale){ const it=SEC.potenzial.items.find(x=>x[0]===rec.potenziale);
     const lbl = P.potL ? P.potL[rec.potenziale] : (lg==="de" ? LL(it.slice(1)) : lc(LL(it.slice(1))));
-    out.push(P.pot(potStr(rec.potenziale, rec.potTend, lg), rec.potTend ? "" : lbl)); }
+    out.push(P.pot(rec.potenziale, lbl)); }
   out.push(`— ${rec.scout||""}`);
   return out.join("\n\n");
 }
@@ -1909,7 +1888,7 @@ function buildRecord(stato){
     scoutUid: base.scoutUid || me.uid, scout: base.scout || fullName(me), lingua: base.lingua || lang, annotazioni:note.trim(), stato};
   SECTIONS.forEach(sec=>{
     if (sec.type==="tips") rec.tips = Object.fromEntries(Object.entries(tips).map(([k,t])=>[k,{nota:t.v,commento:t.n}]));
-    else if (sec.type==="pot"){ rec.potenziale = pot==null ? null : POTS[pot][0]; rec.potTend = pot==null ? "" : POTS[pot][1]; rec.potIdx = pot; }
+    else if (sec.type==="pot") rec.potenziale = pot;
     else { const sel=selected(sec.id).map(it=>it[0]); if(sec.type==="taktik") sel.push(...free.map(f=>f.trim()).filter(Boolean).map(f=>"✎ "+f)); rec[sec.id]=sel; }
   });
   return rec;
@@ -1925,7 +1904,7 @@ function needBoth(){
 /* ---------- Bozza locale: salvataggio automatico nel browser, per non perdere una scheda ---------- */
 const draftKey = ()=> me ? "st_draft_"+me.uid : null;
 function sheetEmpty(){
-  return !editing && !player && !draftPlayerId && !nomeScout.trim() && checks.size===0 && !note.trim() && pot==null && free.every(f=>!f.trim())
+  return !editing && !player && !draftPlayerId && !nomeScout.trim() && checks.size===0 && !note.trim() && !pot && free.every(f=>!f.trim())
     && Object.values(tips).every(t=>t.v==null && !t.n.trim());
 }
 function saveDraft(){
@@ -1942,7 +1921,7 @@ function restoreDraft(){
     matchId = null; matchManual = null; matchTouched = !!d.matchTouched;
     draftPlayerId = d.playerId || null; player = null; editing = d.editing || null;
     if (d.manualPlayer && d.manualPlayer.manuale){ player = d.manualPlayer; draftPlayerId = null; }
-    checks = new Set(d.checks||[]); free = d.free || ["","","",""]; pot = Number.isInteger(d.pot) ? d.pot : (({A:0,B:2,C:4})[d.pot] ?? null);
+    checks = new Set(d.checks||[]); free = d.free || ["","","",""]; pot = d.pot || null;
     tips = d.tips || freshTips(); note = d.note || ""; sistema = d.sistema || ""; matchDate = d.matchDate || ""; nomeScout = d.nomeScout || "";
     setTimeout(()=> toast(u("draftRestored")), 800);
     return true;
@@ -1964,7 +1943,7 @@ function loadRecord(rec){
     sec.items.forEach((it,i)=>{ if (v.includes(it[0])) checks.add(sec.id+":"+i); });
   });
   (rec.taktik||[]).filter(x=>x.startsWith("✎ ")).slice(0,4).forEach((x,i)=> free[i]=x.slice(2));
-  pot = potIdx(rec);
+  pot = rec.potenziale || null;
   tips = freshTips();
   for (const k of ["T","I","P","S"]) if (rec.tips && rec.tips[k]) tips[k] = {v:rec.tips[k].nota ?? null, n:rec.tips[k].commento||""};
   note = rec.annotazioni || ""; sistema = rec.sistema || "";
@@ -2083,7 +2062,7 @@ function renderSchedeRows(){
       <td>${esc(r.dataPartita ? fmtISO(r.dataPartita) : fmtTs(r.creatoIl))}</td><td>${numTag(p)}</td><td><b>${esc(isCoach() && pl(r.giocatoreId) ? pName(pl(r.giocatoreId)) : r.giocatore)}</b>${r.nomeScout?` <span class="muted">(${esc(r.nomeScout)})</span>`:""}${r.giocatoreManuale?` <span class="muted" title="${esc(u("manualTag"))}">✎</span>`:""}</td><td>${(t2=>t2?`<span class="dot" style="background:${esc(t2.color)}"></span>${esc(t2.name)}`:"")(team((pl(r.giocatoreId)||{}).team || r.giocatoreSquadra))}</td>
       ${isCoach()?`<td>${esc(r.scout)}</td>`:""}
       <td class="tipsmini">${["T","I","P","S"].map(k=> t[k]?.nota!=null ? `<span class="badge ${col(t[k].nota)}">${fmt(t[k].nota)}</span>` : `<span class="badge">–</span>`).join("")}</td>
-      <td>${potPill(potIdx(r))}</td></tr>`; }).join("")}</tbody></table>`
+      <td>${r.potenziale?`<span class="potpill p${r.potenziale}">${r.potenziale}</span>`:""}</td></tr>`; }).join("")}</tbody></table>`
     : `<p class="muted">${u("noSchede")}</p>`;
   document.querySelectorAll("[data-open]").forEach(tr=> tr.onclick = ()=> openScheda(tr.dataset.open));
 }
@@ -2111,7 +2090,7 @@ function exportSchede(rows){
     const p = pl(r.giocatoreId) || {}, cog = p.cognome || "", nom = p.nome || r.nomeScout || "", t = r.tips || {};
     const row = [r.dataPartita ? fmtISO(r.dataPartita) : "", r.partita||"", p.numero||r.giocatoreNumero||"", cog, nom, p.nascita||"", p.club||"", team(p.team)?.name||"",
       (p.genere||r.genere||"M"), r.scout||"", (r.lingua||"").toUpperCase(), r.sistema||"",
-      ...["T","I","P","S"].map(k=> t[k]?.nota ?? ""), ...["T","I","P","S"].map(k=> t[k]?.commento || ""), potIdx(r)!=null ? potText(potIdx(r)) : ""];
+      ...["T","I","P","S"].map(k=> t[k]?.nota ?? ""), ...["T","I","P","S"].map(k=> t[k]?.commento || ""), r.potenziale||""];
     voci.forEach(sec=> sec.items.forEach(it=> row.push((r[sec.id]||[]).includes(it[0]) ? 1 : "")));
     row.push((r.taktik||[]).filter(x=>x.startsWith("✎ ")).map(x=>x.slice(2)).join("; "), r.annotazioni||"", reportFrom(r, r.lingua || lang));
     return row;
@@ -2135,17 +2114,16 @@ function aggPlayer(pid){
   TIPSK.forEach(k=>{ const v = rs.map(r=>r.tips?.[k]?.nota).filter(x=>x!=null); avg[k] = v.length ? Math.round(v.reduce((a,b)=>a+b,0)/v.length*10)/10 : null; });
   const tv = TIPSK.map(k=>avg[k]).filter(x=>x!=null);
   const pot = {A:0,B:0,C:0}; rs.forEach(r=>{ if (pot[r.potenziale]!=null) pot[r.potenziale]++; });
-  const pidx = rs.map(potIdx).filter(x=>x!=null).sort((a,b)=>a-b);
   const counts = {};
   SECTIONS.filter(s=>s.items && s.type!=="pot").forEach(sec=> sec.items.forEach((it,i)=>{
     const n = rs.filter(r=>(r[sec.id]||[]).includes(it[0])).length; if (n) counts[sec.id+":"+i] = n; }));
-  return {rs, n:rs.length, sent: rs.filter(r=>statoOf(r)==="inviata").length, avg, tipsAvg: tv.length ? Math.round(tv.reduce((a,b)=>a+b,0)/tv.length*10)/10 : null, pot, pidx, counts};
+  return {rs, n:rs.length, sent: rs.filter(r=>statoOf(r)==="inviata").length, avg, tipsAvg: tv.length ? Math.round(tv.reduce((a,b)=>a+b,0)/tv.length*10)/10 : null, pot, counts};
 }
 const avgBadge = v => `<span class="badge ${col(v)}">${v==null?"–":fmt1(v)}</span>`;
 const fmt1 = v => (Math.round(v*10)/10).toFixed(1).replace(/\.0$/,"");
-// barra delle valutazioni: una fetta per scheda, sempre da A (verde) a C (rosso); grigio = senza potenziale
-const potBar = a => !a.n ? "–" : `<span class="pbar2" title="${esc(a.pidx.map(i=>potText(i)).join(" · "))}">${a.pidx.map(i=>`<i style="background:${POT_COL[i]}"></i>`).join("")}${"<i class=\"nop\"></i>".repeat(a.n - a.pidx.length)}</span><span class="pbn">${a.n}</span>`;
-const potPills = potBar;
+const POTC = {A:"#5f9b2c", B:"#eba133", C:"#e04f4f"};
+const potPills = pot => { const t = ["A","B","C"].reduce((s,x)=>s+(pot[x]||0),0); if (!t) return "–";
+  return `<span class="pbar3" title="${["A","B","C"].filter(x=>pot[x]).map(x=>`${x}: ${pot[x]}`).join(" · ")}">${["A","B","C"].filter(x=>pot[x]).map(x=>`<i style="flex:${pot[x]};background:${POTC[x]}"></i>`).join("")}</span><span class="pbn">${t}</span>`; };
 function matchProgress(t){
   const ps = D.players.filter(p=>p.team===t.id);
   const rs = D.schede.filter(r=> ps.some(p=>p.id===r.giocatoreId));
@@ -2169,7 +2147,7 @@ function viewEval(){
   const q = norm(EV.q);
   let ps = D.players.filter(p=> (!EV.team || p.team===EV.team) && (!q || norm(`${p.cognome} ${p.nome} ${p.numero||""} ${p.club||""}`).includes(q)));
   const A = Object.fromEntries(ps.map(p=>[p.id, aggPlayer(p.id)]));
-  const potScore = a => a.pidx.reduce((s,i)=> s + (4 - i), 0) / Math.max(1, a.pidx.length) * a.n;
+  const potScore = a => a.pot.A*3 + a.pot.B*2 + a.pot.C;
   const sorters = {name:(a,b)=>(a.cognome||"").localeCompare(b.cognome||""),
     n:(a,b)=>A[b.id].n - A[a.id].n, tips:(a,b)=>(A[b.id].tipsAvg??-1) - (A[a.id].tipsAvg??-1),
     pot:(a,b)=> (A[b.id].n?potScore(A[b.id])/A[b.id].n:-1) - (A[a.id].n?potScore(A[a.id])/A[a.id].n:-1)};
@@ -2195,7 +2173,7 @@ function viewEval(){
         <td>${nm(p)}</td><td>${t?`<span class="dot" style="background:${esc(t.color)}"></span>${esc(t.name)}`:""}</td>
         <td>${p.ruolo?esc(roleName(p.ruolo)):""}</td><td>${a.n?a.n:`<span class="muted">0</span>`}</td>
         ${TIPSK.map(k=>`<td>${a.avg[k]==null?`<span class="muted">–</span>`:avgBadge(a.avg[k])}</td>`).join("")}
-        <td>${a.n?potBar(a):""}</td></tr>`; }).join("")}</tbody></table></div>`;
+        <td>${a.n?potPills(a.pot):""}</td></tr>`; }).join("")}</tbody></table></div>`;
   $("#evQ").oninput = e=>{ EV.q = e.target.value; clearTimeout(viewEval._t); viewEval._t = setTimeout(()=>{ viewEval(); const i=$("#evQ"); i.focus(); i.setSelectionRange(i.value.length,i.value.length); }, 250); };
   $("#evTeam").onchange = e=>{ EV.team = e.target.value; viewEval(); };
   $("#evSort").onchange = e=>{ EV.sort = e.target.value; viewEval(); };
@@ -2235,12 +2213,12 @@ function viewPlayerPage(pid){
         <div><h3 style="margin:0;font-size:26px">${numTag(p)}${esc(p.cognome)} ${esc(p.nome)}${p.genere==="F"?" ♀":""}</h3>
           <div class="muted">${[p.nascita, p.club, t?.name, p.ruolo?roleName(p.ruolo):""].filter(Boolean).map(esc).join(" · ")}</div></div>
         <div class="row-flex">${TIPSK.map(k=>`<div class="kpi"><div class="muted">${esc(u("tipsNames")[k])}</div>${avgBadge(a.avg[k])}</div>`).join("")}
-          <div class="kpi"><div class="muted">${esc(L(SEC.potenzial.t))}</div>${potBar(a)}</div>
+          <div class="kpi"><div class="muted">${esc(L(SEC.potenzial.t))}</div>${potPills(a.pot)}</div>
           <div class="kpi"><div class="muted">${u("tabSchede")}</div><b>${a.n}</b></div></div></div></div>
     ${a.n ? `<div class="grid2" style="margin-bottom:16px;grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
       <div class="card"><h3>${u("byScout")}</h3><table class="list"><thead><tr><th>${u("roleScout")}</th><th>${u("matchDate")}</th>${TIPSK.map(k=>`<th>${k}</th>`).join("")}<th>${u("colPot")}</th></tr></thead><tbody>
         ${a.rs.map(r=>`<tr><td>${esc(r.scout)}</td><td>${esc(r.dataPartita?fmtISO(r.dataPartita):"")}</td>${TIPSK.map(k=>`<td>${r.tips?.[k]?.nota!=null?avgBadge(r.tips[k].nota):"–"}</td>`).join("")}
-          <td>${potPill(potIdx(r)) || "–"}</td></tr>`).join("")}</tbody></table></div>
+          <td>${r.potenziale?`<span class="potpill p${r.potenziale}">${r.potenziale}</span>`:"–"}</td></tr>`).join("")}</tbody></table></div>
       <div class="card"><h3>${u("topVoci")}</h3>${topVoci(a, a.n, 5)}</div></div>
     <h3>${u("allReports")}</h3>
     <div class="cards-row">${a.rs.map(r=>`<div class="card rcard">
@@ -2265,7 +2243,7 @@ function viewCompare(){
       ${row(`${u("colNascita")} · ${u("colClub")}`, ps.map(p=>esc([p.nascita,p.club].filter(Boolean).join(" · "))))}
       ${row(u("tabSchede"), As.map(a=>`${a.n}`))}
       ${TIPSK.map(k=> row(`Ø ${esc(u("tipsNames")[k])}`, As.map(a=>avgBadge(a.avg[k])))).join("")}
-      ${row(L(SEC.potenzial.t), As.map(a=>potBar(a)))}
+      ${row(L(SEC.potenzial.t), As.map(a=>potPills(a.pot)))}
       ${SECTIONS.filter(s=>s.items && s.type!=="pot" && s.type!=="tips").map(sec=> row(esc(L(sec.t)), voci(sec))).join("")}
     </tbody></table></div>`;
   $("#evBack").onclick = ()=>{ EV.mode = "list"; viewEval(); };
@@ -2317,8 +2295,8 @@ function setTips(L, v){
   toast(`${u("tipsNames")[L]}: ${fmt(v)}`);
 }
 function setPot(v){
-  const i = ({A:0,B:2,C:4})[v]; pot = pot===i ? null : i; renderSheet(); renderSummary();
-  toast(`${L(SEC.potenzial.t)}: ${pot!=null ? potText(pot) : "–"}`);
+  pot = pot===v ? null : v; renderSheet(); renderSummary();
+  toast(`${L(SEC.potenzial.t)}: ${pot||"–"}`);
 }
 document.addEventListener("keydown", e=>{
   if (!me || $("#app").classList.contains("hidden")) return;
